@@ -3,7 +3,7 @@ import { begin, expect } from '../__test__'
 import { structs } from './__fixtures__'
 import accountsData from './accounts-data'
 
-describe('testing', () => {
+describe('accountsData', () => {
 
   let trx
   let accounts

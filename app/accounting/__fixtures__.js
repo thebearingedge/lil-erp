@@ -10,6 +10,17 @@ const Account = {
   updatedAt: Date
 }
 
+const Entry = {
+  id: Number,
+  debitAccountCode: String,
+  creditAccountCode: String,
+  date: Date,
+  amount: Number,
+  createdAt: Date,
+  updatedAt: Date
+}
+
 export const structs = {
-  Account
+  Account,
+  Entry
 }

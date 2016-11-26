@@ -1,6 +1,6 @@
 export const up = async ({ schema, raw }) => {
   await schema
-    .createTable('journal', tb => {
+    .createTable('entries', tb => {
       tb.increments('id')
         .primary()
         .index()
@@ -14,16 +14,14 @@ export const up = async ({ schema, raw }) => {
         .inTable('accounts')
       tb.timestamp('date')
         .notNullable()
-      tb.string('amount')
+        .defaultTo(raw('now()'))
+      tb.integer('amount')
         .unsigned()
         .notNullable()
-      tb.boolean('is_posted')
-        .notNullable()
-        .defaultTo(false)
     })
-  await raw('select trigger_timestamps(?)', ['journal'])
+  await raw('select trigger_timestamps(?)', ['entries'])
 }
 
 export const down = ({ schema }) =>
   schema
-    .dropTable('journal')
+    .dropTable('entries')

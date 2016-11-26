@@ -18,9 +18,9 @@ describe('testing', () => {
   describe('create', () => {
     it('creates an account', async () => {
       const account = {
-        code: '1010',
-        name: 'Sales of Inventory',
-        description: 'Revenue from sale of inventory assets.',
+        code: '1001',
+        name: 'Found on the Ground',
+        description: 'Revenue from walking down the street.',
         parentCode: '1000'
       }
       const created = await accounts.create(account)

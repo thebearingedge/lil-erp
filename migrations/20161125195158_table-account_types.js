@@ -2,11 +2,11 @@ export const up = async ({ schema, raw }) => {
   await schema
     .createTable('account_types', tb => {
       tb.increments('id')
-      .primary()
-      .index()
+        .primary()
+        .index()
       tb.string('name')
-      .unique()
-      .notNullable()
+        .unique()
+        .notNullable()
     })
   await raw('select trigger_timestamps(?)', ['account_types'])
 }

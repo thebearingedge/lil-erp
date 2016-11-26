@@ -11,11 +11,12 @@ export const seed = async knex => {
 
   await knex
     .insert([
-      { name: 'Asset' },
-      { name: 'Liability' },
-      { name: 'Equity' },
-      { name: 'Revenue' },
-      { name: 'Expense' }
+      { code: '1000', name: 'Assets' },
+      { code: '2000', name: 'Liabilities' },
+      { code: '3000', name: 'Equity' },
+      { code: '4000', name: 'Revenue' },
+      { code: '5000', name: 'Cost of Goods Sold' },
+      { code: '6000', name: 'Expenses' }
     ])
-    .into('account_types')
+    .into('accounts')
 }

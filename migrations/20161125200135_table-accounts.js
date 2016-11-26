@@ -1,10 +1,8 @@
 export const up = async ({ schema, raw }) => {
   await schema
     .createTable('accounts', tb => {
-      tb.increments('id')
-        .primary()
-        .index()
       tb.string('code')
+        .primary()
         .unique()
         .notNullable()
       tb.string('name')

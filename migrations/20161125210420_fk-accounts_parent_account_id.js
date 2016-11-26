@@ -1,14 +1,13 @@
 export const up = ({ schema }) =>
   schema
     .table('accounts', tb => {
-      tb.integer('account_class_id')
-        .notNullable()
-        .references('id')
-        .inTable('account_classes')
+      tb.string('parent_code')
+        .references('code')
+        .inTable('accounts')
     })
 
 export const down = ({ schema }) =>
   schema
     .table('accounts', tb => {
-      tb.dropColumn('account_class_id')
+      tb.dropColumn('parent_code')
     })

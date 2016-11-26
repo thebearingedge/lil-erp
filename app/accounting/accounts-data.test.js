@@ -1,4 +1,4 @@
-import { describe, beforeEach, afterEach, context, it } from 'global'
+import { describe, beforeEach, afterEach, it } from 'global'
 import { begin, expect } from '../__test__'
 import { structs } from './__fixtures__'
 import accountsData from './accounts-data'
@@ -15,12 +15,24 @@ describe('testing', () => {
 
   afterEach(() => trx.rollback())
 
-  describe('findByCode', () => {
-    context('when the account exists', () => {
-      it('returns the account', async () => {
-        const account = await accounts.findByCode('1000')
-        expect(account).to.have.structure(structs.Account)
-      })
+  describe('create', () => {
+    it('creates an account', async () => {
+      const account = {
+        code: '1010',
+        name: 'Sales of Inventory',
+        description: 'Revenue from sale of inventory assets.',
+        parentCode: '1000'
+      }
+      const created = await accounts.create(account)
+      expect(created).to.have.structure(structs.Account)
+    })
+  })
+
+  describe('update', () => {
+    it('updates an account', async () => {
+      const updates = { name: 'COGS' }
+      const updated = await accounts.update('5000', updates)
+      expect(updated).to.have.structure(structs.Account)
     })
   })
 

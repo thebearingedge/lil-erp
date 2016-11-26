@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "inventory",
+  "version": "1.0.0",
+  "description": "Inventory Data Model",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --harmony-async-await -r babel-register",
+    "tdd": "npm t -s -- -w -R min",
+    "db": "babel-node --harmony-async-await node_modules/.bin/knex",
+    "db:up": "npm run -s db migrate:latest",
+    "db:down": "npm run -s db migrate:rollback",
+    "db:make": "npm run -s db migrate:make",
+    "db:seed": "npm run -s db seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebearingedge/inventory.git"
+  },
+  "keywords": [],
+  "author": "Tim Davis",
+  "license": "LicenseRef-LICENSE",
+  "bugs": {
+    "url": "https://github.com/thebearingedge/inventory/issues"
+  },
+  "homepage": "https://github.com/thebearingedge/inventory#readme",
+  "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
+    "chai": "3.5.0",
+    "chai-struct": "2.1.0",
+    "mocha": "3.2.0"
+  },
+  "dependencies": {
+    "bluebird": "3.4.6",
+    "knex": "0.12.6",
+    "pg": "6.1.0"
+  }
+}

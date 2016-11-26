@@ -1,0 +1,21 @@
+export const seed = async knex => {
+
+  const { tables } = await knex
+      .select(knex.raw('array_to_json(array_agg(tablename)) as tables'))
+      .from('pg_tables')
+      .where('schemaname', 'public')
+      .whereNot('tablename', 'like', '%migration%')
+      .first()
+
+  await knex.raw(`truncate table ${tables} restart identity`)
+
+  await knex
+    .insert([
+      { name: 'Asset' },
+      { name: 'Liability' },
+      { name: 'Equity' },
+      { name: 'Revenue' },
+      { name: 'Expense' }
+    ])
+    .into('account_types')
+}

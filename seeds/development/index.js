@@ -30,7 +30,12 @@ export const seed = async knex => {
       { code: '4100', name: 'Inventory Sales', parent_code: '4000' },
       { code: '4200', name: 'Services Rendered', parent_code: '4000' },
       { code: '5000', name: 'Cost of Goods Sold' },
-      { code: '6000', name: 'Expenses' }
+      { code: '5700', name: 'Freight', parent_code: '5000' },
+      { code: '6000', name: 'Expenses' },
+      { code: '6200', name: 'Bank Charges', parent_code: '6000' },
+      { code: '6750', name: 'Professional Services', parent_code: '6000' },
+      { code: '7200', name: 'Rent', parent_code: '6000' },
+      { code: '7500', name: 'Utilities', parent_code: '6000' }
     ])
     .into('accounts')
 }

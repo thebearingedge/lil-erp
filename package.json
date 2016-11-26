@@ -5,7 +5,7 @@
   "description": "Inventory Data Model",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --harmony-async-await -r babel-register",
+    "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
     "tdd": "npm t -s -- -w -R min",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex",
     "db:up": "npm run -s db migrate:latest",
@@ -27,13 +27,18 @@
   "devDependencies": {
     "babel-cli": "6.18.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
+    "babel-plugin-transform-export-extensions": "6.8.0",
+    "babel-plugin-transform-object-rest-spread": "6.19.0",
     "chai": "3.5.0",
     "chai-struct": "2.1.0",
     "mocha": "3.2.0"
   },
   "dependencies": {
+    "deep-clone": "3.0.2",
     "fs-promise": "1.0.0",
+    "global": "4.3.1",
     "knex": "0.12.6",
+    "lodash": "4.17.2",
     "pg": "6.1.0"
   }
 }

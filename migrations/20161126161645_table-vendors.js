@@ -4,6 +4,7 @@ export const up = async ({ schema, raw }) => {
       tb.increments('id')
         .primary()
         .index()
+      tb.string('account_number')
     })
   await raw('select trigger_timestamps(?)', ['vendors'])
 }

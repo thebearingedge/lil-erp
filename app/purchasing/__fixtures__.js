@@ -1,3 +1,5 @@
+import { Nullable } from 'chai-struct'
+
 const Contact = {
   id: Number,
   name: String,
@@ -9,6 +11,8 @@ const Contact = {
 const Vendor = {
   id: Number,
   partyId: Number,
+  accountNumber: Nullable(String),
+  notes: String,
   name: String,
   createdAt: Date,
   updatedAt: Date,

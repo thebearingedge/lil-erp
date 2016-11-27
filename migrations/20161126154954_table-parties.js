@@ -6,6 +6,7 @@ export const up = async ({ schema, raw }) => {
         .index()
       tb.string('name')
         .notNullable()
+      tb.text('notes')
     })
 }
 

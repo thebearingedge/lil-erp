@@ -6,9 +6,9 @@ export default function vendorsData(knex) {
 
   async function create(vendor) {
     return knex.transaction(async trx => {
-      const { name } = vendor
+      const { name, notes } = vendor
       const [ party_id ] = await trx
-        .insert({ name })
+        .insert({ name, notes })
         .into('parties')
         .returning('id')
       const [ contact_id ] = await trx
@@ -28,7 +28,7 @@ export default function vendorsData(knex) {
 
   async function findById(id, trx = knex) {
     const vendor = await trx
-      .select('p.name', 'v.*')
+      .select('v.*', 'p.name', 'p.notes')
       .from('vendors as v')
       .join('parties as p', 'v.party_id', 'p.id')
       .where('v.id', id)

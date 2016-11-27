@@ -17,9 +17,14 @@ describe('vendorsData', () => {
 
   describe('create', () => {
     it('creates a vendor', async () => {
-      const vendor = { name: 'Foo Corp.' }
+      const vendor = {
+        name: 'Foo Corp.',
+        accountNumber: 'foo001',
+        notes: 'This is where we buy our foos.'
+      }
       const created = await vendors.create(vendor)
       expect(created).to.have.structure(structs.Vendor)
+      expect(created.contacts).to.have.lengthOf(1)
     })
   })
 

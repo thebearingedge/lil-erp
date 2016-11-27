@@ -1,8 +1,8 @@
 export const development = {
   client: 'postgresql',
   connection: {
-    database: 'async-await',
-    user: 'async-await'
+    database: 'mini-erp',
+    user: 'mini-erp'
   },
   seeds: {
     directory: 'seeds/development'

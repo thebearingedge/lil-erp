@@ -38,4 +38,19 @@ export const seed = async knex => {
       { code: '7500', name: 'Utilities', parent_code: '6000' }
     ])
     .into('accounts')
+
+  const [ party_id ] = await knex
+    .insert({ name: 'Foo Corp.', notes: 'Where we buy foos.' })
+    .into('parties')
+    .returning('id')
+  const [ contact_id ] = await knex
+    .insert({ name: 'Foo Corp.' })
+    .into('contacts')
+    .returning('id')
+  await knex
+    .insert({ party_id, contact_id })
+    .into('parties_contacts')
+  await knex
+    .insert({ party_id, account_number: 'foo001' })
+    .into('vendors')
 }

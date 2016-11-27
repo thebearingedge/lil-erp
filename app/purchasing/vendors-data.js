@@ -2,7 +2,7 @@ import { camelSql } from '../util'
 
 export default function vendorsData(knex) {
 
-  return camelSql({ create })
+  return camelSql({ findById, create })
 
   async function create(vendor) {
     return knex.transaction(async trx => {

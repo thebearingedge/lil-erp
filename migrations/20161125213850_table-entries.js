@@ -1,9 +1,10 @@
 export const up = async ({ schema, raw }) => {
   await schema
     .createTable('entries', tb => {
-      tb.increments('id')
+      tb.uuid('id')
         .primary()
-        .index()
+        .notNullable()
+        .defaultTo(raw('uuid_generate_v4()'))
       tb.string('debit_account_code')
         .notNullable()
         .references('code')

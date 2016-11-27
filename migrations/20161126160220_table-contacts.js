@@ -1,17 +1,13 @@
-export const up = async ({ schema, raw }) => {
-  await schema
+export const up = ({ schema, raw }) =>
+  schema
     .createTable('contacts', tb => {
-      tb.increments('id')
+      tb.uuid('id')
+        .unique()
         .primary()
-        .index()
-      tb.string('name')
         .notNullable()
-      tb.boolean('is_active')
-        .notNullable()
-        .defaultTo(true)
+        .defaultTo(raw('uuid_generate_v4()'))
+      tb.string('email')
     })
-  await raw('select trigger_timestamps(?)', ['contacts'])
-}
 
 export const down = ({ schema }) =>
   schema

@@ -1,12 +1,12 @@
 export const up = ({ schema, raw }) =>
   schema
     .createTable('parties_contacts', tb => {
-      tb.integer('party_id')
+      tb.uuid('party_id')
         .notNullable()
         .references('id')
         .inTable('parties')
         .onDelete('cascade')
-      tb.integer('contact_id')
+      tb.uuid('contact_id')
         .notNullable()
         .references('id')
         .inTable('contacts')

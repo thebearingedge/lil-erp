@@ -39,18 +39,23 @@ export const seed = async knex => {
     ])
     .into('accounts')
 
-  const [ party_id ] = await knex
-    .insert({ name: 'Foo Corp.', notes: 'Where we buy foos.' })
+  const [ contact_party_id ] = await knex
+    .insert({ name: 'Foo Rep.', type: 'contact', notes: 'Guy with foos.' })
     .into('parties')
     .returning('id')
   const [ contact_id ] = await knex
-    .insert({ name: 'Foo Corp.' })
+    .insert({ party_id: contact_party_id })
     .into('contacts')
     .returning('id')
   await knex
-    .insert({ party_id, contact_id })
+    .insert({ party_id: contact_party_id, contact_id })
     .into('parties_contacts')
+  const [ vendor_party_id ] = await knex
+    .insert({ name: 'Foo Corp.', type: 'vendor', notes: 'Where we buy foos.' })
+    .into('parties')
+    .returning('id')
   await knex
-    .insert({ party_id, account_number: 'foo001' })
+    .insert({ party_id: vendor_party_id, account_number: 'foo001' })
     .into('vendors')
+
 }

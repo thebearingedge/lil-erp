@@ -1,13 +1,14 @@
-export const up = async ({ schema, raw }) => {
-  await schema
+export const up = ({ schema, raw }) =>
+  schema
     .createTable('vendors', tb => {
-      tb.increments('id')
+      tb.uuid('id')
+        .unique()
         .primary()
-        .index()
+        .notNullable()
+        .defaultTo(raw('uuid_generate_v4()'))
       tb.string('account_number')
+      tb.string('website')
     })
-  await raw('select trigger_timestamps(?)', ['vendors'])
-}
 
 export const down = ({ schema }) =>
   schema

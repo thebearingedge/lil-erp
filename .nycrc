@@ -1,0 +1,16 @@
+{
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ],
+  "include": [
+    "app/**/*.js"
+  ],
+  "exclude": [
+    "app/**/__test__.js",
+    "app/**/__fixtures__.js",
+    "app/**/*.test.js",
+    "app/**/index.js"
+  ],
+  "all": true
+}

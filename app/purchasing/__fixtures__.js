@@ -1,21 +1,24 @@
 import { Nullable } from 'chai-struct'
 
 const Contact = {
-  id: Number,
+  id: String,
   name: String,
-  isActive: Boolean,
+  email: Nullable(String),
+  notes: Nullable(String),
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  isActive: Boolean
 }
 
 const Vendor = {
-  id: Number,
-  partyId: Number,
-  accountNumber: Nullable(String),
-  notes: String,
+  id: String,
   name: String,
+  notes: String,
+  website: Nullable(String),
+  accountNumber: Nullable(String),
   createdAt: Date,
   updatedAt: Date,
+  isActive: Boolean,
   contacts: [Contact]
 }
 

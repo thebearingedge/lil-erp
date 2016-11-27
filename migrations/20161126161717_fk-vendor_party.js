@@ -1,12 +1,10 @@
 export const up = async ({ schema, raw }) => {
   await schema
     .table('vendors', tb => {
-      tb.uuid('party_id')
-        .notNullable()
       tb.enum('party_type', ['vendor'])
         .notNullable()
         .defaultTo('vendor')
-      tb.foreign(['party_id', 'party_type'])
+      tb.foreign(['id', 'party_type'])
         .references(['id', 'type'])
         .inTable('parties')
     })
@@ -16,7 +14,6 @@ export const up = async ({ schema, raw }) => {
 export const down = ({ schema }) =>
   schema
     .table('vendors', tb => {
-      tb.dropForeign(['party_id', 'party_type'])
-      tb.dropColumn('party_id')
+      tb.dropForeign(['id', 'party_type'])
       tb.dropColumn('party_type')
     })

@@ -5,7 +5,6 @@ export const up = ({ schema, raw }) =>
         .unique()
         .primary()
         .notNullable()
-        .defaultTo(raw('uuid_generate_v4()'))
       tb.string('account_number')
       tb.string('website')
     })

@@ -1,25 +1,24 @@
-import { camelSql } from '../util'
+import { pick } from 'lodash'
+import { camelSql, getParty } from '../util'
+
+function getVendor(obj) {
+  return pick(obj, ['account_number', 'website'])
+}
 
 export default function vendorsData(knex) {
 
   return camelSql({ findById, create })
 
-  async function create(vendor) {
+  async function create(data) {
     return knex.transaction(async trx => {
-      const { name, notes } = vendor
-      const [ party_id ] = await trx
-        .insert({ name, notes })
+      const party = getParty(data, 'vendor')
+      const vendor = getVendor(data)
+      const [ id ] = await trx
+        .insert(party)
         .into('parties')
         .returning('id')
-      const [ contact_id ] = await trx
-        .insert({ name })
-        .into('contacts')
-        .returning('id')
       await trx
-        .insert({ party_id, contact_id })
-        .into('parties_contacts')
-      const [ id ] = await trx
-        .insert({ party_id })
+        .insert({ ...vendor, id })
         .into('vendors')
         .returning('id')
       return findById(id, trx)
@@ -28,18 +27,16 @@ export default function vendorsData(knex) {
 
   async function findById(id, trx = knex) {
     const vendor = await trx
-      .select('v.*', 'p.name', 'p.notes')
-      .from('vendors as v')
-      .join('parties as p', 'v.party_id', 'p.id')
-      .where('v.id', id)
+      .select('*')
+      .from('vendors_view')
+      .where({ id })
       .first()
-    const { party_id } = vendor
     const contacts = await trx
-      .select('c.*')
+      .select('cv.*')
       .from('parties as p')
       .join('parties_contacts as pc', 'p.id', 'pc.party_id')
-      .join('contacts as c', 'pc.contact_id', 'c.id')
-      .where({ party_id })
+      .join('contacts_view as cv', 'pc.contact_id', 'cv.id')
+      .where('p.id', id)
     return { ...vendor, contacts }
   }
 }

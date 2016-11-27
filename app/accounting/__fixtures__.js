@@ -11,7 +11,7 @@ const Account = {
 }
 
 const Entry = {
-  id: Number,
+  id: String,
   debitAccountCode: String,
   creditAccountCode: String,
   date: Date,

@@ -17,7 +17,11 @@ describe('vendorsData', () => {
 
   describe('findById', () => {
     it('finds a vendor by id', async () => {
-      const vendor = await vendors.findById(1)
+      const { id } = await trx
+        .select('id')
+        .from('vendors')
+        .first()
+      const vendor = await vendors.findById(id)
       expect(vendor).to.have.structure(structs.Vendor)
       expect(vendor.contacts).to.have.lengthOf(1)
     })
@@ -32,7 +36,6 @@ describe('vendorsData', () => {
       }
       const created = await vendors.create(vendor)
       expect(created).to.have.structure(structs.Vendor)
-      expect(created.contacts).to.have.lengthOf(1)
     })
   })
 

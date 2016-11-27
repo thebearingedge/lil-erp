@@ -1,3 +1,5 @@
+import { join } from 'path'
+
 export const development = {
   client: 'postgresql',
   connection: {
@@ -5,6 +7,6 @@ export const development = {
     user: 'mini-erp'
   },
   seeds: {
-    directory: 'seeds/development'
+    directory: join(__dirname, 'seeds/development')
   }
 }

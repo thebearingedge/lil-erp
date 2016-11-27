@@ -2,7 +2,7 @@ import Knex from 'knex'
 import { before, after } from 'global'
 import chai, { expect } from 'chai'
 import { chaiStruct } from 'chai-struct'
-import { development } from '../knexfile'
+import { development } from '../db'
 
 const knex = new Knex(development)
 

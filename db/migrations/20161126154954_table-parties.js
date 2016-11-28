@@ -6,6 +6,7 @@ export const up = async ({ schema, raw }) => {
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
       tb.enum('type', ['vendor', 'contact'])
+        .notNullable()
       tb.string('name')
         .notNullable()
       tb.text('notes')

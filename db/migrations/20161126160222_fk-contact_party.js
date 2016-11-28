@@ -8,7 +8,7 @@ export const up = async ({ schema, raw }) => {
         .references(['id', 'type'])
         .inTable('parties')
     })
-  await raw('select trigger_party_updated_at(?)', ['contacts'])
+  await raw('select trigger_supertype_updated_at(?, ?)', ['contacts', 'parties'])
 }
 
 export const down = ({ schema }) =>

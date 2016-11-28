@@ -10,17 +10,22 @@ const Account = {
   updatedAt: Date
 }
 
-const Entry = {
+const LedgerEntry = {
+  debitCode: String,
+  creditCode: String,
+  amount: Number
+}
+
+const JournalEntry = {
   id: String,
-  debitAccountCode: String,
-  creditAccountCode: String,
   date: Date,
-  amount: Number,
+  memo: Nullable(String),
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  ledgerEntries: [LedgerEntry]
 }
 
 export const structs = {
   Account,
-  Entry
+  JournalEntry
 }

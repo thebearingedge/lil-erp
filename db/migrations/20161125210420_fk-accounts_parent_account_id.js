@@ -4,6 +4,7 @@ export const up = ({ schema }) =>
       tb.string('parent_code')
         .references('code')
         .inTable('accounts')
+        .onUpdate('cascade')
     })
 
 export const down = ({ schema }) =>

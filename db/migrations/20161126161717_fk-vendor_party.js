@@ -5,7 +5,7 @@ export const up = async ({ schema, raw }) => {
         .notNullable()
         .defaultTo('vendor')
       tb.foreign(['id', 'party_type'])
-        .references(['id', 'type'])
+        .references(['id', 'party_type'])
         .inTable('parties')
     })
   await raw('select trigger_supertype_updated_at(?, ?)', ['vendors', 'parties'])

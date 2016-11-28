@@ -5,7 +5,7 @@ export const up = async ({ schema, raw }) => {
         .unique()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.enum('type', ['vendor', 'contact'])
+      tb.enum('party_type', ['vendor', 'contact'])
         .notNullable()
       tb.string('name')
         .notNullable()
@@ -13,7 +13,7 @@ export const up = async ({ schema, raw }) => {
       tb.boolean('is_active')
         .notNullable()
         .defaultTo(true)
-      tb.primary(['id', 'type'])
+      tb.primary(['id', 'party_type'])
     })
   await raw('select trigger_timestamps(?)', ['parties'])
 }

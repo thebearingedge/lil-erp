@@ -4,8 +4,8 @@ const Account = {
   code: String,
   name: String,
   description: Nullable(String),
-  isActive: Boolean,
   parentCode: Nullable(String),
+  isActive: Boolean,
   createdAt: Date,
   updatedAt: Date
 }

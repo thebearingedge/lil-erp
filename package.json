@@ -13,7 +13,8 @@
     "db:up": "npm run -s db migrate:latest",
     "db:down": "npm run -s db migrate:rollback",
     "db:cycle": "run-s -s db:down db:up",
-    "db:seed": "npm run -s db seed:run"
+    "db:seed": "npm run -s db seed:run",
+    "precommit": "npm run cover"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "babel-plugin-transform-object-rest-spread": "6.19.0",
     "chai": "3.5.0",
     "chai-struct": "2.1.0",
+    "husky": "0.11.9",
     "knex": "0.12.6",
     "mocha": "3.2.0",
     "nyc": "10.0.0"

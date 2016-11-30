@@ -5,7 +5,7 @@ export const up = async ({ schema, raw }) => {
         .index()
         .unique()
         .notNullable()
-      tb.enum('item_type', ['service_item'])
+      tb.enum('item_type', ['inventory_item'])
         .notNullable()
       tb.text('description')
       tb.boolean('is_active')

@@ -1,15 +1,16 @@
 export const up = ({ schema }) =>
   schema
-    .table('service_items', tb => {
-      tb.string('revenue_code')
+    .table('expense_items', tb => {
+      tb.string('expense_code')
         .index()
         .notNullable()
         .references('code')
         .inTable('accounts')
+        .onUpdate('cascade')
     })
 
 export const down = ({ schema }) =>
   schema
-    .table('service_items', tb => {
-      tb.dropColumn('revenue_code')
+    .table('expense_items', tb => {
+      tb.dropColumn('expense_code')
     })

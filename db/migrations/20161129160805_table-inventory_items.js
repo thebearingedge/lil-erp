@@ -1,6 +1,6 @@
 export const up = ({ schema, raw }) =>
   schema
-    .createTable('service_items', tb => {
+    .createTable('inventory_items', tb => {
       tb.string('sku')
         .unique()
         .primary()
@@ -8,4 +8,4 @@ export const up = ({ schema, raw }) =>
     })
 
 export const down = ({ raw }) =>
-  raw('drop table "service_items"')
+  raw('drop table "inventory_items"')

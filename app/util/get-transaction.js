@@ -1,6 +1,6 @@
 import { pick } from 'lodash'
 
-export default function getTransaction(obj, type) {
+export default function getTransaction(obj, transaction_type) {
   const transaction = pick(obj, ['date', 'memo'])
-  return { ...transaction, type }
+  return { ...transaction, transaction_type }
 }

@@ -16,13 +16,13 @@ export default function inventoryItemsData(knex) {
   async function create(data) {
     return knex.transaction(async trx => {
       const item = getItem(data, 'inventory_item')
-      const inventoryItem = getInventoryItem(data)
       const [ sku ] = await trx
         .insert(item)
         .into('items')
         .returning('sku')
+      const inventoryItem = getInventoryItem(data)
       await trx
-        .insert({ ...inventoryItem, sku })
+        .insert({ sku, ...inventoryItem })
         .into('inventory_items')
       return findBySku(sku, trx)
     })

@@ -56,4 +56,29 @@ export const seed = async knex => {
   await knex
     .insert({ party_id: vendor_party_id, contact_id: contact_party_id })
     .into('parties_contacts')
+
+  const [ brand_id ] = await knex
+    .insert({ name: 'Suhr Guitars' })
+    .into('brands')
+    .returning('id')
+
+  const [ sku ] = await knex
+    .insert({
+      sku: 'riotdistorion',
+      item_type: 'inventory_item',
+      description: 'A distortion pedal.'
+    })
+    .into('items')
+    .returning('sku')
+
+  await knex
+    .insert({
+      sku,
+      brand_id,
+      item_type: 'inventory_item',
+      revenue_code: '4100',
+      cost_code: '5000',
+      asset_code: '1300'
+    })
+    .into('inventory_items')
 }

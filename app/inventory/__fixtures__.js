@@ -2,6 +2,7 @@ import { Nullable } from 'chai-struct'
 
 const InventoryItem = {
   sku: String,
+  brandName: Nullable(String),
   description: Nullable(String),
   assetCode: String,
   revenueCode: String,

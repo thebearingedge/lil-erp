@@ -7,10 +7,12 @@ export const up = async ({ schema, raw }) => {
       tb.string('name')
         .unique()
         .notNullable()
+      tb.boolean('is_active')
+        .notNullable()
+        .defaultTo(true)
     })
   await raw('select trigger_timestamps(?)', ['brands'])
 }
-
 
 export const down = ({ schema }) =>
   schema

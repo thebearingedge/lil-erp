@@ -7,11 +7,11 @@ export const up = async ({ schema, raw }) => {
         .notNullable()
       tb.enum('item_type', ['inventory_item'])
         .notNullable()
+      tb.primary(['sku', 'item_type'])
       tb.text('description')
       tb.boolean('is_active')
         .notNullable()
         .defaultTo(true)
-      tb.primary(['sku', 'item_type'])
     })
   await raw('select trigger_timestamps(?)', ['items'])
 }

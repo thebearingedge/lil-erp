@@ -1,0 +1,34 @@
+[
+  {
+    "sku": "riotdistorion",
+    "description": "A distortion pedal.",
+    "item_type": "inventory_item",
+    "revenue_code": "4100",
+    "cost_code": "5000",
+    "asset_code": "1300"
+  },
+  {
+    "sku": "halloffamereverb",
+    "item_type": "inventory_item",
+    "description": "A reverb pedal.",
+    "revenue_code": "4100",
+    "cost_code": "5000",
+    "asset_code": "1300"
+  },
+  {
+    "sku": "skm203",
+    "item_type": "inventory_item",
+    "description": "An unbalanced, ¼ inch speaker cable.",
+    "revenue_code": "4100",
+    "cost_code": "5000",
+    "asset_code": "1300"
+  },
+  {
+    "sku": "bigmuffpi",
+    "item_type": "inventory_item",
+    "description": "A fuzz pedal.",
+    "revenue_code": "4100",
+    "cost_code": "5000",
+    "asset_code": "1300"
+  }
+]

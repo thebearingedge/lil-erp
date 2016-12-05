@@ -1,8 +1,9 @@
 import { pick } from 'lodash'
 import { camelSql, getItem } from '../util'
 
-function getInventoryItem(obj) {
-  return pick(obj, [
+function getInventoryItem(doc) {
+  return pick(doc, [
+    'sku',
     'revenue_code',
     'cost_code',
     'asset_code'
@@ -13,16 +14,16 @@ export default function inventoryItemsData(knex) {
 
   return camelSql({ create })
 
-  async function create(data) {
+  async function create(doc) {
     return knex.transaction(async trx => {
-      const item = getItem(data, 'inventory_item')
+      const item = getItem(doc, 'inventory_item')
       const [ sku ] = await trx
         .insert(item)
         .into('items')
         .returning('sku')
-      const inventoryItem = getInventoryItem(data)
+      const inventoryItem = getInventoryItem(doc)
       await trx
-        .insert({ sku, ...inventoryItem })
+        .insert(inventoryItem)
         .into('inventory_items')
       return findBySku(sku, trx)
     })

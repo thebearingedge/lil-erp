@@ -1,0 +1,50 @@
+[
+  {
+    "order_type": "purchase_order",
+    "memo": "We really needed these.",
+    "date": "2016-11-01T07:00:00.000Z",
+    "line_items": [
+      {
+        "sku": "riotdistorion",
+        "quantity": 2,
+        "line_total": 400
+      }
+    ]
+  },
+  {
+    "order_type": "purchase_order",
+    "memo": "We needed these too.",
+    "date": "2016-11-02T07:00:00.000Z",
+    "line_items": [
+      {
+        "sku": "halloffamereverb",
+        "quantity": 5,
+        "line_total": 520
+      }
+    ]
+  },
+  {
+    "order_type": "purchase_order",
+    "memo": "Tell John I said \"Hi.\"",
+    "date": "2016-11-03T07:00:00.000Z",
+    "line_items": [
+      {
+        "sku": "skm203",
+        "quantity": 10,
+        "line_total": 30
+      }
+    ]
+  },
+  {
+    "order_type": "purchase_order",
+    "memo": "Thank you.",
+    "date": "2016-11-03T07:00:00.000Z",
+    "line_items": [
+      {
+        "sku": "bigmuffpi",
+        "quantity": 6,
+        "line_total": 303.6
+      }
+    ]
+  }
+]

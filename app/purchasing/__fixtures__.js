@@ -8,16 +8,7 @@ const Vendor = {
   accountNumber: Nullable(String),
   createdAt: Date,
   updatedAt: Date,
-  isActive: Boolean,
-  contacts: [{
-    id: String,
-    name: String,
-    email: Nullable(String),
-    notes: Nullable(String),
-    createdAt: Date,
-    updatedAt: Date,
-    isActive: Boolean
-  }]
+  isActive: Boolean
 }
 
 const PurchaseOrder = {

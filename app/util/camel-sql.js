@@ -8,9 +8,9 @@ const wrap = fn => async (...args) => {
   return camelKeys(await fn(...args.map(snakeKeys)))
 }
 
-export default function camelSql(obj) {
-  return Object.keys(obj).reduce((wrapped, key) => ({
+export default function camelSql(dao) {
+  return Object.keys(dao).reduce((wrapped, key) => ({
     ...wrapped,
-    [key]: wrap(obj[key])
+    [key]: wrap(dao[key])
   }), {})
 }

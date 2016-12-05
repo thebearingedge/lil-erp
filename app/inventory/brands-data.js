@@ -4,10 +4,10 @@ export default function brandsData(knex) {
 
   return camelSql({ create })
 
-  async function create(data) {
+  async function create(doc) {
     return knex.transaction(async trx => {
       const [ id ] = await trx
-        .insert(data)
+        .insert(doc)
         .into('brands')
         .returning('id')
       return findById(id, trx)

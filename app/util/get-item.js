@@ -1,6 +1,12 @@
 import { pick } from 'lodash'
 
-export default function getItem(obj, item_type) {
-  const item = pick(obj, ['sku', 'description', 'is_active'])
+const itemProps = [
+  'sku',
+  'description',
+  'is_active'
+]
+
+export default function getItem(doc, item_type) {
+  const item = pick(doc, itemProps)
   return { ...item, item_type }
 }

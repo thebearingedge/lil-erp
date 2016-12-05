@@ -1,3 +1,10 @@
+import { zipWith } from 'lodash'
+import accounts from './accounts'
+import brands from './brands'
+import vendors from './vendors'
+import inventory_items from './inventory-items'
+import purchase_orders from './purchase-orders'
+
 export const seed = async knex => {
 
   const { tables } = await knex
@@ -10,75 +17,67 @@ export const seed = async knex => {
   await knex.raw(`truncate table ${tables} restart identity`)
 
   await knex
-    .insert([
-      { code: '1000', name: 'Assets' },
-      { code: '1100', name: 'Cash', parent_code: '1000' },
-      { code: '1200', name: 'Receivables', parent_code: '1000' },
-      { code: '1300', name: 'Inventory', parent_code: '1000' },
-      { code: '1400', name: 'Prepaid Expenses', parent_code: '1000' },
-      { code: '1500', name: 'Fixed Assets', parent_code: '1000' },
-      { code: '2000', name: 'Liabilities' },
-      { code: '2100', name: 'Payables', parent_code: '2000' },
-      { code: '2200', name: 'Accrued Expenses', parent_code: '2000' },
-      { code: '2300', name: 'Sales Tax Payable', parent_code: '2000' },
-      { code: '2400', name: 'Long-Term Debts', parent_code: '2000' },
-      { code: '3000', name: 'Equity' },
-      { code: '3100', name: 'Member Contributions', parent_code: '3000' },
-      { code: '3200', name: 'Member Distributions', parent_code: '3000' },
-      { code: '3300', name: 'Retained Earnings', parent_code: '3000' },
-      { code: '4000', name: 'Revenue' },
-      { code: '4100', name: 'Inventory Sales', parent_code: '4000' },
-      { code: '4200', name: 'Services Rendered', parent_code: '4000' },
-      { code: '5000', name: 'Cost of Goods Sold' },
-      { code: '5700', name: 'Freight', parent_code: '5000' },
-      { code: '6000', name: 'Expenses' },
-      { code: '6200', name: 'Bank Charges', parent_code: '6000' },
-      { code: '6750', name: 'Professional Services', parent_code: '6000' },
-      { code: '7200', name: 'Rent', parent_code: '6000' },
-      { code: '7500', name: 'Utilities', parent_code: '6000' }
-    ])
+    .insert(accounts)
     .into('accounts')
 
-  const [ contact_party_id ] = await knex
-    .insert({ name: 'Foo Rep.', party_type: 'contact', notes: 'Guy with foos.' })
+  const vendor_ids = await knex
+    .insert(vendors.map(({ name, party_type }) => ({
+      name,
+      party_type
+    })))
     .into('parties')
     .returning('id')
-  await knex
-    .insert({ id: contact_party_id, email: 'contact@foo.mal' })
-    .into('contacts')
-  const [ vendor_party_id ] = await knex
-    .insert({ name: 'Foo Corp.', party_type: 'vendor', notes: 'Where we buy foos.' })
-    .into('parties')
-    .returning('id')
-  await knex
-    .insert({ id: vendor_party_id, account_number: 'foo001', website: 'foos.com' })
-    .into('vendors')
-  await knex
-    .insert({ party_id: vendor_party_id, contact_id: contact_party_id })
-    .into('parties_contacts')
 
-  const [ brand_id ] = await knex
-    .insert({ name: 'Suhr Guitars' })
+  await knex
+    .insert(zipWith(vendors, vendor_ids, ({ party_type }, id) => ({
+      id,
+      party_type
+    })))
+    .into('vendors')
+    .returning('id')
+
+  const brand_ids = await knex
+    .insert(brands)
     .into('brands')
     .returning('id')
 
-  const [ sku ] = await knex
-    .insert({
-      sku: 'riotdistorion',
-      item_type: 'inventory_item',
-      description: 'A distortion pedal.'
-    })
+  await knex
+    .insert(inventory_items.map(({ sku, description, item_type, }) => ({
+      sku,
+      description,
+      item_type
+    })))
     .into('items')
     .returning('sku')
 
   await knex
-    .insert({
-      sku,
-      brand_id,
-      item_type: 'inventory_item',
-      revenue_code: '4100',
-      cost_code: '5000',
-      asset_code: '1300'
-    })
+    .insert(zipWith(brand_ids, inventory_items, (brand_id, item) => {
+      const { sku, item_type, revenue_code, cost_code, asset_code } = item
+      return {
+        sku,
+        item_type,
+        revenue_code,
+        cost_code,
+        asset_code,
+        brand_id
+      }
+    }))
     .into('inventory_items')
+
+  vendor_ids.forEach(async (party_id, i) => {
+    const { line_items, ...purchase_order } = purchase_orders[i]
+    const [ order_id ] = await knex
+      .insert({
+        ...purchase_order,
+        party_id
+      })
+      .into('orders')
+      .returning('id')
+    await knex
+      .insert(line_items.map(item => ({
+        ...item,
+        order_id
+      })))
+      .into('order_line_items')
+  })
 }

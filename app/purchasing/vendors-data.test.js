@@ -23,7 +23,6 @@ describe('vendorsData', () => {
         .first()
       const vendor = await vendors.findById(id)
       expect(vendor).to.have.structure(structs.Vendor)
-      expect(vendor.contacts).to.have.lengthOf(1)
     })
   })
 

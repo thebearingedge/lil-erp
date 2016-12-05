@@ -1,6 +1,14 @@
 import { pick } from 'lodash'
 
-export default function getParty(obj, party_type) {
-  const party = pick(obj, ['name', 'notes', 'is_active'])
-  return { ...party, party_type }
+const partyProps = [
+  'name',
+  'notes',
+  'is_active'
+]
+
+export default function getParty(doc, party_type) {
+  return {
+    ...pick(doc, partyProps),
+    party_type
+  }
 }

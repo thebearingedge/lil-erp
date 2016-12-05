@@ -32,7 +32,28 @@ const PurchaseOrder = {
   }]
 }
 
+const GoodsReceivedNote = {
+  id: String,
+  date: Date,
+  vendorId: String,
+  memo: Nullable(String),
+  createdAt: Date,
+  updatedAt: Date,
+  total: String,
+  lineItems:[{
+    id: String,
+    receiptId: String,
+    orderLineItemId: Nullable(String),
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
+    unitPrice: Number,
+    lineTotal: String
+  }]
+}
+
 export const structs = {
   Vendor,
-  PurchaseOrder
+  PurchaseOrder,
+  GoodsReceivedNote
 }

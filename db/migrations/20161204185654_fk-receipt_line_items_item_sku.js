@@ -2,6 +2,7 @@ export const up = ({ schema }) =>
   schema
     .table('receipt_line_items', tb => {
       tb.string('sku')
+        .notNullable()
         .references('sku')
         .inTable('items')
     })

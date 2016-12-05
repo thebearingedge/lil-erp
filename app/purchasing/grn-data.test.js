@@ -19,6 +19,7 @@ describe('grnData', () => {
 
     let partyId
     let sku
+    let orderLineItemId
 
     beforeEach(async () => {
       const { party_id } = await trx
@@ -29,17 +30,22 @@ describe('grnData', () => {
         .select('sku as _sku')
         .from('items')
         .first()
+      const { order_line_item_id } = await trx
+        .select('id as order_line_item_id')
+        .from('order_line_items')
+        .first()
       partyId = party_id
       sku = _sku
+      orderLineItemId = order_line_item_id
     })
 
     it('creates a purchase order', async () => {
-      const grn = {
+      const goodsReceivedNote = {
         date: new Date().toJSON(),
         partyId,
-        lineItems: [{ sku, quantity: 2, lineTotal: 400 }]
+        lineItems: [{ sku, orderLineItemId, quantity: 2, lineTotal: 400 }]
       }
-      const created = await grns.create(grn)
+      const created = await grns.create(goodsReceivedNote)
       expect(created).to.have.structure(structs.GoodsReceivedNote)
     })
   })

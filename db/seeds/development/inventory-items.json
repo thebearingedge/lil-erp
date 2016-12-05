@@ -30,5 +30,13 @@
     "revenue_code": "4100",
     "cost_code": "5000",
     "asset_code": "1300"
+  },
+  {
+    "sku": "micmechanic",
+    "item_type": "inventory_item",
+    "description": "An echo & pitch correction pedal.",
+    "revenue_code": "4100",
+    "cost_code": "5000",
+    "asset_code": "1300"
   }
 ]

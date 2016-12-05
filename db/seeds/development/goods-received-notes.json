@@ -1,0 +1,12 @@
+[
+  {
+    "receipt_type": "goods_received_note",
+    "date": "2016-12-05T04:27:36.208Z",
+    "line_items": [
+      {
+        "quantity": 1,
+        "line_total": 140
+      }
+    ]
+  }
+]

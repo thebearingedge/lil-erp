@@ -1,9 +1,11 @@
 import { zipWith } from 'lodash'
+import { mapSeries } from 'bluebird'
 import accounts from './accounts'
 import brands from './brands'
 import vendors from './vendors'
 import inventory_items from './inventory-items'
 import purchase_orders from './purchase-orders'
+import goods_received_notes from './goods-received-notes'
 
 export const seed = async knex => {
 
@@ -64,21 +66,44 @@ export const seed = async knex => {
     }))
     .into('inventory_items')
 
-  vendor_ids.forEach(async (party_id, i) => {
-    const { line_items, ...purchase_order } = purchase_orders[i]
+  const order_line_item_ids = await mapSeries(vendor_ids, async (party_id, i) => {
+    const { line_items, ...order } = purchase_orders[i]
     const [ order_id ] = await knex
       .insert({
-        ...purchase_order,
+        ...order,
         party_id
       })
       .into('orders')
       .returning('id')
-    await knex
+    const [ order_line_item_id ] = await knex
       .insert(line_items.map(item => ({
         ...item,
         order_id,
         order_type: 'purchase_order'
       })))
       .into('order_line_items')
+      .returning('id')
+    return order_line_item_id
+  })
+
+  goods_received_notes.forEach(async (grn, i) => {
+    const { line_items, ...receipt } = grn
+    const party_id = vendor_ids[i]
+    const [ receipt_id ] = await knex
+      .insert({
+        party_id,
+        ...receipt
+      })
+      .into('receipts')
+      .returning('id')
+    await knex
+      .insert(line_items.map(item => ({
+        ...item,
+        sku: purchase_orders[0].line_items[0].sku,
+        receipt_id,
+        receipt_type: 'goods_received_note',
+        order_line_item_id: order_line_item_ids[0]
+      })))
+      .into('receipt_line_items')
   })
 }

@@ -76,7 +76,8 @@ export const seed = async knex => {
     await knex
       .insert(line_items.map(item => ({
         ...item,
-        order_id
+        order_id,
+        order_type: 'purchase_order'
       })))
       .into('order_line_items')
   })

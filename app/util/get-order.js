@@ -22,9 +22,10 @@ const orderLineItemProps = [
   'is_closed'
 ]
 
-export function getOrderLineItems(doc, order_id) {
+export function getOrderLineItems(doc, order_id, order_type) {
   return doc.line_items.map(line => ({
     ...pick(line, orderLineItemProps),
-    order_id
+    order_id,
+    order_type
   }))
 }

@@ -11,7 +11,7 @@ export default function purchaseOrdersData(knex) {
         .insert(order)
         .into('orders')
         .returning('id')
-      const line_items = getOrderLineItems(doc, order_id)
+      const line_items = getOrderLineItems(doc, order_id, 'purchase_order')
       await trx
         .insert(line_items)
         .into('order_line_items')

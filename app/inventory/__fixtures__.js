@@ -12,6 +12,7 @@ const InventoryItem = {
   sku: String,
   brandName: Nullable(String),
   description: Nullable(String),
+  quantityOnPurchaseOrder: Number,
   assetCode: String,
   revenueCode: String,
   costCode: String,

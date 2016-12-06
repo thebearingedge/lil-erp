@@ -4,6 +4,11 @@ export const up = knex => {
     .from('order_line_items as l')
     .whereRaw('l.sku = ii.sku and l.order_type = \'purchase_order\'')
     .as('quantity_on_purchase_order')
+  const quantityOnHand = knex
+    .select(knex.raw('coalesce(sum(s.quantity), 0)::integer'))
+    .from('stock_moves as s')
+    .whereRaw('s.sku = ii.sku')
+    .as('quantity_on_hand')
   const columns = [
     'i.sku',
     'i.description',
@@ -14,7 +19,8 @@ export const up = knex => {
     'ii.cost_code',
     'ii.asset_code',
     'b.name as brand_name',
-    quantityOnPurchaseOrder
+    quantityOnPurchaseOrder,
+    quantityOnHand
   ]
   const view = knex
     .select(columns)

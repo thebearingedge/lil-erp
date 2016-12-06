@@ -1,3 +1,0 @@
-- [ ] Find a root for `journal_entries` other than `transactions`
-- [ ] Remove `vendor_id` from `goods_received_notes`
-- [ ] Add `party_id` to `transactions`

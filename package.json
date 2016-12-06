@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
     "tdd": "npm t -s -- -w -R min",
-    "cover": "nyc npm test",
+    "cover": "nyc npm t -s",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
     "db:make": "npm run -s db migrate:make",
     "db:up": "npm run -s db migrate:latest",

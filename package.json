@@ -32,7 +32,7 @@
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
     "babel-plugin-transform-export-extensions": "6.8.0",
-    "babel-plugin-transform-object-rest-spread": "6.19.0",
+    "babel-plugin-transform-object-rest-spread": "6.20.2",
     "bluebird": "^3.4.6",
     "chai": "3.5.0",
     "chai-struct": "2.1.0",
@@ -49,6 +49,6 @@
     "global": "4.3.1",
     "knex": "0.12.6",
     "lodash": "4.17.2",
-    "pg": "6.1.0"
+    "pg": "6.1.1"
   }
 }

@@ -1,2 +1,2 @@
-# inventory
-Inventory Data Model
+# mini-erp
+An SMB ERP.

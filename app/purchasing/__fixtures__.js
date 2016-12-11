@@ -28,6 +28,7 @@ const PurchaseOrder = {
     description: Nullable(String),
     unitPrice: Number,
     lineTotal: String,
+    quantityReceived: Number,
     isClosed: Boolean
   }]
 }

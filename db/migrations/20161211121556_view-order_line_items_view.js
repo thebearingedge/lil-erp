@@ -1,10 +1,10 @@
 export const up = knex => {
   const unit_price = knex.raw('(o.line_total / o.quantity)::float as unit_price')
   const quantity_received = knex
-    .select(knex.raw('coalesce(sum(r.quantity), 0)::integer'))
+    .select(knex.raw('o.quantity - coalesce(sum(r.quantity), 0)::integer'))
     .from('receipt_line_items as r')
     .whereRaw('o.id = r.order_line_item_id')
-    .as('quantity_received')
+    .as('quantity_remaining')
   const columns = [
     'o.id',
     'o.order_id',

@@ -1,15 +1,15 @@
 create function create_transaction_receipt_line_item() returns trigger as $$
   declare
-    receipt_date timestamp;
+    receipt record;
     transaction_id uuid;
   begin
-    select date
-    into receipt_date
+    select date, party_id
+    into receipt
     from receipts
     where id = new.receipt_id;
     with create_transaction as (
-      insert into transactions (transaction_type, date)
-      values ('stock_move', receipt_date)
+      insert into transactions (transaction_type, date, party_id)
+      values ('receipt_line_item', receipt.date, receipt.party_id)
       returning id
     )
     select id

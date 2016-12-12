@@ -5,6 +5,7 @@ export const up = ({ schema }) =>
         .notNullable()
         .references('sku')
         .inTable('items')
+        .onUpdate('cascade')
     })
 
 export const down = ({ schema }) =>

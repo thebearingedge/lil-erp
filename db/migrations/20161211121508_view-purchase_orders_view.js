@@ -6,7 +6,7 @@ export const up = knex => {
     )`))
     .from('order_line_items as l')
     .leftJoin('receipt_line_items as r', 'l.id', 'r.order_line_item_id')
-    .whereRaw('l.order_id = o.id')
+    .whereRaw('l.order_id = o.id and l.is_closed = false')
     .as('open_balance')
   const total = knex
     .sum('l.line_total')

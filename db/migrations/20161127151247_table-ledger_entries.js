@@ -11,7 +11,7 @@ export const up = ({ schema }) =>
         .references('code')
         .inTable('accounts')
         .onUpdate('cascade')
-      tb.integer('amount')
+      tb.decimal('amount', 10, 2)
         .notNullable()
     })
 

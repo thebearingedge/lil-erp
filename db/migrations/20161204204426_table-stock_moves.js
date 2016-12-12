@@ -3,6 +3,8 @@ export const up = ({ schema }) =>
     .createTable('stock_moves', tb => {
       tb.integer('quantity')
         .notNullable()
+      tb.timestamp('receipt_date')
+        .notNullable()
     })
 
 export const down = ({ schema }) =>

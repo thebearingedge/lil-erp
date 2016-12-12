@@ -1,4 +1,13 @@
 export const up = knex => {
+  const open_balance = knex
+    .select(knex.raw(`sum(
+      l.line_total / l.quantity *
+      (l.quantity - coalesce(r.quantity, 0)::integer)
+    )`))
+    .from('order_line_items as l')
+    .leftJoin('receipt_line_items as r', 'l.id', 'r.order_line_item_id')
+    .whereRaw('l.order_id = o.id')
+    .as('open_balance')
   const total = knex
     .sum('l.line_total')
     .from('order_line_items as l')
@@ -12,7 +21,8 @@ export const up = knex => {
     'o.is_closed',
     'o.created_at',
     'o.updated_at',
-    total
+    total,
+    open_balance
   ]
   const view = knex
     .select(columns)

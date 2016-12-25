@@ -1,2 +1,2 @@
-# mini-erp
+# lil-erp
 An SMB ERP.

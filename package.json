@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "mini-erp",
+  "name": "lil-erp",
   "version": "1.0.0",
   "description": "Inventory Data Model",
   "main": "index.js",
@@ -18,15 +18,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thebearingedge/mini-erp.git"
+    "url": "git+https://github.com/thebearingedge/lil-erp.git"
   },
   "keywords": [],
   "author": "Tim Davis",
   "license": "LicenseRef-LICENSE",
   "bugs": {
-    "url": "https://github.com/thebearingedge/mini-erp/issues"
+    "url": "https://github.com/thebearingedge/lil-erp/issues"
   },
-  "homepage": "https://github.com/thebearingedge/mini-erp#readme",
+  "homepage": "https://github.com/thebearingedge/lil-erp#readme",
   "devDependencies": {
     "babel-cli": "6.18.0",
     "babel-eslint": "^7.1.1",

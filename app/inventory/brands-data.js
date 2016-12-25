@@ -2,7 +2,7 @@ import { camelSql } from '../util'
 
 export default function brandsData(knex) {
 
-  return camelSql({ create })
+  return camelSql({ create, find })
 
   async function create(doc) {
     return knex.transaction(async trx => {
@@ -20,5 +20,13 @@ export default function brandsData(knex) {
       .from('brands')
       .where({ id })
       .first()
+  }
+
+  async function find({ name } = {}) {
+    const query = knex
+      .select('*')
+      .from('brands')
+    name && query.whereRaw(`name ilike '%' || ? || '%'`, [name])
+    return await query
   }
 }

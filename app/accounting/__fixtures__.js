@@ -5,6 +5,7 @@ const Account = {
   name: String,
   description: Nullable(String),
   parentCode: Nullable(String),
+  balance: Number,
   isActive: Boolean,
   createdAt: Date,
   updatedAt: Date

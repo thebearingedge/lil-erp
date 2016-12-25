@@ -36,4 +36,12 @@ describe('accountsData', () => {
     })
   })
 
+  describe('find', () => {
+    it('lists all accounts', async () => {
+      const list = await accounts.find()
+      expect(list).to.have.structure([structs.Account])
+      console.log(list)
+    })
+  })
+
 })

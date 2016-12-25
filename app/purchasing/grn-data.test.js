@@ -48,6 +48,7 @@ describe('grnData', () => {
       const created = await grns.create(goodsReceivedNote)
       expect(created).to.have.structure(structs.GoodsReceivedNote)
     })
+
   })
 
 })

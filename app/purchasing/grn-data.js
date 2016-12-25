@@ -20,10 +20,8 @@ export default function grnData(knex) {
   }
 
   async function findById(id, trx) {
-    const goodsReceivedNote = await trx
-      .select('*')
-      .from('goods_received_notes_view')
-      .where({ id })
+    const goodsReceivedNote = await goodsReceivedNotesView(trx)
+      .where('s.id', id)
       .first()
     const lineItems = await trx
       .select('*')
@@ -31,4 +29,25 @@ export default function grnData(knex) {
       .where('shipment_id', id)
     return { lineItems, ...goodsReceivedNote }
   }
+}
+
+function goodsReceivedNotesView(knex) {
+  const total = knex
+    .sum('l.line_total')
+    .from('shipment_line_items as l')
+    .whereRaw('l.shipment_id = s.id')
+    .as('total')
+  const columns = [
+    's.id',
+    's.date',
+    's.party_id',
+    's.memo',
+    's.created_at',
+    's.updated_at',
+    total
+  ]
+  return knex
+    .select(columns)
+    .from('shipments as s')
+    .join('shipment_line_items as l', 's.id', 'l.shipment_id')
 }

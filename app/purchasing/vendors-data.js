@@ -34,10 +34,25 @@ export default function vendorsData(knex) {
   }
 
   async function findById(id, trx = knex) {
-    return trx
-      .select('*')
-      .from('vendors_view')
-      .where({ id })
+    return vendorsView(trx)
+      .where('v.id', id)
       .first()
   }
+}
+
+function vendorsView(knex) {
+  const columns = [
+    'p.name',
+    'p.notes',
+    'p.is_active',
+    'p.created_at',
+    'p.updated_at',
+    'v.id',
+    'v.account_number',
+    'v.website'
+  ]
+  return knex
+    .select(columns)
+    .from('vendors as v')
+    .join('parties as p', 'v.id', 'p.id')
 }

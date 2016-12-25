@@ -1,6 +1,6 @@
 [
   {
-    "receipt_type": "goods_received_note",
+    "shipment_type": "goods_received_note",
     "date": "2016-12-05T04:27:36.208Z",
     "line_items": [
       {

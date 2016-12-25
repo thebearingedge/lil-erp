@@ -23,9 +23,7 @@ export default function grnData(knex) {
     const goodsReceivedNote = await goodsReceivedNotesView(trx)
       .where('s.id', id)
       .first()
-    const lineItems = await trx
-      .select('*')
-      .from('shipment_line_items_view')
+    const lineItems = await shipmentLineItemsView(trx)
       .where('shipment_id', id)
     return { lineItems, ...goodsReceivedNote }
   }
@@ -50,4 +48,20 @@ function goodsReceivedNotesView(knex) {
     .select(columns)
     .from('shipments as s')
     .join('shipment_line_items as l', 's.id', 'l.shipment_id')
+}
+
+function shipmentLineItemsView(knex) {
+  const columns = [
+    'id',
+    'shipment_id',
+    'order_line_item_id',
+    'sku',
+    'quantity',
+    'description',
+    'line_total',
+    knex.raw('(line_total / quantity)::float as unit_price')
+  ]
+  return knex
+    .select(columns)
+    .from('shipment_line_items')
 }

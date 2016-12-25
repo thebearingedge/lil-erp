@@ -2,7 +2,7 @@ export const up = knex => {
   const unit_price = knex.raw('(o.line_total / o.quantity)::float as unit_price')
   const quantity_received = knex
     .select(knex.raw('o.quantity - coalesce(sum(r.quantity), 0)::integer'))
-    .from('receipt_line_items as r')
+    .from('shipment_line_items as r')
     .whereRaw('o.id = r.order_line_item_id')
     .as('quantity_remaining')
   const columns = [
@@ -19,7 +19,7 @@ export const up = knex => {
   const view = knex
     .select(columns)
     .from('order_line_items as o')
-    .leftJoin('receipt_line_items as r', 'o.id', 'r.order_line_item_id')
+    .leftJoin('shipment_line_items as r', 'o.id', 'r.order_line_item_id')
   return knex.raw(`create view "order_line_items_view" as ${view}`)
 }
 

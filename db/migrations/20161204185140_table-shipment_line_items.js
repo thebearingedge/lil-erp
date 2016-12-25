@@ -1,6 +1,6 @@
 export const up = ({ schema, raw }) =>
   schema
-    .createTable('receipt_line_items', tb => {
+    .createTable('shipment_line_items', tb => {
       tb.uuid('id')
         .unique()
         .notNullable()
@@ -14,4 +14,4 @@ export const up = ({ schema, raw }) =>
 
 export const down = ({ schema }) =>
   schema
-    .dropTable('receipt_line_items')
+    .dropTable('shipment_line_items')

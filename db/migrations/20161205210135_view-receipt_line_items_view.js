@@ -1,7 +1,7 @@
 export const up = knex => {
   const columns = [
     'id',
-    'receipt_id',
+    'shipment_id',
     'order_line_item_id',
     'sku',
     'quantity',
@@ -11,9 +11,9 @@ export const up = knex => {
   ]
   const view = knex
     .select(columns)
-    .from('receipt_line_items')
-  return knex.raw(`create view "receipt_line_items_view" as ${view}`)
+    .from('shipment_line_items')
+  return knex.raw(`create view "shipment_line_items_view" as ${view}`)
 }
 
 export const down = ({ raw }) =>
-  raw('drop view "receipt_line_items_view"')
+  raw('drop view "shipment_line_items_view"')

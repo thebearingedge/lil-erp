@@ -1,21 +1,21 @@
-create function create_transaction_receipt_line_item() returns trigger as $$
+create function create_transaction_shipment_line_item() returns trigger as $$
   declare
-    receipt record;
+    shipment record;
     transaction_id uuid;
   begin
     select date, party_id
-    into receipt
-    from receipts
-    where id = new.receipt_id;
+    into shipment
+    from shipments
+    where id = new.shipment_id;
     with create_transaction as (
       insert into transactions (transaction_type, date, party_id)
-      values ('receipt_line_item', receipt.date, receipt.party_id)
+      values ('shipment_line_item', shipment.date, shipment.party_id)
       returning id
     )
     select id
     into transaction_id
     from create_transaction;
-    if new.receipt_type = 'goods_received_note' then
+    if new.shipment_type = 'goods_received_note' then
       insert into ledger_entries (transaction_id, debit_code, credit_code, amount)
       values (transaction_id, '1300', '2100', new.line_total);
     end if;
@@ -25,5 +25,5 @@ $$ language plpgsql;
 
 create trigger create_transaction
   after insert
-  on receipt_line_items
-  for each row execute procedure create_transaction_receipt_line_item();
+  on shipment_line_items
+  for each row execute procedure create_transaction_shipment_line_item();

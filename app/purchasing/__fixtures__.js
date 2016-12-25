@@ -37,14 +37,14 @@ const PurchaseOrder = {
 const GoodsReceivedNote = {
   id: String,
   date: Date,
-  vendorId: String,
+  partyId: String,
   memo: Nullable(String),
   createdAt: Date,
   updatedAt: Date,
   total: String,
   lineItems:[{
     id: String,
-    receiptId: String,
+    shipmentId: String,
     orderLineItemId: Nullable(String),
     sku: String,
     quantity: Number,

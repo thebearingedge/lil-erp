@@ -1,6 +1,6 @@
 export const up = ({ schema }) =>
   schema
-    .table('receipt_line_items', tb => {
+    .table('shipment_line_items', tb => {
       tb.string('sku')
         .notNullable()
         .references('sku')
@@ -10,6 +10,6 @@ export const up = ({ schema }) =>
 
 export const down = ({ schema }) =>
   schema
-    .table('receipt_line_items', tb => {
+    .table('shipment_line_items', tb => {
       tb.dropColumn('sku')
     })

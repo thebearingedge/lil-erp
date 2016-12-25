@@ -87,23 +87,23 @@ export const seed = async knex => {
   })
 
   goods_received_notes.forEach(async (grn, i) => {
-    const { line_items, ...receipt } = grn
+    const { line_items, ...shipment } = grn
     const party_id = vendor_ids[i]
-    const [ receipt_id ] = await knex
+    const [ shipment_id ] = await knex
       .insert({
         party_id,
-        ...receipt
+        ...shipment
       })
-      .into('receipts')
+      .into('shipments')
       .returning('id')
     await knex
       .insert(line_items.map(item => ({
         ...item,
         sku: purchase_orders[0].line_items[0].sku,
-        receipt_id,
-        receipt_type: 'goods_received_note',
+        shipment_id,
+        shipment_type: 'goods_received_note',
         order_line_item_id: order_line_item_ids[0]
       })))
-      .into('receipt_line_items')
+      .into('shipment_line_items')
   })
 }

@@ -39,7 +39,7 @@ describe('grnData', () => {
       orderLineItemId = order_line_item_id
     })
 
-    it('creates a purchase order', async () => {
+    it('creates a goods received note', async () => {
       const goodsReceivedNote = {
         date: new Date().toJSON(),
         partyId,

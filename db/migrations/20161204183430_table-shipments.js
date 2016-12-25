@@ -1,19 +1,19 @@
 export const up = async ({ schema, raw }) => {
   await schema
-    .createTable('receipts', tb => {
+    .createTable('shipments', tb => {
       tb.uuid('id')
         .unique()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.enum('receipt_type', ['goods_received_note'])
-      tb.primary(['id', 'receipt_type'])
+      tb.enum('shipment_type', ['goods_received_note'])
+      tb.primary(['id', 'shipment_type'])
       tb.text('memo')
       tb.timestamp('date')
         .notNullable()
     })
-  await raw('select trigger_timestamps(?)', ['receipts'])
+  await raw('select trigger_timestamps(?)', ['shipments'])
 }
 
 export const down = ({ schema }) =>
   schema
-    .dropTable('receipts')
+    .dropTable('shipments')

@@ -1,12 +1,9 @@
-import { join } from 'path'
-import { readFile } from 'fs-promise'
-
-const readSql = filename => readFile(join(__dirname, `sql/${filename}`), 'utf8')
+import { readSql } from './helpers'
 
 export const up = async ({ raw }) => {
-  await raw(await readSql('set_created_at.sql'))
-  await raw(await readSql('set_updated_at.sql'))
-  await raw(await readSql('trigger_timestamps.sql'))
+  await raw(await readSql(__dirname, 'set_created_at.sql'))
+  await raw(await readSql(__dirname, 'set_updated_at.sql'))
+  await raw(await readSql(__dirname, 'trigger_timestamps.sql'))
 }
 
 export const down = async ({ raw }) => {

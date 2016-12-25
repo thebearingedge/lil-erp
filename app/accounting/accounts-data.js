@@ -2,7 +2,7 @@ import { camelSql } from '../util'
 
 export default function accountsData(knex) {
 
-  return camelSql({ create, update, find })
+  return camelSql({ create, update, find, makeInactive })
 
   function create(account) {
     return knex.transaction(async trx => {
@@ -33,6 +33,10 @@ export default function accountsData(knex) {
 
   function find() {
     return accountsView(knex)
+  }
+
+  function makeInactive(code) {
+    return update(code, { is_active: false })
   }
 
 }

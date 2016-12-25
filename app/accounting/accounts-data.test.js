@@ -40,7 +40,14 @@ describe('accountsData', () => {
     it('lists all accounts', async () => {
       const list = await accounts.find()
       expect(list).to.have.structure([structs.Account])
-      console.log(list)
+    })
+  })
+
+  describe('makeInactive', () => {
+    it('makes an account inactive by code', async () => {
+      const inactive = await accounts.makeInactive('1000')
+      expect(inactive).to.have.structure(structs.Account)
+      expect(inactive).to.have.property('isActive', false)
     })
   })
 

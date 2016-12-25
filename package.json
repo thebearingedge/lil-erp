@@ -35,9 +35,9 @@
     "babel-plugin-transform-object-rest-spread": "6.20.2",
     "bluebird": "^3.4.6",
     "chai": "3.5.0",
-    "chai-struct": "2.1.0",
+    "chai-struct": "2.1.1",
     "eslint": "^3.11.1",
-    "husky": "0.11.9",
+    "husky": "0.12.0",
     "knex": "0.12.6",
     "mocha": "3.2.0",
     "npm-run-all": "^3.1.2",
@@ -48,7 +48,7 @@
     "fs-promise": "1.0.0",
     "global": "4.3.1",
     "knex": "0.12.6",
-    "lodash": "4.17.2",
-    "pg": "6.1.1"
+    "lodash": "4.17.3",
+    "pg": "6.1.2"
   }
 }

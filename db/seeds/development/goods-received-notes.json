@@ -8,5 +8,15 @@
         "line_total": 140
       }
     ]
+  },
+  {
+    "shipment_type": "goods_received_note",
+    "date": "2016-12-25T23:10:56.960Z",
+    "line_items": [
+      {
+        "quantity": 1,
+        "line_total": 135
+      }
+    ]
   }
 ]

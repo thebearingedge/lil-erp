@@ -86,7 +86,7 @@ export const seed = async knex => {
     return order_line_item_id
   })
 
-  goods_received_notes.forEach(async (grn, i) => {
+  await mapSeries(goods_received_notes, async (grn, i) => {
     const { line_items, ...shipment } = grn
     const party_id = vendor_ids[i]
     const [ shipment_id ] = await knex

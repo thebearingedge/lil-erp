@@ -23,9 +23,7 @@ export default function purchaseOrdersData(knex) {
     const purchaseOrder = await purchaseOrdersView(trx)
       .where('o.id', id)
       .first()
-    const lineItems = await trx
-      .select('*')
-      .from('order_line_items_view')
+    const lineItems = await orderLineItemsView(trx)
       .where('order_id', id)
     return { lineItems, ...purchaseOrder }
   }
@@ -62,4 +60,28 @@ function purchaseOrdersView(knex) {
     .select(columns)
     .from('orders as o')
     .join('order_line_items as l', 'o.id', 'l.order_id')
+}
+
+function orderLineItemsView(knex) {
+  const unit_price = knex.raw('(o.line_total / o.quantity)::float as unit_price')
+  const quantity_received = knex
+    .select(knex.raw('o.quantity - coalesce(sum(s.quantity), 0)::integer'))
+    .from('shipment_line_items as s')
+    .whereRaw('o.id = s.order_line_item_id')
+    .as('quantity_remaining')
+  const columns = [
+    'o.id',
+    'o.order_id',
+    'o.sku',
+    'o.quantity',
+    'o.description',
+    'o.line_total',
+    'o.is_closed',
+    unit_price,
+    quantity_received
+  ]
+  return knex
+    .select(columns)
+    .from('order_line_items as o')
+    .leftJoin('shipment_line_items as s', 'o.id', 's.order_line_item_id')
 }

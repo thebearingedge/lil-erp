@@ -1,4 +1,4 @@
-import { zipWith } from 'lodash'
+import { zipWith, pick } from 'lodash'
 import { mapSeries } from 'bluebird'
 import accounts from './accounts'
 import brands from './brands'
@@ -24,19 +24,6 @@ export const seed = async knex => {
     .insert(accounts)
     .into('accounts')
 
-  const vendor_ids = await knex
-    .insert(vendors)
-    .into('parties')
-    .returning('id')
-
-  await knex
-    .insert(zipWith(vendors, vendor_ids, ({ party_type }, id) => ({
-      id,
-      party_type
-    })))
-    .into('vendors')
-    .returning('id')
-
   const brand_ids = await knex
     .insert(brands)
     .into('brands')
@@ -52,26 +39,31 @@ export const seed = async knex => {
     .returning('sku')
 
   await knex
-    .insert(zipWith(brand_ids, inventory_items, (brand_id, item) => {
-      const { sku, item_type, revenue_code, cost_code, asset_code } = item
-      return {
-        sku,
-        item_type,
-        revenue_code,
-        cost_code,
-        asset_code,
-        brand_id
-      }
-    }))
+    .insert(zipWith(brand_ids, inventory_items, (brand_id, item) => ({
+      brand_id,
+      ...pick(item, [
+        'sku', 'item_type', 'revenue_code', 'cost_code', 'asset_code'
+      ])
+    })))
     .into('inventory_items')
+
+  const vendor_ids = await knex
+    .insert(vendors)
+    .into('parties')
+    .returning('id')
+
+  await knex
+    .insert(zipWith(vendors, vendor_ids, ({ party_type }, id) => ({
+      id,
+      party_type
+    })))
+    .into('vendors')
+    .returning('id')
 
   const order_line_item_ids = await mapSeries(vendor_ids, async (party_id, i) => {
     const { line_items, ...order } = purchase_orders[i]
     const [ order_id ] = await knex
-      .insert({
-        ...order,
-        party_id
-      })
+      .insert({ ...order, party_id })
       .into('orders')
       .returning('id')
     const [ order_line_item_id ] = await knex
@@ -89,10 +81,7 @@ export const seed = async knex => {
     const { line_items, ...shipment } = grn
     const party_id = vendor_ids[i]
     const [ shipment_id ] = await knex
-      .insert({
-        party_id,
-        ...shipment
-      })
+      .insert({ ...shipment, party_id })
       .into('shipments')
       .returning('id')
     await knex
@@ -121,10 +110,7 @@ export const seed = async knex => {
   await mapSeries(customer_ids, async (party_id, i) => {
     const { line_items, ...order } = sales_orders[i]
     const [ order_id ] = await knex
-      .insert({
-        ...order,
-        party_id
-      })
+      .insert({ ...order, party_id })
       .into('orders')
       .returning('id')
     const [ order_line_item_id ] = await knex

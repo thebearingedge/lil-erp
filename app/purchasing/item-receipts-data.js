@@ -1,12 +1,12 @@
 import { camelSql, getShipment, getShipmentLineItems } from '../util'
 
-export default function grnData(knex) {
+export default function itemReceiptsData(knex) {
 
   return camelSql({ create })
 
   async function create(doc) {
     return knex.transaction(async trx => {
-      const shipment = getShipment(doc, 'goods_received_note')
+      const shipment = getShipment(doc, 'item_receipt')
       const [ shipment_id ] = await trx
         .insert(shipment)
         .into('shipments')
@@ -14,7 +14,7 @@ export default function grnData(knex) {
       const line_items = getShipmentLineItems(
         doc,
         shipment_id,
-        'goods_received_note'
+        'item_receipt'
       )
       await trx
         .insert(line_items)
@@ -24,16 +24,16 @@ export default function grnData(knex) {
   }
 
   async function findById(id, trx) {
-    const goodsReceivedNote = await goodsReceivedNotesView(trx)
+    const itemReceipt = await itemReceiptsView(trx)
       .where('s.id', id)
       .first()
     const lineItems = await shipmentLineItemsView(trx)
       .where('shipment_id', id)
-    return { lineItems, ...goodsReceivedNote }
+    return { lineItems, ...itemReceipt }
   }
 }
 
-function goodsReceivedNotesView(knex) {
+function itemReceiptsView(knex) {
   const total = knex
     .sum('l.line_total')
     .from('shipment_line_items as l')

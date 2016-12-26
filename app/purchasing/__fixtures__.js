@@ -34,7 +34,7 @@ const PurchaseOrder = {
   }]
 }
 
-const GoodsReceivedNote = {
+const ItemReceipt = {
   id: String,
   date: Date,
   partyId: String,
@@ -57,5 +57,5 @@ const GoodsReceivedNote = {
 export const structs = {
   Vendor,
   PurchaseOrder,
-  GoodsReceivedNote
+  ItemReceipt
 }

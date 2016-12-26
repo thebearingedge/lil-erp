@@ -15,7 +15,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
     select id
     into transaction_id
     from create_transaction;
-    if new.shipment_type = 'goods_received_note' then
+    if new.shipment_type = 'item_receipt' then
       insert into ledger_entries (transaction_id, debit_code, credit_code, amount)
       values (transaction_id, '1300', '2100', new.line_total);
     end if;

@@ -1,16 +1,16 @@
 import { describe, beforeEach, afterEach, it } from 'global'
 import { begin, expect } from '../__test__'
 import { structs } from './__fixtures__'
-import grnData from './grn-data'
+import itemReceiptsData from './item-receipts-data'
 
-describe('grnData', () => {
+describe('itemReceiptsData', () => {
 
   let trx
-  let grns
+  let itemReceipts
 
   beforeEach(begin(_trx => {
     trx = _trx
-    grns = grnData(trx)
+    itemReceipts = itemReceiptsData(trx)
   }))
 
   afterEach(() => trx.rollback())
@@ -39,14 +39,14 @@ describe('grnData', () => {
       orderLineItemId = order_line_item_id
     })
 
-    it('creates a goods received note', async () => {
-      const goodsReceivedNote = {
+    it('creates an item receipt', async () => {
+      const itemReceipt = {
         date: new Date().toJSON(),
         partyId,
         lineItems: [{ sku, orderLineItemId, quantity: 2, lineTotal: 400 }]
       }
-      const created = await grns.create(goodsReceivedNote)
-      expect(created).to.have.structure(structs.GoodsReceivedNote)
+      const created = await itemReceipts.create(itemReceipt)
+      expect(created).to.have.structure(structs.ItemReceipt)
     })
 
   })

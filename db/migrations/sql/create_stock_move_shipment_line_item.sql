@@ -18,8 +18,15 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
     limit 1;
 
     select
-      case when new.shipment_type = 'goods_received_note' then 1
-           when new.shipment_type = 'invoice' then -1
+      case
+        when
+          new.shipment_type = 'goods_received_note'
+        then
+          1
+        when
+          new.shipment_type = 'invoice'
+        then
+          -1
       end
     into sign;
 
@@ -43,13 +50,21 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
     into new_quantity_on_hand;
 
     select
-      case when previous_average_cost is not null and sign < 0 then previous_average_cost
-           when previous_average_cost is null and sign > 0 then new.line_total
-           else ((previous_quantity_on_hand * previous_average_cost)
-                +
-                (new.line_total))
-                /
-                (new.quantity + previous_quantity_on_hand)
+      case
+        when
+          previous_average_cost is not null and sign < 0
+        then
+          previous_average_cost
+        when
+          previous_average_cost is null and sign > 0
+        then
+          new.line_total
+        else
+          ((previous_quantity_on_hand * previous_average_cost)
+          +
+          (new.line_total))
+          /
+          (new.quantity + previous_quantity_on_hand)
       end
     into new_average_cost;
 

@@ -2,7 +2,7 @@ import { camelSql, getOrder, getOrderLineItems } from '../util'
 
 export default function salesOrdersData(knex) {
 
-  return camelSql({ create })
+  return camelSql({ create, findById })
 
   async function create(doc) {
     return knex.transaction(async trx => {
@@ -19,8 +19,8 @@ export default function salesOrdersData(knex) {
     })
   }
 
-  async function findById(id, trx) {
-    const purchaseOrder = await purchaseOrdersView(trx)
+  async function findById(id, trx = knex) {
+    const purchaseOrder = await salesOrdersView(trx)
       .where('o.id', id)
       .first()
     const lineItems = await orderLineItemsView(trx)
@@ -30,8 +30,7 @@ export default function salesOrdersData(knex) {
 
 }
 
-
-function purchaseOrdersView(knex) {
+function salesOrdersView(knex) {
   const open_balance = knex
     .select(knex.raw(`sum(
       l.line_total / l.quantity *

@@ -44,4 +44,23 @@ describe('salesOrdersData', () => {
     })
   })
 
+  describe('findById', () => {
+
+    let orderId
+
+    beforeEach(async () => {
+      const { id } = await trx
+        .select('id')
+        .from('orders')
+        .where('order_type', 'sales_order')
+        .first()
+      orderId = id
+    })
+
+    it('finds a sales order by id', async () => {
+      const order = await salesOrders.findById(orderId)
+      expect(order).to.have.structure(structs.SalesOrder)
+    })
+  })
+
 })

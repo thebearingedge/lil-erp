@@ -6,6 +6,7 @@ import vendors from './vendors'
 import inventory_items from './inventory-items'
 import purchase_orders from './purchase-orders'
 import goods_received_notes from './goods-received-notes'
+import customers from './customers'
 
 export const seed = async knex => {
 
@@ -23,10 +24,7 @@ export const seed = async knex => {
     .into('accounts')
 
   const vendor_ids = await knex
-    .insert(vendors.map(({ name, party_type }) => ({
-      name,
-      party_type
-    })))
+    .insert(vendors)
     .into('parties')
     .returning('id')
 
@@ -106,4 +104,16 @@ export const seed = async knex => {
       })))
       .into('shipment_line_items')
   })
+
+  const customer_ids = await knex
+    .insert(customers)
+    .into('parties')
+    .returning('id')
+
+  await knex
+    .insert(zipWith(customers, customer_ids, ({ party_type }, id) => ({
+      id,
+      party_type
+    })))
+    .into('customers')
 }

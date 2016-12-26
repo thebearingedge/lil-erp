@@ -24,7 +24,7 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
         then
           1
         when
-          new.shipment_type = 'invoice'
+          new.shipment_type = 'item_sale'
         then
           -1
       end

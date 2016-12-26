@@ -1,6 +1,6 @@
 [
   {
-    "shipment_type": "invoice",
+    "shipment_type": "item_sale",
     "date": "2016-12-05T04:27:36.208Z",
     "line_items": [
       {

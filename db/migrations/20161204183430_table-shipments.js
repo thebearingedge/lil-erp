@@ -5,7 +5,7 @@ export const up = async ({ schema, raw }) => {
         .unique()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.enum('shipment_type', ['item_receipt', 'invoice'])
+      tb.enum('shipment_type', ['item_receipt', 'item_sale'])
       tb.primary(['id', 'shipment_type'])
       tb.text('memo')
       tb.timestamp('date')

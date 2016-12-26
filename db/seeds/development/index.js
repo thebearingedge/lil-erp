@@ -8,7 +8,7 @@ import purchase_orders from './purchase-orders'
 import item_receipts from './item-receipts'
 import customers from './customers'
 import sales_orders from './sales-orders'
-import invoices from './invoices'
+import item_sales from './item-sales'
 
 export const seed = async knex => {
 
@@ -125,8 +125,8 @@ export const seed = async knex => {
     return order_line_item_id
   })
 
-  await mapSeries(invoices, async (invoice, i) => {
-    const { line_items, ...shipment } = invoice
+  await mapSeries(item_sales, async (item_sale, i) => {
+    const { line_items, ...shipment } = item_sale
     const party_id = customer_ids[i]
     const [ shipment_id ] = await knex
       .insert({ ...shipment, party_id })
@@ -137,7 +137,7 @@ export const seed = async knex => {
         ...item,
         sku: sales_orders[0].line_items[0].sku,
         shipment_id,
-        shipment_type: 'invoice',
+        shipment_type: 'item_sale',
         order_line_item_id: so_line_item_ids[0]
       })))
       .into('shipment_line_items')

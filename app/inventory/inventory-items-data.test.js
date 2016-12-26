@@ -29,4 +29,12 @@ describe('inventoryItemsData', () => {
     })
   })
 
+  describe('find', () => {
+    it('lists all inventory items', async () => {
+      const list = await inventoryItems.find()
+      expect(list).to.have.structure([structs.InventoryItem])
+      expect(list).to.have.length.above(0)
+    })
+  })
+
 })

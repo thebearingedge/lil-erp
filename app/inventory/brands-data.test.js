@@ -36,10 +36,10 @@ describe('brandsData', () => {
         const found = await brands.find({ name: 'e' })
         expect(found).to.have.structure([structs.Brand])
         found.forEach(({ name }) => {
-          expect(name).to.match(/e/i)
+          expect(name).to.match(/^e/i)
         })
       })
     })
   })
-  
+
 })

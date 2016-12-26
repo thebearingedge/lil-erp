@@ -44,11 +44,13 @@ export default function accountsData(knex) {
 function accountsView(knex) {
   const balance = knex.raw(`
     coalesce(sum(
-      case when le.debit_code = a.code
-           then le.amount
-           else -1 * le.amount
+      case
+        when le.debit_code = a.code
+          then le.amount
+        else
+          -1 * le.amount
       end
-    ), 0::float) as balance
+    ), 0)::float as balance
   `)
   return knex
     .select('a.*', balance)

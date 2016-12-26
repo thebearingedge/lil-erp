@@ -26,7 +26,7 @@ export default function brandsData(knex) {
     const query = knex
       .select('*')
       .from('brands')
-    name && query.whereRaw(`name ilike '%' || ? || '%'`, [name])
+    name && query.whereRaw(`name ilike ? || '%'`, [name])
     return await query
   }
 }

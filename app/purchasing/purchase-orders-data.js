@@ -63,8 +63,10 @@ function purchaseOrdersView(knex) {
 }
 
 function orderLineItemsView(knex) {
-  const unit_price = knex.raw('(o.line_total / o.quantity)::float as unit_price')
-  const quantity_received = knex
+  const unit_price = knex.raw(`
+    (o.line_total / o.quantity)::float as unit_price
+  `)
+  const quantity_remaining = knex
     .select(knex.raw('o.quantity - coalesce(sum(s.quantity), 0)::integer'))
     .from('shipment_line_items as s')
     .whereRaw('o.id = s.order_line_item_id')
@@ -78,7 +80,7 @@ function orderLineItemsView(knex) {
     'o.line_total',
     'o.is_closed',
     unit_price,
-    quantity_received
+    quantity_remaining
   ]
   return knex
     .select(columns)

@@ -63,7 +63,9 @@ function salesOrdersView(knex) {
 }
 
 function orderLineItemsView(knex) {
-  const unit_price = knex.raw('(o.line_total / o.quantity)::float as unit_price')
+  const unit_price = knex.raw(`
+    (o.line_total / o.quantity)::float as unit_price
+  `)
   const quantity_received = knex
     .select(knex.raw('o.quantity - coalesce(sum(s.quantity), 0)::integer'))
     .from('shipment_line_items as s')

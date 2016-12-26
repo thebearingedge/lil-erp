@@ -11,7 +11,11 @@ export default function grnData(knex) {
         .insert(shipment)
         .into('shipments')
         .returning('id')
-      const line_items = getShipmentLineItems(doc, shipment_id, 'goods_received_note')
+      const line_items = getShipmentLineItems(
+        doc,
+        shipment_id,
+        'goods_received_note'
+      )
       await trx
         .insert(line_items)
         .into('shipment_line_items')

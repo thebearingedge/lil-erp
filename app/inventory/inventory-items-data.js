@@ -21,9 +21,9 @@ export default function inventoryItemsData(knex) {
         .insert(item)
         .into('items')
         .returning('sku')
-      const inventoryItem = getInventoryItem(doc)
+      const inventory_item = getInventoryItem(doc)
       await trx
-        .insert(inventoryItem)
+        .insert(inventory_item)
         .into('inventory_items')
       return findBySku(sku, trx)
     })
@@ -76,5 +76,4 @@ function inventoryItemsView(knex) {
     .from('inventory_items as ii')
     .join('items as i', 'ii.sku', 'i.sku')
     .leftJoin('brands as b', 'ii.brand_id', 'b.id')
-    .leftJoin('order_line_items as l', 'i.sku', 'l.sku')
 }

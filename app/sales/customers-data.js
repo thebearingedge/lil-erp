@@ -15,7 +15,6 @@ export default function customersData(knex) {
       await trx
         .insert(customer)
         .into('customers')
-        .returning('id')
       return findById(id, trx)
     })
   }

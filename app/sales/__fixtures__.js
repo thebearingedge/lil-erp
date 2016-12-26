@@ -9,6 +9,30 @@ const Customer = {
   isActive: Boolean
 }
 
+const SalesOrder = {
+  id: String,
+  date: Date,
+  customerId: String,
+  memo: Nullable(String),
+  createdAt: Date,
+  updatedAt: Date,
+  isClosed: Boolean,
+  total: String,
+  openBalance: String,
+  lineItems: [{
+    id: String,
+    orderId: String,
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
+    unitPrice: Number,
+    lineTotal: String,
+    quantityRemaining: Number,
+    isClosed: Boolean
+  }]
+}
+
 export const structs = {
-  Customer
+  Customer,
+  SalesOrder
 }

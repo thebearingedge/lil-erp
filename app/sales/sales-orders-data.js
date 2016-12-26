@@ -1,17 +1,17 @@
 import { camelSql, getOrder, getOrderLineItems } from '../util'
 
-export default function purchaseOrdersData(knex) {
+export default function salesOrdersData(knex) {
 
   return camelSql({ create })
 
   async function create(doc) {
     return knex.transaction(async trx => {
-      const order = getOrder(doc, 'purchase_order')
+      const order = getOrder(doc, 'sales_order')
       const [ order_id ] = await trx
         .insert(order)
         .into('orders')
         .returning('id')
-      const line_items = getOrderLineItems(doc, order_id, 'purchase_order')
+      const line_items = getOrderLineItems(doc, order_id, 'sales_order')
       await trx
         .insert(line_items)
         .into('order_line_items')
@@ -29,6 +29,7 @@ export default function purchaseOrdersData(knex) {
   }
 
 }
+
 
 function purchaseOrdersView(knex) {
   const open_balance = knex
@@ -48,7 +49,7 @@ function purchaseOrdersView(knex) {
   const columns = [
     'o.id',
     'o.date',
-    'o.party_id as vendor_id',
+    'o.party_id as customer_id',
     'o.memo',
     'o.is_closed',
     'o.created_at',

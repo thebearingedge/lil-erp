@@ -19,7 +19,7 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
 
     select
       case when new.shipment_type = 'goods_received_note' then 1
-           when new.shipment_type = 'shipment' then -1
+           when new.shipment_type = 'invoice' then -1
       end
     into sign;
 

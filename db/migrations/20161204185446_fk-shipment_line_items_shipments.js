@@ -5,7 +5,7 @@ export const up = ({ schema }) =>
         .notNullable()
         .references('id')
         .inTable('shipments')
-      tb.enum('shipment_type', ['goods_received_note'])
+      tb.enum('shipment_type', ['goods_received_note', 'invoice'])
         .notNullable()
       tb.foreign(['shipment_id', 'shipment_type'])
         .references(['id', 'shipment_type'])

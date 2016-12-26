@@ -8,6 +8,7 @@ import purchase_orders from './purchase-orders'
 import goods_received_notes from './goods-received-notes'
 import customers from './customers'
 import sales_orders from './sales-orders'
+import invoices from './invoices'
 
 export const seed = async knex => {
 
@@ -60,7 +61,7 @@ export const seed = async knex => {
     .into('vendors')
     .returning('id')
 
-  const order_line_item_ids = await mapSeries(vendor_ids, async (party_id, i) => {
+  const po_line_item_ids = await mapSeries(vendor_ids, async (party_id, i) => {
     const { line_items, ...order } = purchase_orders[i]
     const [ order_id ] = await knex
       .insert({ ...order, party_id })
@@ -90,7 +91,7 @@ export const seed = async knex => {
         sku: purchase_orders[0].line_items[0].sku,
         shipment_id,
         shipment_type: 'goods_received_note',
-        order_line_item_id: order_line_item_ids[0]
+        order_line_item_id: po_line_item_ids[0]
       })))
       .into('shipment_line_items')
   })
@@ -107,7 +108,7 @@ export const seed = async knex => {
     })))
     .into('customers')
 
-  await mapSeries(customer_ids, async (party_id, i) => {
+  const so_line_item_ids = await mapSeries(customer_ids, async (party_id, i) => {
     const { line_items, ...order } = sales_orders[i]
     const [ order_id ] = await knex
       .insert({ ...order, party_id })
@@ -122,5 +123,23 @@ export const seed = async knex => {
       .into('order_line_items')
       .returning('id')
     return order_line_item_id
+  })
+
+  await mapSeries(invoices, async (invoice, i) => {
+    const { line_items, ...shipment } = invoice
+    const party_id = customer_ids[i]
+    const [ shipment_id ] = await knex
+      .insert({ ...shipment, party_id })
+      .into('shipments')
+      .returning('id')
+    await knex
+      .insert(line_items.map(item => ({
+        ...item,
+        sku: sales_orders[0].line_items[0].sku,
+        shipment_id,
+        shipment_type: 'invoice',
+        order_line_item_id: so_line_item_ids[0]
+      })))
+      .into('shipment_line_items')
   })
 }

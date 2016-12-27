@@ -8,13 +8,13 @@
     "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
     "tdd": "npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
+    "check": "nyc check-coverage",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
     "db:make": "npm run -s db migrate:make",
     "db:up": "npm run -s db migrate:latest",
     "db:down": "npm run -s db migrate:rollback",
-    "db:cycle": "run-s -s db:down db:up",
     "db:seed": "npm run -s db seed:run",
-    "precommit": "npm run cover"
+    "precommit": "run-s -s cover check"
   },
   "repository": {
     "type": "git",

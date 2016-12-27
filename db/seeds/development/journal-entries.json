@@ -1,0 +1,13 @@
+[
+  {
+    "transaction_type": "journal_entry",
+    "date": "2016-01-01T08:00:00.000Z",
+    "ledger_entries": [
+      {
+        "credit_code": "3100",
+        "debit_code": "1100",
+        "amount": 10000
+      }
+    ]
+  }
+]

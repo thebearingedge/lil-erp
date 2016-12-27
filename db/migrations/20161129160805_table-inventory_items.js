@@ -1,4 +1,4 @@
-export const up = ({ schema, raw }) =>
+export const up = ({ schema }) =>
   schema
     .createTable('inventory_items', tb => {
       tb.string('sku')

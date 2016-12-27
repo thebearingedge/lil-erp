@@ -1,4 +1,4 @@
-export const up = ({ schema, raw }) =>
+export const up = ({ schema }) =>
   schema
     .createTable('vendors', tb => {
       tb.uuid('id')

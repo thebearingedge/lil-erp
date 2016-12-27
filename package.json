@@ -5,6 +5,7 @@
   "description": "Inventory Data Model",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint app db",
     "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
     "tdd": "npm run db:seed && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
@@ -14,7 +15,7 @@
     "db:up": "npm run -s db migrate:latest",
     "db:down": "npm run -s db migrate:rollback",
     "db:seed": "npm run -s db seed:run",
-    "precommit": "run-s -s cover check"
+    "precommit": "run-s -s lint cover check"
   },
   "repository": {
     "type": "git",

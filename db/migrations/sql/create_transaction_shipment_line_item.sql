@@ -64,7 +64,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       values (
         transaction_id,
         '1200',
-        '4000',
+        '4100',
         new.line_total
       ), (
         transaction_id,

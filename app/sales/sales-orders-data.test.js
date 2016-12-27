@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'global'
-import { begin, expect } from '../__test__'
+import { begin, expect, rollback } from '../__test__'
 import { structs } from './__fixtures__'
 import salesOrdersData from './sales-orders-data'
 
@@ -13,7 +13,7 @@ describe('salesOrdersData', () => {
     salesOrders = salesOrdersData(trx)
   }))
 
-  afterEach(() => trx.rollback())
+  afterEach(() => rollback(trx))
 
   describe('create', () => {
 

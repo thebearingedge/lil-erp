@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'global'
-import { begin, expect } from '../__test__'
+import { begin, expect, rollback } from '../__test__'
 import { structs } from './__fixtures__'
 import inventoryItemsData from './inventory-items-data'
 
@@ -13,7 +13,7 @@ describe('inventoryItemsData', () => {
     inventoryItems = inventoryItemsData(trx)
   }))
 
-  afterEach(() => trx.rollback())
+  afterEach(() => rollback(trx))
 
   describe('create', () => {
     const item = {
@@ -32,8 +32,8 @@ describe('inventoryItemsData', () => {
   describe('find', () => {
     it('lists all inventory items', async () => {
       const list = await inventoryItems.find()
-      expect(list).to.have.structure([structs.InventoryItem])
       expect(list).to.have.length.above(0)
+      expect(list).to.have.structure([structs.InventoryItem])
     })
   })
 

@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'global'
-import { begin, expect } from '../__test__'
+import { begin, expect, rollback } from '../__test__'
 import { structs } from './__fixtures__'
 import customersData from './customers-data'
 
@@ -13,7 +13,7 @@ describe('customersData', () => {
     customers = customersData(trx)
   }))
 
-  afterEach(() => trx.rollback())
+  afterEach(() => rollback(trx))
 
   describe('findById', () => {
     it('finds a customer by id', async () => {

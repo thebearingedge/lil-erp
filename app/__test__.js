@@ -6,14 +6,16 @@ import { development } from '../db'
 
 const knex = new Knex(development)
 
-const rejected = promise => promise.catch(err => err)
+const suppress = promise => promise.catch(_ => _)
 
 const begin = setup => done => {
-  rejected(knex.transaction(trx => {
+  suppress(knex.transaction(trx => {
     setup(trx)
     done()
   }))
 }
+
+const rollback = trx => trx.rollback()
 
 before(() => knex.seed.run())
 
@@ -24,5 +26,5 @@ chai.use(chaiStruct)
 export {
   begin,
   expect,
-  rejected
+  rollback
 }

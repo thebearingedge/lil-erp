@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'global'
-import { begin, expect } from '../__test__'
+import { begin, expect, rollback } from '../__test__'
 import { structs } from './__fixtures__'
 import journalEntriesData from './journal-entries-data'
 
@@ -13,7 +13,7 @@ describe('journalEntriesData', () => {
     entries = journalEntriesData(trx)
   }))
 
-  afterEach(() => trx.rollback())
+  afterEach(() => rollback(trx))
 
   describe('create', () => {
     const entry = {
@@ -28,4 +28,5 @@ describe('journalEntriesData', () => {
       expect(created).to.have.structure(structs.JournalEntry)
     })
   })
+  
 })

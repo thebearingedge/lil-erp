@@ -2,4 +2,4 @@
 An SMB ERP.
 
 ## TODO
-- [ ] Create ledger transaction on sale of inventory
+- [ ] Record payments/credits

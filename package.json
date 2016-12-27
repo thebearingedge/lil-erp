@@ -4,6 +4,10 @@
   "version": "1.0.0",
   "description": "A Small Business ERP.",
   "main": "index.js",
+  "engines": {
+    "node": ">=7.2.0",
+    "npm": ">=3.10.9"
+  },
   "scripts": {
     "lint": "eslint api db",
     "test": "mocha --harmony-async-await -r babel-register api/**/*.test.js",

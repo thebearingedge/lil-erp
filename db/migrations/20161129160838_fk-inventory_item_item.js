@@ -1,5 +1,5 @@
-export const up = async ({ schema, raw }) => {
-  await schema
+export const up = ({ schema }) =>
+  schema
     .table('inventory_items', tb => {
       tb.enum('item_type', ['inventory_item'])
         .notNullable()
@@ -8,8 +8,6 @@ export const up = async ({ schema, raw }) => {
         .references(['sku', 'item_type'])
         .inTable('items')
     })
-  await raw('select trigger_supertype_updated_at(?, ?)', ['inventory_items', 'items'])
-}
 
 export const down = ({ schema }) =>
   schema

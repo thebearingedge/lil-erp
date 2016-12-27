@@ -5,8 +5,8 @@
   "description": "Inventory Data Model",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint app db",
-    "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
+    "lint": "eslint api db",
+    "test": "mocha --harmony-async-await -r babel-register api/**/*.test.js",
     "tdd": "npm run db:seed && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",

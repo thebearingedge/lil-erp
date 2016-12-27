@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --harmony-async-await -r babel-register app/**/*.test.js",
-    "tdd": "npm t -s -- -w -R min",
+    "tdd": "npm run db:seed && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",

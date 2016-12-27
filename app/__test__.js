@@ -1,5 +1,5 @@
 import Knex from 'knex'
-import { before, after } from 'global'
+import { after } from 'global'
 import chai, { expect } from 'chai'
 import { chaiStruct } from 'chai-struct'
 import { development } from '../db'
@@ -16,8 +16,6 @@ const begin = setup => done => {
 }
 
 const rollback = trx => trx.rollback()
-
-before(() => knex.seed.run())
 
 after(() => knex.destroy())
 

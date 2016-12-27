@@ -2,7 +2,7 @@
   "private": true,
   "name": "lil-erp",
   "version": "1.0.0",
-  "description": "Inventory Data Model",
+  "description": "A Small Business ERP.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint api db",

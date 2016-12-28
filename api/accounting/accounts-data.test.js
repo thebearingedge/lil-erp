@@ -25,6 +25,10 @@ describe('accountsData', () => {
       }
       const created = await accounts.create(account)
       expect(created).to.have.structure(structs.Account)
+      expect(created).to.include({
+        balance: 0,
+        isActive: true
+      })
     })
   })
 

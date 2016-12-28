@@ -41,6 +41,19 @@ describe('salesOrdersData', () => {
       }
       const created = await salesOrders.create(salesOrder)
       expect(created).to.have.structure(structs.SalesOrder)
+      expect(created).to.include({
+        isClosed: false,
+        total: 400,
+        openBalance: 400
+      })
+      created.lineItems.forEach(line => {
+        expect(line).to.include({
+          unitPrice: line.lineTotal / line.quantity,
+          quantityRemaining: line.quantity,
+          orderId: created.id,
+          isClosed: false
+        })
+      })
     })
   })
 

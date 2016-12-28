@@ -20,8 +20,8 @@ const PurchaseOrder = {
   createdAt: Date,
   updatedAt: Date,
   isClosed: Boolean,
-  total: String,
-  openBalance: String,
+  total: Number,
+  openBalance: Number,
   lineItems: [{
     id: String,
     orderId: String,
@@ -42,7 +42,7 @@ const ItemReceipt = {
   memo: Nullable(String),
   createdAt: Date,
   updatedAt: Date,
-  total: String,
+  total: Number,
   lineItems:[{
     id: String,
     shipmentId: String,

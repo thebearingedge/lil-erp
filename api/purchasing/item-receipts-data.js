@@ -38,7 +38,6 @@ function itemReceiptsView(knex) {
     .sum('l.line_total')
     .from('shipment_line_items as l')
     .whereRaw('l.shipment_id = s.id')
-    .as('total')
   const columns = [
     's.id',
     's.date',
@@ -46,7 +45,7 @@ function itemReceiptsView(knex) {
     's.memo',
     's.created_at',
     's.updated_at',
-    total
+    knex.raw(`(${total})::float as total`)
   ]
   return knex
     .select(columns)

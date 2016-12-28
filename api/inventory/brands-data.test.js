@@ -20,6 +20,9 @@ describe('brandsData', () => {
     it('creates a brand', async () => {
       const created = await brands.create(brand)
       expect(created).to.have.structure(structs.Brand)
+      expect(created).to.include({
+        isActive: true
+      })
     })
   })
 

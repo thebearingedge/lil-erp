@@ -20,12 +20,12 @@ export default function salesOrdersData(knex) {
   }
 
   async function findById(id, trx = knex) {
-    const purchaseOrder = await salesOrdersView(trx)
+    const salesOrder = await salesOrdersView(trx)
       .where('o.id', id)
       .first()
     const lineItems = await orderLineItemsView(trx)
       .where('order_id', id)
-    return { lineItems, ...purchaseOrder }
+    return { lineItems, ...salesOrder }
   }
 
 }
@@ -34,17 +34,15 @@ function salesOrdersView(knex) {
   const open_balance = knex
     .select(knex.raw(`sum(
       l.line_total / l.quantity *
-      (l.quantity - coalesce(s.quantity, 0)::integer)
+      (l.quantity - coalesce(s.quantity, 0))
     )`))
     .from('order_line_items as l')
     .leftJoin('shipment_line_items as s', 'l.id', 's.order_line_item_id')
     .whereRaw('l.order_id = o.id and l.is_closed = false')
-    .as('open_balance')
   const total = knex
     .sum('l.line_total')
     .from('order_line_items as l')
     .whereRaw('l.order_id = o.id')
-    .as('total')
   const columns = [
     'o.id',
     'o.date',
@@ -53,8 +51,8 @@ function salesOrdersView(knex) {
     'o.is_closed',
     'o.created_at',
     'o.updated_at',
-    total,
-    open_balance
+    knex.raw(`(${total})::float as total`),
+    knex.raw(`(${open_balance})::float as open_balance`)
   ]
   return knex
     .select(columns)

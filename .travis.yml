@@ -13,5 +13,4 @@ before_script:
   - psql -U postgres -c 'create database "lil-erp"'
   - npm run db:up
   - npm run db:seed
-script: npm test
-after_script: npm run coveralls
+script: nyc npm test && nyc report --reporter=text-lcov | coveralls

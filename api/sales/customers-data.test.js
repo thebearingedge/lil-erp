@@ -34,6 +34,10 @@ describe('customersData', () => {
       }
       const created = await customers.create(customer)
       expect(created).to.have.structure(structs.Customer)
+      expect(created).to.include({
+        openBalance: 0,
+        isActive: true
+      })
     })
   })
 

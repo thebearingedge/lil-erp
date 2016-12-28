@@ -26,6 +26,12 @@ describe('inventoryItemsData', () => {
     it('creates a inventory item', async () => {
       const created = await inventoryItems.create(item)
       expect(created).to.have.structure(structs.InventoryItem)
+      expect(created).to.include({
+        quantityOnPurchaseOrder: 0,
+        quantityOnSalesOrder: 0,
+        quantityOnHand: 0,
+        isActive: true
+      })
     })
   })
 

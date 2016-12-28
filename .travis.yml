@@ -1,0 +1,18 @@
+dist: trusty
+sudo: false
+language: node_js
+node_js:
+  - '7'
+env:
+  - 'NODE_ENV=integration'
+addons:
+  postgresql: '9.6'
+services:
+  - postgresql
+before_script:
+  - psql -U postgres -c 'create database "lil-erp"'
+  - npm install
+  - npm run db:up
+  - npm run db:seed
+script: npm test
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"

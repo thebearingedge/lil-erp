@@ -28,23 +28,6 @@ export default function customersData(knex) {
 }
 
 function customersView(knex) {
-  const open_balance = knex
-    .select(knex.raw(`
-      coalesce(sum(
-        case
-          when le.debit_code = '1200'
-            then le.amount
-          else
-            -1 * le.amount
-        end
-      ), 0)::float as open_balance
-    `))
-    .from('customers as c')
-    .join('transactions as t', 'c.id', 't.party_id')
-    .join('ledger_entries as le', 't.id', 'le.transaction_id')
-    .where('le.debit_code', '=', '1200')
-    .orWhere('le.credit_code', '=', '1200')
-    .as('open_balance')
   const columns = [
     'p.name',
     'p.notes',
@@ -52,10 +35,29 @@ function customersView(knex) {
     'p.created_at',
     'p.updated_at',
     'c.id',
-    open_balance
+    knex.raw('coalesce(cb.balance, 0)::float as open_balance')
   ]
   return knex
+    .with('customer_balances', qb => qb
+      .select('p.id', knex.raw(`
+        sum(
+          case
+            when le.debit_code = '1200'
+              then le.amount
+            else
+              -1 * le.amount
+          end
+        ) as balance
+      `))
+      .from('parties as p')
+      .join('transactions as t', 'p.id', 't.party_id')
+      .join('ledger_entries as le', 't.id', 'le.transaction_id')
+      .where('le.debit_code', '1200')
+      .orWhere('le.credit_code', '1200')
+      .groupBy('p.id')
+    )
     .select(columns)
     .from('customers as c')
     .join('parties as p', 'c.id', 'p.id')
+    .leftJoin('customer_balances as cb', 'p.id', 'cb.id')
 }

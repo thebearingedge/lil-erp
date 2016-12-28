@@ -35,6 +35,10 @@ describe('vendorsData', () => {
       }
       const created = await vendors.create(vendor)
       expect(created).to.have.structure(structs.Vendor)
+      expect(created).to.include({
+        openBalance: 0,
+        isActive: true
+      })
     })
   })
 

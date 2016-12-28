@@ -6,6 +6,7 @@ const Vendor = {
   notes: Nullable(String),
   website: Nullable(String),
   accountNumber: Nullable(String),
+  openBalance: Number,
   createdAt: Date,
   updatedAt: Date,
   isActive: Boolean

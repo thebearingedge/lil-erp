@@ -19,7 +19,7 @@
     "db:up": "npm run -s db migrate:latest",
     "db:down": "npm run -s db migrate:rollback",
     "db:seed": "npm run -s db seed:run",
-    "precommit": "run-s -s lint cover check"
+    "precommit": "run-s -s lint db:up db:seed cover check"
   },
   "repository": {
     "type": "git",

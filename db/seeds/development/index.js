@@ -10,6 +10,7 @@ import item_receipts from './item-receipts'
 import customers from './customers'
 import sales_orders from './sales-orders'
 import item_sales from './item-sales'
+import payment_methods from './payment-methods'
 
 export const seed = async knex => {
 
@@ -155,4 +156,8 @@ export const seed = async knex => {
       })))
       .into('shipment_line_items')
   })
+
+  await knex
+    .insert(payment_methods)
+    .into('payment_methods')
 }

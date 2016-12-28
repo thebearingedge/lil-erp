@@ -4,6 +4,7 @@ const Customer = {
   id: String,
   name: String,
   notes: Nullable(String),
+  openBalance: Number,
   createdAt: Date,
   updatedAt: Date,
   isActive: Boolean

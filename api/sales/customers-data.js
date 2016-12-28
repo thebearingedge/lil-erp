@@ -28,13 +28,31 @@ export default function customersData(knex) {
 }
 
 function customersView(knex) {
+  const open_balance = knex
+    .select(knex.raw(`
+      coalesce(sum(
+        case
+          when le.debit_code = '1200'
+            then le.amount
+          else
+            -1 * le.amount
+        end
+      ), 0)::float as open_balance
+    `))
+    .from('customers as c')
+    .join('transactions as t', 'c.id', 't.party_id')
+    .join('ledger_entries as le', 't.id', 'le.transaction_id')
+    .where('le.debit_code', '=', '1200')
+    .orWhere('le.credit_code', '=', '1200')
+    .as('open_balance')
   const columns = [
     'p.name',
     'p.notes',
     'p.is_active',
     'p.created_at',
     'p.updated_at',
-    'c.id'
+    'c.id',
+    open_balance
   ]
   return knex
     .select(columns)

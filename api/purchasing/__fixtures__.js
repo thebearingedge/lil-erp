@@ -42,7 +42,7 @@ const ItemReceipt = {
   memo: Nullable(String),
   createdAt: Date,
   updatedAt: Date,
-  total: String,
+  total: Number,
   lineItems:[{
     id: String,
     shipmentId: String,

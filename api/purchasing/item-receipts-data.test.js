@@ -47,6 +47,16 @@ describe('itemReceiptsData', () => {
       }
       const created = await itemReceipts.create(itemReceipt)
       expect(created).to.have.structure(structs.ItemReceipt)
+      expect(created).to.include({
+        total: 400
+      })
+      created.lineItems.forEach(line => {
+        expect(line).to.include({
+          unitPrice: line.lineTotal / line.quantity,
+          shipmentId: created.id,
+          orderLineItemId: null
+        })
+      })
     })
 
   })

@@ -14,6 +14,7 @@
     "tdd": "npm run db:seed && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
     "db:make": "npm run -s db migrate:make",
     "db:up": "npm run -s db migrate:latest",

@@ -20,8 +20,8 @@ const PurchaseOrder = {
   createdAt: Date,
   updatedAt: Date,
   isClosed: Boolean,
-  total: String,
-  openBalance: String,
+  total: Number,
+  openBalance: Number,
   lineItems: [{
     id: String,
     orderId: String,

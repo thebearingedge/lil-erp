@@ -17,8 +17,7 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
      where s.id = new.shipment_id
      limit 1;
 
-    select
-           case
+    select case
              when
                new.shipment_type = 'item_receipt'
              then
@@ -45,8 +44,7 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
     select new.quantity * sign + coalesce(previous_quantity_on_hand, 0)
       into new_quantity_on_hand;
 
-    select
-           case
+    select case
              when
                previous_average_cost is not null and sign < 0
              then

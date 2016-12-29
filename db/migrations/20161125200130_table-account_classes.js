@@ -5,7 +5,7 @@ export const up = ({ schema, raw }) =>
         .primary()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.enum('name', ['asset', 'liability', 'equity', 'revenue'])
+      tb.enum('name', ['asset', 'liability', 'equity', 'revenue', 'expense'])
       tb.unique(['id', 'name'])
     })
 

@@ -28,6 +28,19 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       into transaction_id
       from create_transaction;
 
+    select revenue_code,
+           cost_code,
+           asset_code,
+           coalesce(average_cost, 0) as average_cost
+      into inventory_item
+      from inventory_items
+           left join stock_moves
+           on inventory_items.sku = stock_moves.sku
+     where inventory_items.sku = new.sku
+     order by stock_moves.shipment_date desc,
+              stock_moves.created_at desc
+     limit 1;
+
     if new.shipment_type = 'item_receipt' then
       insert into ledger_entries (
              transaction_id,
@@ -37,24 +50,11 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       )
       values (
         transaction_id,
-        '1300',
+        inventory_item.asset_code,
         '2100',
         new.line_total
       );
     elsif new.shipment_type = 'item_sale' then
-      select revenue_code,
-             cost_code,
-             asset_code,
-             coalesce(average_cost, 0) as average_cost
-        into inventory_item
-        from inventory_items
-             left join stock_moves
-             on inventory_items.sku = stock_moves.sku
-       where inventory_items.sku = new.sku
-       order by stock_moves.shipment_date desc,
-                stock_moves.created_at desc
-       limit 1;
-
       insert into ledger_entries (
              transaction_id,
              debit_code,
@@ -64,12 +64,12 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       values (
         transaction_id,
         '1200',
-        '4100',
+        inventory_item.revenue_code,
         new.line_total
       ), (
         transaction_id,
-        '5000',
-        '1300',
+        inventory_item.cost_code,
+        inventory_item.asset_code,
         inventory_item.average_cost * new.quantity
       );
     end if;

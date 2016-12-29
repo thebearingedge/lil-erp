@@ -6,6 +6,7 @@ export const up = ({ schema, raw }) =>
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
       tb.enum('name', ['asset', 'liability', 'equity', 'revenue'])
+      tb.unique(['id', 'name'])
     })
 
 export const down = ({ schema }) =>

@@ -25,8 +25,8 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       returning id
     )
     select id
-    into transaction_id
-    from create_transaction;
+      into transaction_id
+      from create_transaction;
 
     if new.shipment_type = 'item_receipt' then
       insert into ledger_entries (
@@ -51,8 +51,8 @@ create function create_transaction_shipment_line_item() returns trigger as $$
              left join stock_moves
              on inventory_items.sku = stock_moves.sku
        where inventory_items.sku = new.sku
-             order by stock_moves.shipment_date desc,
-                      stock_moves.created_at desc
+       order by stock_moves.shipment_date desc,
+                stock_moves.created_at desc
        limit 1;
 
       insert into ledger_entries (

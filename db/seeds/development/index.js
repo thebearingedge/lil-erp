@@ -2,6 +2,7 @@ import { zipWith, pick } from 'lodash'
 import { mapSeries } from 'bluebird'
 import account_classes from './account-classes'
 import accounts from './accounts'
+import default_accounts from './default-accounts'
 import journal_entries from './journal-entries'
 import brands from './brands'
 import vendors from './vendors'
@@ -37,6 +38,10 @@ export const seed = async knex => {
       return { ...account, account_class_id }
     }))
     .into('accounts')
+
+  await knex
+    .insert(default_accounts)
+    .into('default_accounts')
 
   await mapSeries(journal_entries, async ({ ledger_entries, ...entry }) => {
     const [ transaction_id ] = await knex

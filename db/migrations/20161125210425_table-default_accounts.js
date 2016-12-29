@@ -6,7 +6,7 @@ export const up = ({ schema }) =>
         .references('code')
         .inTable('accounts')
         .onUpdate('cascade')
-      tb.string('cost_of_goods_sold')
+      tb.string('inventory_cost')
         .notNullable()
         .references('code')
         .inTable('accounts')

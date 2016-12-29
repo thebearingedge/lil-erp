@@ -18,15 +18,19 @@ describe('inventoryItemsData', () => {
   describe('create', () => {
     const item = {
       sku: 'widget',
-      description: 'A quality widget.',
-      revenueCode: '4100',
-      costCode: '5000',
-      assetCode: '1300'
+      description: 'A quality widget.'
     }
     it('creates a inventory item', async () => {
+      const { inventory_revenue, inventory_cost, inventory_assets } = await trx
+        .select('inventory_revenue', 'inventory_cost', 'inventory_assets')
+        .from('default_accounts')
+        .first()
       const created = await inventoryItems.create(item)
       expect(created).to.have.structure(structs.InventoryItem)
       expect(created).to.include({
+        revenueCode: inventory_revenue,
+        costCode: inventory_cost,
+        assetCode: inventory_assets,
         quantityOnPurchaseOrder: 0,
         quantityOnSalesOrder: 0,
         quantityOnHand: 0,

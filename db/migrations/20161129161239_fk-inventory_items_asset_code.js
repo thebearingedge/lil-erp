@@ -1,9 +1,10 @@
-export const up = ({ schema }) =>
+export const up = ({ schema, raw }) =>
   schema
     .table('inventory_items', tb => {
       tb.string('asset_code')
         .index()
         .notNullable()
+        .defaultTo(raw('get_default_inventory_assets()'))
         .references('code')
         .inTable('accounts')
         .onUpdate('cascade')

@@ -24,12 +24,18 @@ export const seed = async knex => {
 
   await knex.raw(`truncate table ${tables} restart identity`)
 
-  await knex
+  const classes = await knex
     .insert(account_classes)
     .into('account_classes')
+    .returning('*')
 
   await knex
-    .insert(accounts)
+    .insert(accounts.map(account => {
+      if (!('account_class_name' in account)) return account
+      const { id: account_class_id } = classes
+        .find(({ name }) => account.account_class_name === name)
+      return { ...account, account_class_id }
+    }))
     .into('accounts')
 
   await mapSeries(journal_entries, async ({ ledger_entries, ...entry }) => {

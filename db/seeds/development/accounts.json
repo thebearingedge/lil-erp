@@ -1,7 +1,8 @@
 [
   {
     "code": "1000",
-    "name": "Assets"
+    "name": "Assets",
+    "account_class_name": "asset"
   },
   {
     "code": "1100",
@@ -30,7 +31,8 @@
   },
   {
     "code": "2000",
-    "name": "Liabilities"
+    "name": "Liabilities",
+    "account_class_name": "liability"
   },
   {
     "code": "2100",
@@ -54,7 +56,8 @@
   },
   {
     "code": "3000",
-    "name": "Equity"
+    "name": "Equity",
+    "account_class_name": "equity"
   },
   {
     "code": "3100",
@@ -73,7 +76,8 @@
   },
   {
     "code": "4000",
-    "name": "Revenue"
+    "name": "Revenue",
+    "account_class_name": "revenue"
   },
   {
     "code": "4100",
@@ -87,7 +91,8 @@
   },
   {
     "code": "5000",
-    "name": "Cost of Goods Sold"
+    "name": "Cost of Goods Sold",
+    "account_class_name": "expense"
   },
   {
     "code": "5700",
@@ -96,7 +101,8 @@
   },
   {
     "code": "6000",
-    "name": "Expenses"
+    "name": "Expenses",
+    "account_class_name": "expense"
   },
   {
     "code": "6200",

@@ -1,5 +1,6 @@
 import { zipWith, pick } from 'lodash'
 import { mapSeries } from 'bluebird'
+import account_classes from './account-classes'
 import accounts from './accounts'
 import journal_entries from './journal-entries'
 import brands from './brands'
@@ -22,6 +23,10 @@ export const seed = async knex => {
       .first()
 
   await knex.raw(`truncate table ${tables} restart identity`)
+
+  await knex
+    .insert(account_classes)
+    .into('account_classes')
 
   await knex
     .insert(accounts)

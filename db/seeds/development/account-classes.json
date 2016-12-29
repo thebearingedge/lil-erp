@@ -1,14 +1,14 @@
 [
   {
-    "name": "Asset"
+    "name": "asset"
   },
   {
-    "name": "Liability"
+    "name": "liability"
   },
   {
-    "name": "Equity"
+    "name": "equity"
   },
   {
-    "name": "Revenue"
+    "name": "revenue"
   }
 ]

@@ -2,6 +2,6 @@
   "inventory_revenue": "4100",
   "inventory_cost": "5000",
   "inventory_assets": "1300",
-  "accounts_receivable": "1200",
-  "accounts_payable": "2100"
+  "trade_receivable": "1200",
+  "trade_payable": "2100"
 }

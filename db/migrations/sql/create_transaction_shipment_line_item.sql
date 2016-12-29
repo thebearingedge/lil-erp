@@ -51,7 +51,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       values (
         transaction_id,
         inventory_item.asset_code,
-        '2100',
+        get_default_trade_payable(),
         new.line_total
       );
     elsif new.shipment_type = 'item_sale' then
@@ -63,7 +63,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       )
       values (
         transaction_id,
-        '1200',
+        get_default_trade_receivable(),
         inventory_item.revenue_code,
         new.line_total
       ), (

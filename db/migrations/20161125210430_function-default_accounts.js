@@ -8,4 +8,6 @@ export const down = async ({ raw }) => {
   await raw('drop function get_default_inventory_revenue()')
   await raw('drop function get_default_inventory_cost()')
   await raw('drop function get_default_inventory_assets()')
+  await raw('drop function get_default_trade_payable()')
+  await raw('drop function get_default_trade_receivable()')
 }

@@ -9,7 +9,7 @@ create function create_stock_move_shipment_line_item() returns trigger as $$
     new_average_cost          float;
   begin
 
-    shipment_line_item_id := new.id;
+    shipment_line_item_id = new.id;
 
     select s.date
       into shipment_date

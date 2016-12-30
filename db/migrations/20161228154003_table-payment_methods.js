@@ -1,5 +1,5 @@
-export const up = ({ schema, raw }) =>
-  schema
+export const up = async ({ schema, raw }) => {
+  await schema
     .createTable('payment_methods', tb => {
       tb.uuid('id')
         .primary()
@@ -12,6 +12,8 @@ export const up = ({ schema, raw }) =>
         .notNullable()
         .defaultTo(true)
     })
+  await raw('select trigger_timestamps(?)', ['payment_methods'])
+}
 
 export const down = ({ schema }) =>
   schema

@@ -38,10 +38,11 @@ export default function vendorsData(knex) {
       .where('v.id', id)
       .first()
   }
+
 }
 
 function vendorsView(knex) {
-  const columns = [
+  const vendor = [
     'p.name',
     'p.notes',
     'p.is_active',
@@ -49,30 +50,26 @@ function vendorsView(knex) {
     'p.updated_at',
     'v.id',
     'v.account_number',
-    'v.website',
-    knex.raw('coalesce(vb.balance, 0)::float as open_balance')
+    'v.website'
   ]
-  return knex
-    .with('vendor_balances', qb => qb
-      .select('p.id', knex.raw(`
-        sum(
-          case
-            when le.debit_code = '2100'
-              then le.amount
-            else
-              -1 * le.amount
-          end
-        ) as balance
-      `))
-      .from('parties as p')
-      .join('transactions as t', 'p.id', 't.party_id')
-      .join('ledger_entries as le', 't.id', 'le.transaction_id')
-      .where('le.debit_code', '2100')
-      .orWhere('le.credit_code', '2100')
-      .groupBy('p.id')
+  const open_balance = knex
+    .select(knex.raw(`
+      coalesce(sum(case
+                     when le.debit_code = '2100'
+                     then -1 * le.amount
+                     else le.amount
+                   end), 0)::float
+    `))
+    .from('transactions as t')
+    .join('ledger_entries as le', 't.id', 'le.transaction_id')
+    .whereRaw('v.id = t.party_id')
+    .andWhere(qb =>
+      qb.where('le.debit_code', '2100')
+        .orWhere('le.credit_code', '2100')
     )
-    .select(columns)
+    .as('open_balance')
+  return knex
+    .select([...vendor, open_balance])
     .from('vendors as v')
     .join('parties as p', 'v.id', 'p.id')
-    .leftJoin('vendor_balances as vb', 'p.id', 'vb.id')
 }

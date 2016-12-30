@@ -42,22 +42,7 @@ export default function inventoryItemsData(knex) {
 }
 
 function inventoryItemsView(knex) {
-  const quantityOnPurchaseOrder = knex
-    .select(knex.raw('coalesce(sum(l.quantity), 0)::integer'))
-    .from('order_line_items as l')
-    .whereRaw('l.sku = ii.sku and l.order_type = \'purchase_order\'')
-    .as('quantity_on_purchase_order')
-  const quantityOnSalesOrder = knex
-    .select(knex.raw('coalesce(sum(l.quantity), 0)::integer'))
-    .from('order_line_items as l')
-    .whereRaw('l.sku = ii.sku and l.order_type = \'sales_order\'')
-    .as('quantity_on_sales_order')
-  const quantityOnHand = knex
-    .select(knex.raw('coalesce(sum(s.quantity), 0)::integer'))
-    .from('stock_moves as s')
-    .whereRaw('s.sku = ii.sku')
-    .as('quantity_on_hand')
-  const columns = [
+  const inventory_item = [
     'i.sku',
     'i.description',
     'i.is_active',
@@ -66,13 +51,29 @@ function inventoryItemsView(knex) {
     'ii.revenue_code',
     'ii.cost_code',
     'ii.asset_code',
-    'b.name as brand_name',
-    quantityOnPurchaseOrder,
-    quantityOnSalesOrder,
-    quantityOnHand
+    'b.name as brand_name'
   ]
+  const on_purchase_order = knex
+    .select(knex.raw('coalesce(sum(l.quantity), 0)::integer'))
+    .from('order_line_items as l')
+    .whereRaw(`l.sku = ii.sku and l.order_type = 'purchase_order'`)
+    .as('quantity_on_purchase_order')
+  const on_sales_order = knex
+    .select(knex.raw('coalesce(sum(l.quantity), 0)::integer'))
+    .from('order_line_items as l')
+    .whereRaw(`l.sku = ii.sku and l.order_type = 'sales_order'`)
+    .as('quantity_on_sales_order')
+  const on_hand = knex.raw(`coalesce((${
+      knex
+        .select('s.quantity_on_hand')
+        .from('stock_moves as s')
+        .whereRaw('s.sku = ii.sku')
+        .orderBy('s.shipment_date', 'desc')
+        .orderBy('s.created_at', 'desc')
+        .limit(1)
+    }), 0)::integer as quantity_on_hand`)
   return knex
-    .select(columns)
+    .select([...inventory_item, on_purchase_order, on_sales_order, on_hand])
     .from('inventory_items as ii')
     .join('items as i', 'ii.sku', 'i.sku')
     .leftJoin('brands as b', 'ii.brand_id', 'b.id')

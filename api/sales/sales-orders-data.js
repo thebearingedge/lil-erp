@@ -31,36 +31,49 @@ export default function salesOrdersData(knex) {
 }
 
 function salesOrdersView(knex) {
-  const open_balance = knex
-    .select(knex.raw(`sum(
-      l.line_total / l.quantity *
-      (l.quantity - coalesce(s.quantity, 0))
-    )`))
-    .from('order_line_items as l')
-    .leftJoin('shipment_line_items as s', 'l.id', 's.order_line_item_id')
-    .whereRaw('l.order_id = o.id and l.is_closed = false')
-  const total = knex
-    .sum('l.line_total')
-    .from('order_line_items as l')
-    .whereRaw('l.order_id = o.id')
-  const columns = [
+  const sales_order = [
     'o.id',
     'o.date',
     'o.party_id as customer_id',
     'o.memo',
     'o.is_closed',
     'o.created_at',
-    'o.updated_at',
-    knex.raw(`(${total})::float as total`),
-    knex.raw(`(${open_balance})::float as open_balance`)
+    'o.updated_at'
   ]
+  const total = knex.raw(`(${
+    knex
+      .sum('l.line_total')
+      .from('order_line_items as l')
+      .whereRaw('l.order_id = o.id')
+  })::float as total`)
+  const open_balance = knex
+    .select(knex.raw(`
+      sum(
+        (l.line_total / l.quantity)
+        *
+        (l.quantity - coalesce(s.quantity, 0))
+      )::float
+    `))
+    .from('order_line_items as l')
+    .leftJoin('shipment_line_items as s', 'l.id', 's.order_line_item_id')
+    .whereRaw('l.order_id = o.id and l.is_closed = false')
+    .as('open_balance')
   return knex
-    .select(columns)
+    .select([...sales_order, total, open_balance])
     .from('orders as o')
     .join('order_line_items as l', 'o.id', 'l.order_id')
 }
 
 function orderLineItemsView(knex) {
+  const line_item = [
+    'o.id',
+    'o.order_id',
+    'o.sku',
+    'o.quantity',
+    'o.description',
+    'o.line_total',
+    'o.is_closed'
+  ]
   const unit_price = knex.raw(`
     (o.line_total / o.quantity)::float as unit_price
   `)
@@ -69,19 +82,8 @@ function orderLineItemsView(knex) {
     .from('shipment_line_items as s')
     .whereRaw('o.id = s.order_line_item_id')
     .as('quantity_remaining')
-  const columns = [
-    'o.id',
-    'o.order_id',
-    'o.sku',
-    'o.quantity',
-    'o.description',
-    'o.line_total',
-    'o.is_closed',
-    unit_price,
-    quantity_received
-  ]
   return knex
-    .select(columns)
+    .select([...line_item, unit_price, quantity_received])
     .from('order_line_items as o')
     .leftJoin('shipment_line_items as s', 'o.id', 's.order_line_item_id')
 }

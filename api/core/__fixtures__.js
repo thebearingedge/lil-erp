@@ -1,3 +1,13 @@
+const Payment = {
+  id: String,
+  partyId: String,
+  paymentMethodId: String,
+  date: Date,
+  amount: Number,
+  assetCode: String,
+  creditCode: String
+}
+
 const PaymentMethod = {
   id: String,
   name: String,
@@ -5,5 +15,6 @@ const PaymentMethod = {
 }
 
 export const structs = {
-  PaymentMethod
+  PaymentMethod,
+  Payment
 }

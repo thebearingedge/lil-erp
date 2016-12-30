@@ -11,6 +11,8 @@ const Payment = {
 const PaymentMethod = {
   id: String,
   name: String,
+  createdAt: Date,
+  updatedAt: Date,
   isActive: Boolean
 }
 

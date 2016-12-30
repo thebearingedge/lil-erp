@@ -109,9 +109,9 @@ export const seed = async knex => {
     return order_line_item_id
   })
 
-  await mapSeries(item_receipts, async (itemReceipt, i) => {
-    const { line_items, ...shipment } = itemReceipt
-    const party_id = vendor_ids[i]
+  await mapSeries(item_receipts, async item_receipt => {
+    const { line_items, ...shipment } = item_receipt
+    const party_id = vendor_ids[0]
     const [ shipment_id ] = await knex
       .insert({ ...shipment, party_id })
       .into('shipments')

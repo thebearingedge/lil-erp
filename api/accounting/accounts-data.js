@@ -4,7 +4,7 @@ export default function accountsData(knex) {
 
   return camelSql({ create, update, find, makeInactive })
 
-  function create(account) {
+  async function create(account) {
     return knex.transaction(async trx => {
       const [ code ] = await trx
         .insert(account)
@@ -14,7 +14,7 @@ export default function accountsData(knex) {
     })
   }
 
-  function update(code, updates) {
+  async function update(code, updates) {
     return knex.transaction(async trx => {
       const [ savedCode ] = await trx
         .update(updates)
@@ -25,17 +25,17 @@ export default function accountsData(knex) {
     })
   }
 
-  function findByCode(code, trx) {
+  async function findByCode(code, trx) {
     return accountsView(trx)
       .where({ code })
       .first()
   }
 
-  function find() {
+  async function find() {
     return accountsView(knex)
   }
 
-  function makeInactive(code) {
+  async function makeInactive(code) {
     return update(code, { is_active: false })
   }
 

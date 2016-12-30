@@ -31,40 +31,42 @@ export default function itemReceiptsData(knex) {
       .where('shipment_id', id)
     return { lineItems, ...itemReceipt }
   }
+  
 }
 
 function itemReceiptsView(knex) {
-  const total = knex
-    .sum('l.line_total')
-    .from('shipment_line_items as l')
-    .whereRaw('l.shipment_id = s.id')
-  const columns = [
+  const item_receipt = [
     's.id',
     's.date',
     's.party_id',
     's.memo',
     's.created_at',
-    's.updated_at',
-    knex.raw(`(${total})::float as total`)
+    's.updated_at'
   ]
+  const total = knex.raw(`(${
+    knex
+      .sum('l.line_total')
+      .from('shipment_line_items as l')
+      .whereRaw('l.shipment_id = s.id')
+  })::float as total`)
   return knex
-    .select(columns)
+    .select([...item_receipt, total])
     .from('shipments as s')
     .join('shipment_line_items as l', 's.id', 'l.shipment_id')
 }
 
 function shipmentLineItemsView(knex) {
-  const columns = [
+  const line_item = [
     'id',
     'shipment_id',
     'order_line_item_id',
     'sku',
     'quantity',
     'description',
-    'line_total',
-    knex.raw('(line_total / quantity)::float as unit_price')
+    'line_total'
   ]
+  const unit_price = knex.raw('(line_total / quantity)::float as unit_price')
   return knex
-    .select(columns)
+    .select([...line_item, unit_price])
     .from('shipment_line_items')
 }

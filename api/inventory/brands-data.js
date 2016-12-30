@@ -14,7 +14,7 @@ export default function brandsData(knex) {
     })
   }
 
-  function findById(id, trx) {
+  async function findById(id, trx) {
     return trx
       .select('*')
       .from('brands')

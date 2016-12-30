@@ -1,15 +1,23 @@
 create function create_transaction_shipment_line_item() returns trigger as $$
   declare
-    shipment_date     timestamptz;
-    shipment_party_id uuid;
-    transaction_id    uuid;
-    inventory_item    record;
+    _shipment_id    uuid        = new.shipment_id;
+    _shipment_type  varchar     = new.shipment_type;
+    _sku            varchar     = new.sku;
+    _quantity       integer     = new.quantity;
+    _line_total     numeric     = new.line_total;
+    _date           timestamptz;
+    _party_id       uuid;
+    _transaction_id uuid;
+    _revenue_code   varchar;
+    _cost_code      varchar;
+    _asset_code     varchar;
+    _average_cost   float;
   begin
 
     select date, party_id
-      into shipment_date, shipment_party_id
+      into _date, _party_id
       from shipments
-     where id = new.shipment_id;
+     where id = _shipment_id;
 
     with create_transaction as (
       insert into transactions (
@@ -18,30 +26,33 @@ create function create_transaction_shipment_line_item() returns trigger as $$
              party_id
       )
       values (
-        'shipment_line_item',
-        shipment_date,
-        shipment_party_id
+        'shipment',
+        _date,
+        _party_id
       )
       returning id
     )
     select id
-      into transaction_id
+      into _transaction_id
       from create_transaction;
 
     select revenue_code,
            cost_code,
            asset_code,
-           coalesce(average_cost, 0) as average_cost
-      into inventory_item
+           coalesce(average_cost, 0)
+      into _revenue_code,
+           _cost_code,
+           _asset_code,
+           _average_cost
       from inventory_items
            left join stock_moves
            on inventory_items.sku = stock_moves.sku
-     where inventory_items.sku = new.sku
+     where inventory_items.sku = _sku
      order by stock_moves.shipment_date desc,
               stock_moves.created_at desc
      limit 1;
 
-    if new.shipment_type = 'item_receipt' then
+    if _shipment_type = 'item_receipt' then
       insert into ledger_entries (
              transaction_id,
              debit_code,
@@ -49,12 +60,12 @@ create function create_transaction_shipment_line_item() returns trigger as $$
              amount
       )
       values (
-        transaction_id,
-        inventory_item.asset_code,
+        _transaction_id,
+        _asset_code,
         get_default_trade_payable(),
-        new.line_total
+        _line_total
       );
-    elsif new.shipment_type = 'item_sale' then
+    elsif _shipment_type = 'item_sale' then
       insert into ledger_entries (
              transaction_id,
              debit_code,
@@ -62,15 +73,15 @@ create function create_transaction_shipment_line_item() returns trigger as $$
              amount
       )
       values (
-        transaction_id,
+        _transaction_id,
         get_default_trade_receivable(),
-        inventory_item.revenue_code,
-        new.line_total
+        _revenue_code,
+        _line_total
       ), (
-        transaction_id,
-        inventory_item.cost_code,
-        inventory_item.asset_code,
-        inventory_item.average_cost * new.quantity
+        _transaction_id,
+        _cost_code,
+        _asset_code,
+        _quantity * _average_cost
       );
     end if;
 
@@ -78,7 +89,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
   end;
 $$ language plpgsql;
 
-create trigger create_transaction
+create trigger create_transaction_shipment_line_item
   after insert
   on shipment_line_items
   for each row execute procedure create_transaction_shipment_line_item();

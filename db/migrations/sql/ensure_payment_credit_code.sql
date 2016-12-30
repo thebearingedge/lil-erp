@@ -1,25 +1,25 @@
 create function ensure_payment_credit_code() returns trigger as $$
   declare
+    _party_id   uuid    = new.party_id;
     _party_type varchar;
   begin
 
     select party_type
       into _party_type
       from parties
-     where id = new.party_id
+     where id = _party_id
      limit 1;
 
-    new.credit_code =
-      case
-        when
-          _party_type = 'vendor'
-        then
-          get_default_trade_payable()
-        when
-          _party_type = 'customer'
-        then
-          get_default_trade_receivable()
-      end;
+    new.credit_code = case
+                        when
+                          _party_type = 'vendor'
+                        then
+                          get_default_trade_payable()
+                        when
+                          _party_type = 'customer'
+                        then
+                          get_default_trade_receivable()
+                      end;
 
     return new;
   end;

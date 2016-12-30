@@ -1,18 +1,13 @@
 create function create_transaction_payment() returns trigger as $$
   declare
-    _date           timestamptz;
-    _party_id       uuid;
-    _asset_code     varchar;
-    _credit_code    varchar;
+    _date           timestamptz = new.date;
+    _party_id       uuid        = new.party_id;
+    _asset_code     varchar     = new.asset_code;
+    _credit_code    varchar     = new.credit_code;
     _party_type     varchar;
     _amount         numeric;
     _transaction_id uuid;
   begin
-
-    _date        = new.date;
-    _party_id    = new.party_id;
-    _asset_code  = new.asset_code;
-    _credit_code = new.credit_code;
 
     select party_type
       into _party_type

@@ -26,7 +26,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
              party_id
       )
       values (
-        'shipment_line_item',
+        'shipment',
         _date,
         _party_id
       )

@@ -1,7 +1,7 @@
 import { readSql } from './helpers'
 
 export const up = async ({ raw }) => {
-  await raw(await readSql(__dirname, 'trigger_timestamps.sql'))
+  await raw(await readSql('trigger_timestamps.sql'))
 }
 
 export const down = async ({ raw }) => {

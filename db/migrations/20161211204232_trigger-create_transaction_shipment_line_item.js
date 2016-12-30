@@ -1,7 +1,7 @@
 import { readSql } from './helpers'
 
 export const up = async ({ raw }) => {
-  await raw(await readSql(__dirname, 'create_transaction_shipment_line_item.sql'))
+  await raw(await readSql('create_transaction_shipment_line_item.sql'))
 }
 
 export const down = async ({ raw }) => {

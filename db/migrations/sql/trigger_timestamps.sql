@@ -1,3 +1,24 @@
+create function set_created_at() returns trigger as $$
+  begin
+    new.created_at = now();
+    return new;
+  end;
+$$ language plpgsql;
+
+create function set_updated_at() returns trigger as $$
+  begin
+    new.updated_at = now();
+    return new;
+  end;
+$$ language plpgsql;
+
+create function keep_created_at() returns trigger as $$
+  begin
+    new.created_at = old.created_at;
+    return new;
+  end;
+$$ language plpgsql;
+
 create function trigger_timestamps(table_name regclass) returns void as $$
   begin
     execute format('

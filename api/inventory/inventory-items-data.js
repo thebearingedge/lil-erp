@@ -29,13 +29,13 @@ export default function inventoryItemsData(knex) {
     })
   }
 
-  function findBySku(sku, trx) {
+  async function findBySku(sku, trx) {
     return inventoryItemsView(trx)
       .where('i.sku', sku)
       .first()
   }
 
-  function find() {
+  async function find() {
     return inventoryItemsView(knex)
   }
 

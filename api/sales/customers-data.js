@@ -19,7 +19,7 @@ export default function customersData(knex) {
     })
   }
 
-  function findById(id, trx = knex) {
+  async function findById(id, trx = knex) {
     return customersView(trx)
       .where('c.id', id)
       .first()

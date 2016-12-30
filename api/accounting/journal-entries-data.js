@@ -4,7 +4,7 @@ export default function journalEntriesData(knex) {
 
   return camelSql({ create })
 
-  function create({ ledger_entries, ...data }) {
+  async function create({ ledger_entries, ...data }) {
     return knex.transaction(async trx => {
       const transaction = getTransaction(data, 'journal_entry')
       const [ transaction_id ] = await trx
@@ -18,7 +18,7 @@ export default function journalEntriesData(knex) {
     })
   }
 
-  function findById(id, trx) {
+  async function findById(id, trx) {
     return journalEntriesView(trx)
       .where({ id })
       .first()

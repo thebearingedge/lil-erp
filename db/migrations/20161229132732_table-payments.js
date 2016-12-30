@@ -1,18 +1,15 @@
 export const up = ({ schema, raw }) =>
   schema
-    .createTable('payment_methods', tb => {
+    .createTable('payments', tb => {
       tb.uuid('id')
         .primary()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.string('name')
-        .unique()
+      tb.decimal('amount', 10, 2)
+        .unsigned()
         .notNullable()
-      tb.boolean('is_active')
-        .notNullable()
-        .defaultTo(true)
     })
 
 export const down = ({ schema }) =>
   schema
-    .dropTable('payment_methods')
+    .dropTable('payments')

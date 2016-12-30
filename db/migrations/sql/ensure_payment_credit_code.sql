@@ -1,4 +1,4 @@
-create function ensure_payment_credit_account_code() returns trigger as $$
+create function ensure_payment_credit_code() returns trigger as $$
   declare
     _party_type varchar;
   begin
@@ -9,7 +9,7 @@ create function ensure_payment_credit_account_code() returns trigger as $$
      where id = new.party_id
      limit 1;
 
-    new.credit_account_code =
+    new.credit_code =
       case
         when
           _party_type = 'vendor'
@@ -25,10 +25,10 @@ create function ensure_payment_credit_account_code() returns trigger as $$
   end;
 $$ language plpgsql;
 
-create trigger ensure_payment_credit_account_code
+create trigger ensure_payment_credit_code
   before insert or
-         update of credit_account_code
+         update of credit_code
   on payments
   for each row
-  when (new.credit_account_code is null)
-  execute procedure ensure_payment_credit_account_code();
+  when (new.credit_code is null)
+  execute procedure ensure_payment_credit_code();

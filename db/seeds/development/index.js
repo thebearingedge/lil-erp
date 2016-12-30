@@ -13,6 +13,7 @@ import customers from './customers'
 import sales_orders from './sales-orders'
 import item_sales from './item-sales'
 import payment_methods from './payment-methods'
+import payments from './payments'
 
 export const seed = async knex => {
 
@@ -173,7 +174,17 @@ export const seed = async knex => {
       .into('shipment_line_items')
   })
 
-  await knex
+  const payment_method_ids = await knex
     .insert(payment_methods)
     .into('payment_methods')
+    .returning('id')
+
+  await knex
+    .insert(payments.map((payment, i) => ({
+      ...payment,
+      party_id: customer_ids[i],
+      payment_method_id: payment_method_ids[i],
+      asset_code: '1100'
+    })))
+    .into('payments')
 }

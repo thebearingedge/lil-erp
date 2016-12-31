@@ -1,0 +1,73 @@
+[
+  {
+    "code": "1000",
+    "name": "Assets",
+    "type": "asset",
+    "is_system_account": true
+  },
+  {
+    "code": "1200",
+    "name": "Accounts Receivable",
+    "parent_code": "1000",
+    "type": "asset",
+    "is_system_account": true
+  },
+  {
+    "code": "1300",
+    "name": "Inventory",
+    "parent_code": "1000",
+    "type": "asset",
+    "is_system_account": true
+  },
+  {
+    "code": "2000",
+    "name": "Liabilities",
+    "type": "liability",
+    "is_system_account": true
+  },
+  {
+    "code": "2100",
+    "name": "Accounts Payable",
+    "parent_code": "2000",
+    "type": "liability",
+    "is_system_account": true
+  },
+  {
+    "code": "2200",
+    "name": "Credit Cards",
+    "parent_code": "2000",
+    "type": "liability",
+    "is_system_account": true
+  },
+  {
+    "code": "3000",
+    "name": "Equity",
+    "type": "equity",
+    "is_system_account": true
+  },
+  {
+    "code": "4000",
+    "name": "Revenue",
+    "type": "revenue",
+    "is_system_account": true
+  },
+  {
+    "code": "4100",
+    "name": "Sales Revenue",
+    "parent_code": "4000",
+    "type": "revenue",
+    "is_system_account": true
+  },
+  {
+    "code": "5000",
+    "name": "Cost of Goods Sold",
+    "type": "expense",
+    "is_system_account": true
+  },
+  {
+    "code": "6000",
+    "name": "Expenses",
+    "type": "expense",
+    "is_system_account": true
+  }
+]

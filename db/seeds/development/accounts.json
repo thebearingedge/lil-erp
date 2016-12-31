@@ -1,23 +1,18 @@
 [
   {
-    "code": "1000",
-    "name": "Assets",
-    "account_class_name": "asset"
-  },
-  {
     "code": "1100",
     "name": "Cash",
     "parent_code": "1000"
   },
   {
-    "code": "1200",
-    "name": "Receivables",
-    "parent_code": "1000"
+    "code": "1110",
+    "name": "Petty Cash",
+    "parent_code": "1100"
   },
   {
-    "code": "1300",
-    "name": "Inventory",
-    "parent_code": "1000"
+    "code": "1120",
+    "name": "Business Checking",
+    "parent_code": "1100"
   },
   {
     "code": "1400",
@@ -30,21 +25,6 @@
     "parent_code": "1000"
   },
   {
-    "code": "2000",
-    "name": "Liabilities",
-    "account_class_name": "liability"
-  },
-  {
-    "code": "2100",
-    "name": "Payables",
-    "parent_code": "2000"
-  },
-  {
-    "code": "2200",
-    "name": "Accrued Expenses",
-    "parent_code": "2000"
-  },
-  {
     "code": "2300",
     "name": "Sales Tax Payable",
     "parent_code": "2000"
@@ -53,11 +33,6 @@
     "code": "2400",
     "name": "Long-Term Debts",
     "parent_code": "2000"
-  },
-  {
-    "code": "3000",
-    "name": "Equity",
-    "account_class_name": "equity"
   },
   {
     "code": "3100",
@@ -75,34 +50,14 @@
     "parent_code": "3000"
   },
   {
-    "code": "4000",
-    "name": "Revenue",
-    "account_class_name": "revenue"
-  },
-  {
-    "code": "4100",
-    "name": "Inventory Sales",
-    "parent_code": "4000"
-  },
-  {
     "code": "4200",
     "name": "Services Rendered",
     "parent_code": "4000"
   },
   {
-    "code": "5000",
-    "name": "Cost of Goods Sold",
-    "account_class_name": "expense"
-  },
-  {
     "code": "5700",
     "name": "Freight",
     "parent_code": "5000"
-  },
-  {
-    "code": "6000",
-    "name": "Expenses",
-    "account_class_name": "expense"
   },
   {
     "code": "6200",

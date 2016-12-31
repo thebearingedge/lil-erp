@@ -5,12 +5,12 @@ const Account = {
   name: String,
   description: Nullable(String),
   parentCode: Nullable(String),
-  accountClassId: Nullable(String),
-  accountClassName: Nullable(String),
+  type: Nullable(String),
   balance: Number,
-  isActive: Boolean,
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  isActive: Boolean,
+  isSystemAccount: Boolean
 }
 
 const LedgerEntry = {

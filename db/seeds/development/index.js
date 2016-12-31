@@ -1,8 +1,7 @@
 import { zipWith, pick } from 'lodash'
 import { mapSeries } from 'bluebird'
-import account_classes from './account-classes'
+import systemSeed from '../system'
 import accounts from './accounts'
-import default_accounts from './default-accounts'
 import journal_entries from './journal-entries'
 import brands from './brands'
 import vendors from './vendors'
@@ -26,23 +25,11 @@ export const seed = async knex => {
 
   await knex.raw(`truncate table ${tables} restart identity`)
 
-  const classes = await knex
-    .insert(account_classes)
-    .into('account_classes')
-    .returning('*')
+  await systemSeed(knex)
 
   await knex
-    .insert(accounts.map(account => {
-      if (!('account_class_name' in account)) return account
-      const { id: account_class_id } = classes
-        .find(({ name }) => account.account_class_name === name)
-      return { ...account, account_class_id }
-    }))
+    .insert(accounts)
     .into('accounts')
-
-  await knex
-    .insert(default_accounts)
-    .into('default_accounts')
 
   await mapSeries(journal_entries, async ({ ledger_entries, ...entry }) => {
     const [ transaction_id ] = await knex
@@ -184,7 +171,7 @@ export const seed = async knex => {
       ...payment,
       party_id: customer_ids[i],
       payment_method_id: payment_method_ids[i],
-      asset_code: '1100'
+      asset_code: '1110'
     })))
     .into('payments')
 }

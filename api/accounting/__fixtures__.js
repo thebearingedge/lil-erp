@@ -6,6 +6,7 @@ const Account = {
   description: Nullable(String),
   parentCode: Nullable(String),
   type: Nullable(String),
+  class: Nullable(String),
   balance: Number,
   createdAt: Date,
   updatedAt: Date,

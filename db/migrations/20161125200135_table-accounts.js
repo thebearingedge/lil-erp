@@ -9,12 +9,16 @@ export const up = async ({ schema, raw }) => {
         .unique()
         .notNullable()
       tb.text('description')
-      tb.enum('type', [
+      tb.enum('class', [
         'asset',
         'liability',
         'equity',
         'revenue',
         'expense'
+      ])
+      tb.enum('type', [
+        'accounts_receivable',
+        'accounts_payable'
       ])
       tb.boolean('is_system_account')
         .notNullable()

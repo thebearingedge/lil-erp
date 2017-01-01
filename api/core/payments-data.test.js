@@ -30,6 +30,7 @@ describe('paymentsData', () => {
         paymentMethodId,
         date: new Date(),
         assetCode: '1100',
+        tradeAccountCode: '2400',
         amount: 100
       }
       const created = await payments.create(payment)

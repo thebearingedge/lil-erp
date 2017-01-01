@@ -3,9 +3,11 @@ export const up = ({ schema, raw }) =>
     .createTable('payments', tb => {
       tb.uuid('id')
         .primary()
-        .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
       tb.timestamp('date')
+        .notNullable()
+        .defaultTo(raw('now()'))
+        .notNullable()
       tb.decimal('amount', 10, 2)
         .unsigned()
         .notNullable()

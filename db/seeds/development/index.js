@@ -55,13 +55,16 @@ export const seed = async knex => {
       item_type
     })))
     .into('items')
-    .returning('sku')
 
   await knex
     .insert(zipWith(brand_ids, inventory_items, (brand_id, item) => ({
       brand_id,
       ...pick(item, [
-        'sku', 'item_type', 'revenue_code', 'cost_code', 'asset_code'
+        'sku',
+        'item_type',
+        'revenue_account_code',
+        'cost_account_code',
+        'asset_account_code'
       ])
     })))
     .into('inventory_items')

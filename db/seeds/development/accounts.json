@@ -1,10 +1,5 @@
 [
   {
-    "code": "1100",
-    "name": "Cash",
-    "parent_code": "1000"
-  },
-  {
     "code": "1110",
     "name": "Petty Cash",
     "parent_code": "1100"
@@ -20,68 +15,34 @@
     "parent_code": "1000"
   },
   {
-    "code": "1500",
-    "name": "Fixed Assets",
-    "parent_code": "1000"
-  },
-  {
-    "code": "2110",
-    "name": "Bro Dealz",
-    "parent_code": "2100"
-  },
-  {
     "code": "2300",
     "name": "Sales Tax Payable",
     "parent_code": "2000"
   },
   {
-    "code": "2400",
-    "name": "Long-Term Debts",
-    "parent_code": "2000"
-  },
-  {
-    "code": "3100",
-    "name": "Member Contributions",
-    "parent_code": "3000"
-  },
-  {
-    "code": "3200",
-    "name": "Member Distributions",
-    "parent_code": "3000"
-  },
-  {
-    "code": "3300",
-    "name": "Retained Earnings",
-    "parent_code": "3000"
-  },
-  {
-    "code": "4200",
-    "name": "Services Rendered",
-    "parent_code": "4000"
-  },
-  {
-    "code": "5700",
+    "code": "5100",
     "name": "Freight",
     "parent_code": "5000"
+
   },
   {
-    "code": "6200",
-    "name": "Bank Charges",
-    "parent_code": "6000"
-  },
-  {
-    "code": "6750",
-    "name": "Professional Services",
-    "parent_code": "6000"
-  },
-  {
-    "code": "7200",
+    "code": "6100",
     "name": "Rent",
     "parent_code": "6000"
   },
   {
-    "code": "7500",
+    "code": "6200",
     "name": "Utilities",
+    "parent_code": "6000"
+  },
+  {
+    "code": "6300",
+    "name": "Bank Charges",
+    "parent_code": "6000"
+  },
+  {
+    "code": "6400",
+    "name": "Professional Services",
     "parent_code": "6000"
   }
 ]

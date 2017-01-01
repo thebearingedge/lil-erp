@@ -1,75 +1,138 @@
 [
   {
     "code": "1000",
-    "name": "Assets",
+    "name": "Current Assets",
     "class": "asset",
+    "type": "current_assets",
+    "is_system_account": true
+  },
+  {
+    "code": "1100",
+    "parent_code": "1000",
+    "name": "Cash",
+    "class": "asset",
+    "type": "cash",
     "is_system_account": true
   },
   {
     "code": "1200",
-    "name": "Accounts Receivable",
     "parent_code": "1000",
+    "name": "Accounts Receivable",
     "class": "asset",
     "type": "accounts_receivable",
     "is_system_account": true
   },
   {
     "code": "1300",
-    "name": "Inventory",
     "parent_code": "1000",
+    "name": "Inventory Assets",
     "class": "asset",
+    "type": "inventory_assets",
+    "is_system_account": true
+  },
+  {
+    "code": "1500",
+    "name": "Fixed Assets",
+    "class": "asset",
+    "type": "fixed_assets",
     "is_system_account": true
   },
   {
     "code": "2000",
-    "name": "Liabilities",
+    "name": "Current Liabilities",
     "class": "liability",
+    "type": "current_liabilities",
     "is_system_account": true
   },
   {
     "code": "2100",
-    "name": "Accounts Payable",
     "parent_code": "2000",
+    "name": "Accounts Payable",
     "class": "liability",
     "type": "accounts_payable",
     "is_system_account": true
   },
   {
     "code": "2200",
-    "name": "Credit Cards",
     "parent_code": "2000",
+    "name": "Credit Cards",
     "class": "liability",
+    "type": "credit_cards",
+    "is_system_account": true
+  },
+  {
+    "code": "2500",
+    "name": "Long-Term Liabilities",
+    "class": "liability",
+    "type": "long_term_liabilities",
     "is_system_account": true
   },
   {
     "code": "3000",
-    "name": "Equity",
+    "name": "Shareholders' Equity",
     "class": "equity",
+    "type": "shareholders_equity",
+    "is_system_account": true
+  },
+  {
+    "code": "3100",
+    "parent_code": "3000",
+    "name": "Contributed Capital",
+    "class": "equity",
+    "type": "contributed_capital",
+    "is_system_account": true
+  },
+  {
+    "code": "3200",
+    "parent_code": "3000",
+    "name": "Shareholder Distributions",
+    "class": "equity",
+    "type": "shareholder_distributions",
+    "is_system_account": true
+  },
+  {
+    "code": "3300",
+    "parent_code": "3000",
+    "name": "Retained Earnings",
+    "class": "equity",
+    "type": "retained_earnings",
     "is_system_account": true
   },
   {
     "code": "4000",
     "name": "Revenue",
     "class": "revenue",
+    "type": "revenue",
     "is_system_account": true
   },
   {
     "code": "4100",
-    "name": "Sales Revenue",
+    "name": "Inventory Sales",
     "parent_code": "4000",
     "class": "revenue",
+    "type": "inventory_sales",
+    "is_system_account": true
+  },
+  {
+    "code": "4200",
+    "name": "Services Rendered",
+    "parent_code": "4000",
+    "class": "revenue",
+    "type": "services_rendered",
     "is_system_account": true
   },
   {
     "code": "5000",
     "name": "Cost of Goods Sold",
     "class": "expense",
+    "type": "cost_of_goods_sold",
     "is_system_account": true
   },
   {
     "code": "6000",
-    "name": "Expenses",
+    "name": "Operating Expenses",
     "class": "expense",
+    "type": "operating_expenses",
     "is_system_account": true
   }
 ]

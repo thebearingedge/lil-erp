@@ -28,9 +28,9 @@ describe('inventoryItemsData', () => {
       const created = await inventoryItems.create(item)
       expect(created).to.have.structure(structs.InventoryItem)
       expect(created).to.include({
-        revenueCode: inventory_revenue,
-        costCode: inventory_cost,
-        assetCode: inventory_assets,
+        revenueAccountCode: inventory_revenue,
+        costAccountCode: inventory_cost,
+        assetAccountCode: inventory_assets,
         quantityOnPurchaseOrder: 0,
         quantityOnSalesOrder: 0,
         quantityOnHand: 0,

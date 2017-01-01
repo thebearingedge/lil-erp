@@ -5,6 +5,15 @@ export const up = ({ schema }) =>
         .unique()
         .primary()
         .notNullable()
+      tb.enum('revenue_account_type', ['inventory_sales'])
+        .notNullable()
+        .defaultTo('inventory_sales')
+      tb.enum('cost_account_type', ['cost_of_goods_sold'])
+        .notNullable()
+        .defaultTo('cost_of_goods_sold')
+      tb.enum('asset_account_type', ['inventory_assets'])
+        .notNullable()
+        .defaultTo('inventory_assets')
     })
 
 export const down = ({ raw }) =>

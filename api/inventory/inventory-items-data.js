@@ -4,9 +4,9 @@ import { camelSql, getItem } from '../util'
 function getInventoryItem(doc) {
   return pick(doc, [
     'sku',
-    'revenue_code',
-    'cost_code',
-    'asset_code'
+    'revenue_account_code',
+    'cost_account_code',
+    'asset_account_code'
   ])
 }
 
@@ -48,9 +48,9 @@ function inventoryItemsView(knex) {
     'i.is_active',
     'i.created_at',
     'i.updated_at',
-    'ii.revenue_code',
-    'ii.cost_code',
-    'ii.asset_code',
+    'ii.revenue_account_code',
+    'ii.cost_account_code',
+    'ii.asset_account_code',
     'b.name as brand_name'
   ]
   const on_purchase_order = knex

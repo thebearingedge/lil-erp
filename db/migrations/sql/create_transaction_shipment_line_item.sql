@@ -8,7 +8,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
     _date           timestamptz;
     _party_id       uuid;
     _transaction_id uuid;
-    _revenue_code   varchar;
+    _revenue_account_code   varchar;
     _cost_code      varchar;
     _asset_code     varchar;
     _average_cost   float;
@@ -36,11 +36,11 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       into _transaction_id
       from create_transaction;
 
-    select revenue_code,
-           cost_code,
-           asset_code,
+    select revenue_account_code,
+           cost_account_code,
+           asset_account_code,
            coalesce(average_cost, 0)
-      into _revenue_code,
+      into _revenue_account_code,
            _cost_code,
            _asset_code,
            _average_cost
@@ -75,7 +75,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
       values (
         _transaction_id,
         get_default_trade_receivable(),
-        _revenue_code,
+        _revenue_account_code,
         _line_total
       ), (
         _transaction_id,

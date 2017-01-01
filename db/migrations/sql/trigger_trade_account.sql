@@ -1,4 +1,4 @@
-create function ensure_payment_trade_account() returns trigger as $$
+create function set_trade_account() returns trigger as $$
   declare
     _party_id   uuid    = new.party_id;
     _party_type varchar;
@@ -28,11 +28,17 @@ create function ensure_payment_trade_account() returns trigger as $$
   end;
 $$ language plpgsql;
 
-create trigger ensure_payment_trade_account
-  before insert or
-         update of trade_account_code
-  on payments
-  for each row
-  when (new.trade_account_code is null or
-        new.trade_account_type is null)
-  execute procedure ensure_payment_trade_account();
+create function trigger_trade_account(table_name regclass) returns void as $$
+  begin
+    execute format('
+      create trigger set_trade_account
+      before insert or
+             update of trade_account_code
+      on %I
+      for each row
+      when (new.trade_account_code is null or
+            new.trade_account_type is null)
+      execute procedure set_trade_account()
+    ', table_name);
+  end;
+$$ language plpgsql;

@@ -53,19 +53,31 @@ function vendorsView(knex) {
     'v.website'
   ]
   const open_balance = knex
+    .with('accounts_payable', qb =>
+      qb.from(knex.raw(`get_accounts_of_type('accounts_payable')`))
+    )
     .select(knex.raw(`
       coalesce(sum(case
-                     when le.debit_code = '2100'
-                     then -1 * le.amount
-                     else le.amount
+                     when le.credit_code in (
+                            select code
+                            from accounts_payable
+                          )
+                     then le.amount
+                     else -1 * le.amount
                    end), 0)::float
     `))
     .from('transactions as t')
     .join('ledger_entries as le', 't.id', 'le.transaction_id')
     .whereRaw('v.id = t.party_id')
     .andWhere(qb =>
-      qb.where('le.debit_code', '2100')
-        .orWhere('le.credit_code', '2100')
+      qb.whereIn('le.debit_code', knex
+          .select('code')
+          .from('accounts_payable')
+        )
+        .orWhereIn('le.credit_code', knex
+          .select('code')
+          .from('accounts_payable')
+        )
     )
     .as('open_balance')
   return knex

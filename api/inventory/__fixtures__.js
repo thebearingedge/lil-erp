@@ -15,9 +15,9 @@ const InventoryItem = {
   quantityOnPurchaseOrder: Number,
   quantityOnSalesOrder: Number,
   quantityOnHand: Number,
-  assetCode: String,
-  revenueCode: String,
-  costCode: String,
+  revenueAccountCode: String,
+  costAccountCode: String,
+  assetAccountCode: String,
   isActive: Boolean,
   createdAt: Date,
   updatedAt: Date

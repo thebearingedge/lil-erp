@@ -20,8 +20,8 @@ export default function paymentsData(knex) {
       'party_id',
       'payment_method_id',
       'date',
-      'asset_code',
-      'credit_code',
+      'payment_account_code',
+      'trade_account_code',
       knex.raw('amount::float')
     ]
     return trx
@@ -29,5 +29,5 @@ export default function paymentsData(knex) {
       .from('payments')
       .first()
   }
-  
+
 }

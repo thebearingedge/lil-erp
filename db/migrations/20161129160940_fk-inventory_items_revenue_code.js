@@ -1,11 +1,11 @@
 export const up = ({ schema, raw }) =>
   schema
     .table('inventory_items', tb => {
-      tb.string('revenue_code')
-        .index()
+      tb.string('revenue_account_code')
         .notNullable()
         .defaultTo(raw('get_default_inventory_revenue()'))
-        .references('code')
+      tb.foreign(['revenue_account_code', 'revenue_account_type'])
+        .references(['code', 'type'])
         .inTable('accounts')
         .onUpdate('cascade')
     })
@@ -13,5 +13,6 @@ export const up = ({ schema, raw }) =>
 export const down = ({ schema }) =>
   schema
     .table('inventory_items', tb => {
-      tb.dropColumn('revenue_code')
+      tb.dropForeign(['revenue_account_code', 'revenue_account_type'])
+      tb.dropColumn('revenue_account_code')
     })

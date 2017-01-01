@@ -37,9 +37,15 @@ function customersView(knex) {
     'c.id'
   ]
   const open_balance = knex
+    .with('accounts_receivable', qb =>
+      qb.from(knex.raw(`get_accounts_of_type('accounts_receivable')`))
+    )
     .select(knex.raw(`
       coalesce(sum(case
-                     when le.debit_code = '1200'
+                     when le.debit_code in (
+                            select code
+                            from accounts_receivable
+                          )
                      then le.amount
                      else -1 * le.amount
                    end), 0)::float
@@ -48,8 +54,14 @@ function customersView(knex) {
     .join('ledger_entries as le', 't.id', 'le.transaction_id')
     .whereRaw('c.id = t.party_id')
     .andWhere(qb =>
-      qb.where('le.debit_code', '1200')
-        .orWhere('le.credit_code', '1200')
+      qb.whereIn('le.debit_code', knex
+          .select('code')
+          .from('accounts_receivable')
+        )
+        .orWhereIn('le.credit_code', knex
+          .select('code')
+          .from('accounts_receivable')
+        )
     )
     .as('open_balance')
   return knex

@@ -4,8 +4,8 @@ const Payment = {
   paymentMethodId: String,
   date: Date,
   amount: Number,
-  assetCode: String,
-  creditCode: String
+  paymentAccountCode: String,
+  tradeAccountCode: String
 }
 
 const PaymentMethod = {

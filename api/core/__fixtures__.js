@@ -4,7 +4,7 @@ const Payment = {
   paymentMethodId: String,
   date: Date,
   amount: Number,
-  assetCode: String,
+  paymentAccountCode: String,
   tradeAccountCode: String
 }
 

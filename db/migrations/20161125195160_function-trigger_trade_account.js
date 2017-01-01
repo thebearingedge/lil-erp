@@ -6,4 +6,5 @@ export const up = async ({ raw }) => {
 
 export const down = async ({ raw }) => {
   await raw('drop function trigger_trade_account(table_name regclass)')
+  await raw('drop function set_trade_account()')
 }

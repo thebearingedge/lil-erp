@@ -174,7 +174,7 @@ export const seed = async knex => {
       ...payment,
       party_id: customer_ids[i],
       payment_method_id: payment_method_ids[i],
-      asset_code: '1110'
+      payment_account_code: '1110'
     })))
     .into('payments')
 }

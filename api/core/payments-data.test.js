@@ -29,7 +29,7 @@ describe('paymentsData', () => {
         partyId,
         paymentMethodId,
         date: new Date(),
-        assetCode: '1100',
+        paymentAccountCode: '1100',
         tradeAccountCode: '2400',
         amount: 100
       }

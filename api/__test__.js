@@ -3,7 +3,7 @@ import Knex from 'knex'
 import uuid from 'uuid/v4'
 import chai, { expect } from 'chai'
 import { chaiStruct } from 'chai-struct'
-import { development } from '../db'
+import { development } from '../_db'
 
 const knex = new Knex(development)
 

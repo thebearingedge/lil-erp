@@ -1,0 +1,11 @@
+{
+  "client": {
+    "name": "postgresql",
+    "config": {
+      "database": "lil-erp"
+    }
+  },
+  "files": {
+    "directory": "db/migrations"
+  }
+}

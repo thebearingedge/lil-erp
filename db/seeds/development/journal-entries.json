@@ -1,12 +1,11 @@
 [
   {
-    "transaction_type": "journal_entry",
     "date": "2016-01-01T08:00:00.000Z",
     "memo": "Let's do this!",
     "ledger_entries": [
       {
-        "credit_code": "3100",
-        "debit_code": "1120",
+        "credit_account_code": "3100",
+        "debit_account_code": "1000",
         "amount": 10000
       }
     ]

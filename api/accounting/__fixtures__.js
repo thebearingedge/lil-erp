@@ -1,6 +1,7 @@
 import { Nullable } from 'chai-struct'
 
 const Account = {
+  id: String,
   code: String,
   name: String,
   description: Nullable(String),
@@ -15,8 +16,8 @@ const Account = {
 }
 
 const LedgerEntry = {
-  debitCode: String,
-  creditCode: String,
+  debitAccountCode: String,
+  creditAccountCode: String,
   amount: Number
 }
 

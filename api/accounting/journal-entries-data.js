@@ -37,8 +37,8 @@ function journalEntriesView(knex) {
     coalesce(
       json_agg(
         json_build_object(
-          'debit_code', le.debit_code,
-          'credit_code', le.credit_code,
+          'debit_account_code', le.debit_account_code,
+          'credit_account_code', le.credit_account_code,
           'amount', le.amount
         )
       ) filter (where le is not null),

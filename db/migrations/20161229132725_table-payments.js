@@ -6,8 +6,6 @@ export const up = ({ schema, raw }) =>
         .defaultTo(raw('uuid_generate_v4()'))
       tb.timestamp('date')
         .notNullable()
-        .defaultTo(raw('now()'))
-        .notNullable()
       tb.decimal('amount', 10, 2)
         .unsigned()
         .notNullable()

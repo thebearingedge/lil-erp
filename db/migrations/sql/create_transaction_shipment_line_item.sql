@@ -1,17 +1,17 @@
 create function create_transaction_shipment_line_item() returns trigger as $$
   declare
-    _shipment_id    uuid        = new.shipment_id;
-    _shipment_type  varchar     = new.shipment_type;
-    _sku            varchar     = new.sku;
-    _quantity       integer     = new.quantity;
-    _line_total     numeric     = new.line_total;
-    _date           timestamptz;
-    _party_id       uuid;
-    _transaction_id uuid;
-    _revenue_account_code   varchar;
-    _cost_code      varchar;
-    _asset_code     varchar;
-    _average_cost   float;
+    _shipment_id          uuid    = new.shipment_id;
+    _shipment_type        varchar = new.shipment_type;
+    _sku                  varchar = new.sku;
+    _quantity             integer = new.quantity;
+    _line_total           numeric = new.line_total;
+    _date                 timestamptz;
+    _party_id             uuid;
+    _transaction_id       uuid;
+    _revenue_account_code varchar;
+    _cost_account_code    varchar;
+    _asset_account_code   varchar;
+    _average_cost         float;
   begin
 
     select date, party_id
@@ -21,7 +21,7 @@ create function create_transaction_shipment_line_item() returns trigger as $$
 
     with create_transaction as (
       insert into transactions (
-             transaction_type,
+             type,
              date,
              party_id
       )
@@ -41,8 +41,8 @@ create function create_transaction_shipment_line_item() returns trigger as $$
            asset_account_code,
            coalesce(average_cost, 0)
       into _revenue_account_code,
-           _cost_code,
-           _asset_code,
+           _cost_account_code,
+           _asset_account_code,
            _average_cost
       from inventory_items
            left join stock_moves
@@ -55,21 +55,21 @@ create function create_transaction_shipment_line_item() returns trigger as $$
     if _shipment_type = 'item_receipt' then
       insert into ledger_entries (
              transaction_id,
-             debit_code,
-             credit_code,
+             debit_account_code,
+             credit_account_code,
              amount
       )
       values (
         _transaction_id,
-        _asset_code,
+        _asset_account_code,
         get_default_trade_payable(),
         _line_total
       );
     elsif _shipment_type = 'item_sale' then
       insert into ledger_entries (
              transaction_id,
-             debit_code,
-             credit_code,
+             debit_account_code,
+             credit_account_code,
              amount
       )
       values (
@@ -79,8 +79,8 @@ create function create_transaction_shipment_line_item() returns trigger as $$
         _line_total
       ), (
         _transaction_id,
-        _cost_code,
-        _asset_code,
+        _cost_account_code,
+        _asset_account_code,
         _quantity * _average_cost
       );
     end if;

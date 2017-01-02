@@ -15,6 +15,50 @@ describe('vendorsData', () => {
 
   afterEach(() => rollback(trx))
 
+  describe('create', () => {
+
+    const vendor = {
+      name: 'Bar Corp.',
+      accountNumber: 'bar002',
+      notes: 'This is where we buy our bars.'
+    }
+
+    it('inserts "parties" and "vendors" records', async () => {
+      await vendors.create(vendor)
+      const partyRecord = await trx
+        .select('*')
+        .from('parties')
+        .where('name', vendor.name)
+        .first()
+      const vendorRecord = await trx
+        .select('*')
+        .from('vendors')
+        .where('id', partyRecord.id)
+        .first()
+      expect(partyRecord).to.exist
+      expect(vendorRecord).to.exist
+    })
+
+    it('returns the created vendor', async () => {
+      const created = await vendors.create(vendor)
+      expect(created).to.exist
+    })
+
+    it('returns the vendor with the correct structure', async () => {
+      const created = await vendors.create(vendor)
+      expect(created).to.have.structure(structs.Vendor)
+    })
+
+    it('creates the vendor with default properties', async () => {
+      const created = await vendors.create(vendor)
+      expect(created).to.include({
+        openBalance: 0,
+        isActive: true
+      })
+    })
+
+  })
+
   describe('findById', () => {
     it('finds a vendor by id', async () => {
       const { id } = await trx
@@ -23,22 +67,6 @@ describe('vendorsData', () => {
         .first()
       const vendor = await vendors.findById(id)
       expect(vendor).to.have.structure(structs.Vendor)
-    })
-  })
-
-  describe('create', () => {
-    it('creates a vendor', async () => {
-      const vendor = {
-        name: 'Bar Corp.',
-        accountNumber: 'bar002',
-        notes: 'This is where we buy our bars.'
-      }
-      const created = await vendors.create(vendor)
-      expect(created).to.have.structure(structs.Vendor)
-      expect(created).to.include({
-        openBalance: 0,
-        isActive: true
-      })
     })
   })
 

@@ -1,12 +1,12 @@
 export const up = ({ schema }) =>
   schema
     .createTable('ledger_entries', tb => {
-      tb.string('debit_code')
+      tb.string('debit_account_code')
         .notNullable()
         .references('code')
         .inTable('accounts')
         .onUpdate('cascade')
-      tb.string('credit_code')
+      tb.string('credit_account_code')
         .notNullable()
         .references('code')
         .inTable('accounts')

@@ -1,13 +1,14 @@
 import { pick } from 'lodash'
 
 const transactionProps = [
+  'id',
   'date',
   'memo'
 ]
 
-export default function getTransaction(doc, transaction_type) {
+export default function getTransaction(doc, type) {
   return {
     ...pick(doc, transactionProps),
-    transaction_type
+    type
   }
 }

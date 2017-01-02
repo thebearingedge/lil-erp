@@ -1,10 +1,12 @@
 export const up = async ({ schema, raw }) => {
   await schema
     .createTable('accounts', tb => {
-      tb.string('code')
-        .primary()
+      tb.uuid('id')
         .unique()
         .notNullable()
+        .defaultTo(raw('uuid_generate_v4()'))
+      tb.string('code')
+        .primary()
       tb.string('parent_code')
       tb.string('name')
         .unique()

@@ -54,7 +54,9 @@ function vendorsView(knex) {
   ]
   const open_balance = knex
     .with('accounts_payable', qb =>
-      qb.from(knex.raw(`get_accounts_of_type('accounts_payable')`))
+      qb.select('code')
+        .from('accounts')
+        .where('type', 'accounts_payable')
     )
     .select(knex.raw(`
       coalesce(sum(case

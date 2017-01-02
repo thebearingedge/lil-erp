@@ -1,6 +1,7 @@
 import { Nullable } from 'chai-struct'
 
 const Account = {
+  id: String,
   code: String,
   name: String,
   description: Nullable(String),

@@ -38,7 +38,9 @@ function customersView(knex) {
   ]
   const open_balance = knex
     .with('accounts_receivable', qb =>
-      qb.from(knex.raw(`get_accounts_of_type('accounts_receivable')`))
+      qb.select('code')
+        .from('accounts')
+        .where('type', 'accounts_receivable')
     )
     .select(knex.raw(`
       coalesce(sum(case

@@ -36,8 +36,6 @@ create function trigger_trade_account(table_name regclass) returns void as $$
                update of trade_account_code
         on %I
         for each row
-        when (new.trade_account_code is null or
-              new.trade_account_type is null)
         execute procedure set_trade_account()
     ', table_name);
   end;

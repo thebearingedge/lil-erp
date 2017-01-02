@@ -27,6 +27,7 @@ export default function paymentsData(knex) {
     return trx
       .select(columns)
       .from('payments')
+      .where({ id })
       .first()
   }
 

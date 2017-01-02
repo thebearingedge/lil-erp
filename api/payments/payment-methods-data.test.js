@@ -52,7 +52,7 @@ describe('paymentMethodsData', () => {
       const err = await rejected(paymentMethods.create(otherPaymentMethod))
       expect(err)
         .to.be.an('error')
-        .and.have.property('message')
+        .with.property('message')
         .that.includes('payment_methods_name_unique')
     })
 

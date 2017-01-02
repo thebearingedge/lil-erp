@@ -78,7 +78,7 @@ describe('inventoryItemsData', () => {
       const err = await rejected(inventoryItems.create(otherItem))
       expect(err)
         .to.be.an('error')
-        .and.have.property('message')
+        .with.property('message')
         .that.includes('items_sku_unique')
     })
 

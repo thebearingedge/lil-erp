@@ -16,8 +16,8 @@ const Account = {
 }
 
 const LedgerEntry = {
-  debitCode: String,
-  creditCode: String,
+  debitAccountCode: String,
+  creditAccountCode: String,
   amount: Number
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { zipWith, pick } from 'lodash'
 import { mapSeries } from 'bluebird'
 import systemSeed from '../system'
@@ -16,6 +17,11 @@ import payments from './payments'
 
 export const seed = async knex => {
 
+  knex.on('query-error', (err, details) => {
+    console.error(err)
+    console.log(JSON.stringify(details, null, 2))
+  })
+
   const { tables } = await knex
       .select(knex.raw('array_to_json(array_agg(tablename)) as tables'))
       .from('pg_tables')
@@ -31,14 +37,14 @@ export const seed = async knex => {
     .insert(accounts)
     .into('accounts')
 
-  await mapSeries(journal_entries, async ({ ledger_entries, ...entry }) => {
+  await mapSeries(journal_entries, async ({ ledger_entries, ...journal }) => {
     const [ transaction_id ] = await knex
-      .insert(entry)
+      .insert({ type: 'journal_entry', ...journal })
       .into('transactions')
       .returning('id')
-    await mapSeries(ledger_entries, entry =>
+    await mapSeries(ledger_entries, ledger =>
       knex
-        .insert({ ...entry, transaction_id })
+        .insert({ transaction_id, ...ledger })
         .into('ledger_entries')
     )
   })
@@ -170,11 +176,20 @@ export const seed = async knex => {
     .returning('id')
 
   await knex
-    .insert(payments.map((payment, i) => ({
-      ...payment,
-      party_id: customer_ids[i],
-      payment_method_id: payment_method_ids[i],
+    .insert({
+      ...payments[0],
+      party_id: customer_ids[0],
+      payment_method_id: payment_method_ids[0],
       payment_account_code: '1110'
-    })))
+    })
+    .into('payments')
+
+  await knex
+    .insert({
+      ...payments[1],
+      party_id: vendor_ids[0],
+      payment_method_id: payment_method_ids[0],
+      payment_account_code: '1110'
+    })
     .into('payments')
 }

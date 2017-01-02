@@ -5,14 +5,12 @@ export const up = async ({ schema, raw }) => {
         .unique()
         .notNullable()
         .defaultTo(raw('uuid_generate_v4()'))
-      tb.enum('transaction_type', [
-          'journal_entry', 'shipment', 'payment'
-        ])
+      tb.enum('type', ['journal_entry', 'shipment', 'payment'])
         .notNullable()
       tb.timestamp('date')
         .notNullable()
       tb.text('memo')
-      tb.primary(['id', 'transaction_type'])
+      tb.primary(['id', 'type'])
     })
   await raw('select trigger_timestamps(?)', ['transactions'])
 }

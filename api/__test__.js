@@ -1,5 +1,6 @@
-import Knex from 'knex'
 import { after } from 'global'
+import Knex from 'knex'
+import uuid from 'uuid/v4'
 import chai, { expect } from 'chai'
 import { chaiStruct } from 'chai-struct'
 import { development } from '../db'
@@ -22,6 +23,7 @@ after(() => knex.destroy())
 chai.use(chaiStruct)
 
 export {
+  uuid,
   begin,
   expect,
   rollback,

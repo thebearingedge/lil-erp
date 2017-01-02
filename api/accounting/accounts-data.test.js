@@ -44,15 +44,15 @@ describe('accountsData', () => {
     })
 
     it('does not create accounts with the same code', async () => {
+      await accounts.create(account)
       const otherAccount = {
         ...account,
         name: 'Tip Jar 2'
       }
-      await accounts.create(account)
       const err = await rejected(accounts.create(otherAccount))
       expect(err)
         .to.be.an('error')
-        .and.have.property('message')
+        .with.property('message')
         .that.includes('accounts_pkey')
     })
 
@@ -65,7 +65,7 @@ describe('accountsData', () => {
       const err = await rejected(accounts.create(otherAccount))
       expect(err)
         .to.be.an('error')
-        .and.have.property('message')
+        .with.property('message')
         .that.includes('accounts_name_unique')
     })
 

@@ -3,9 +3,9 @@ create function create_transaction_payment() returns trigger as $$
     _date                 timestamptz = new.date;
     _party_id             uuid        = new.party_id;
     _payment_account_code varchar     = new.payment_account_code;
-    _credit_code          varchar     = new.trade_account_code;
+    _credit_account_code  varchar     = new.trade_account_code;
+    _amount               numeric     = new.amount;
     _party_type           varchar;
-    _amount               numeric;
     _transaction_id       uuid;
   begin
 
@@ -14,20 +14,9 @@ create function create_transaction_payment() returns trigger as $$
       from parties
      where id = _party_id;
 
-    _amount = case
-                 when
-                   _party_type = 'customer'
-                 then
-                   new.amount
-                 when
-                   _party_type = 'vendor'
-                 then
-                   -1 * new.amount
-               end;
-
     with create_transaction as (
       insert into transactions (
-             transaction_type,
+             type,
              date,
              party_id
       )
@@ -44,14 +33,14 @@ create function create_transaction_payment() returns trigger as $$
 
     insert into ledger_entries (
            transaction_id,
-           debit_code,
-           credit_code,
+           debit_account_code,
+           credit_account_code,
            amount
     )
     values (
       _transaction_id,
       _payment_account_code,
-      _credit_code,
+      _credit_account_code,
       _amount
     );
 

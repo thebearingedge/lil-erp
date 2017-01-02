@@ -60,7 +60,7 @@ function vendorsView(knex) {
     )
     .select(knex.raw(`
       coalesce(sum(case
-                     when le.credit_code in (
+                     when le.credit_account_code in (
                             select code
                             from accounts_payable
                           )
@@ -72,11 +72,11 @@ function vendorsView(knex) {
     .join('ledger_entries as le', 't.id', 'le.transaction_id')
     .whereRaw('v.id = t.party_id')
     .andWhere(qb =>
-      qb.whereIn('le.debit_code', knex
+      qb.whereIn('le.debit_account_code', knex
           .select('code')
           .from('accounts_payable')
         )
-        .orWhereIn('le.credit_code', knex
+        .orWhereIn('le.credit_account_code', knex
           .select('code')
           .from('accounts_payable')
         )

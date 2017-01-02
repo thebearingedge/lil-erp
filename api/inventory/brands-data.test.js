@@ -52,7 +52,7 @@ describe('brandsData', () => {
       const err = await rejected(brands.create(otherBrand))
       expect(err)
         .to.be.an('error')
-        .and.have.property('message')
+        .with.property('message')
         .that.includes('brands_name_unique')
     })
 

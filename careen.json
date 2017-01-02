@@ -5,6 +5,7 @@
       "database": "lil-erp"
     }
   },
+  "journalTable": "schema_journal",
   "files": {
     "directory": "db/migrations"
   }

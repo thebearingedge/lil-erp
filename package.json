@@ -18,12 +18,14 @@
     "db:make": "careen -C",
     "db:up": "careen -A --all",
     "db:down": "careen -R -t ixgk6g09",
+    "db:cycle": "run-s -s db:down db:up",
+    "db:watch": "onchange 'db/migrations/*.sql' -- run-s db:cycle",
     "_db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd _db/",
     "_db:make": "npm run -s _db migrate:make",
     "_db:up": "npm run -s _db migrate:latest",
     "_db:down": "npm run -s _db migrate:rollback",
     "_db:seed": "npm run -s _db seed:run",
-    "precommit": "run-s -s lint _db:up _db:seed cover check"
+    "precommit": "run-s -s lint"
   },
   "repository": {
     "type": "git",
@@ -51,6 +53,7 @@
     "mocha": "3.2.0",
     "npm-run-all": "3.1.2",
     "nyc": "10.0.0",
+    "onchange": "3.2.1",
     "uuid": "3.0.1"
   },
   "dependencies": {

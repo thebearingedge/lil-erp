@@ -11,8 +11,7 @@ services:
   - postgresql
 before_script:
   - psql -U postgres -c 'create database "lil-erp"'
-  - npm run _db:up
-  - npm run _db:seed
-script: npm run cover && npm run check
+  - npm run db:up
+script: npm test
 after_success:
   - bash <(curl -s https://codecov.io/bash)

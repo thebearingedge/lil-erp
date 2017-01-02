@@ -1,5 +1,4 @@
 -- up
-
 create function set_created_at() returns trigger as $$
   begin
     new.created_at = now();
@@ -63,7 +62,6 @@ $$ language plpgsql;
 ---
 
 -- down
-
 drop function trigger_timestamps(table_name regclass);
 drop function keep_created_at();
 drop function set_updated_at();

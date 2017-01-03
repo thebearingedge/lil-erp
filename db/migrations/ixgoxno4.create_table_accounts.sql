@@ -1,4 +1,3 @@
--- up
 create type account_type as enum (
   'current_assets',
   'cash',
@@ -44,9 +43,48 @@ create table accounts (
   foreign key (parent_code, class) references accounts (code, class)
 );
 
+create function accounts_inherit_parent_account_type() returns trigger as $$
+  begin
+
+    select a.type
+      into new.type
+      from accounts as a
+     where a.code = new.parent_code;
+
+    return new;
+  end;
+$$ language plpgsql;
+
+create trigger inherit_parent_account_type
+  before insert or update of parent_code
+  on accounts
+  for each row
+  when (new.is_system_account != true)
+  execute procedure accounts_inherit_parent_account_type();
+
+create function accounts_inherit_parent_account_class() returns trigger as $$
+  begin
+
+    select a.class
+      into new.class
+      from accounts as a
+     where a.code = new.parent_code;
+
+    return new;
+  end;
+$$ language plpgsql;
+
+create trigger inherit_parent_account_class
+  before insert or update of parent_code
+  on accounts
+  for each row
+  when (new.is_system_account != true)
+  execute procedure accounts_inherit_parent_account_class();
+
 ---
 
--- down
 drop table accounts;
 drop type account_type;
 drop type account_class;
+drop function accounts_inherit_parent_account_type();
+drop function accounts_inherit_parent_account_class();

@@ -1,0 +1,22 @@
+[
+  {
+    "shipment_type": "item_receipt",
+    "date": "2016-12-05T04:27:36.208Z",
+    "line_items": [
+      {
+        "quantity": 1,
+        "line_total": 140
+      }
+    ]
+  },
+  {
+    "shipment_type": "item_receipt",
+    "date": "2016-12-25T23:10:56.960Z",
+    "line_items": [
+      {
+        "quantity": 1,
+        "line_total": 135
+      }
+    ]
+  }
+]

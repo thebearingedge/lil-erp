@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint api db _db",
     "test": "mocha --harmony-async-await -r babel-register api/**/*.test.js",
-    "tdd": "npm run db:seed && npm t -s -- -w -R min",
+    "tdd": "run-s db:up db:seed && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",
     "db:status": "careen",
@@ -19,13 +19,10 @@
     "db:up": "careen -A --all",
     "db:down": "careen -R -t ixgk6g09",
     "db:cycle": "run-s -s db:down db:up",
-    "db:watch": "onchange 'db/migrations/*.sql' -- run-s db:cycle",
-    "_db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd _db/",
-    "_db:make": "npm run -s _db migrate:make",
-    "_db:up": "npm run -s _db migrate:latest",
-    "_db:down": "npm run -s _db migrate:rollback",
-    "_db:seed": "npm run -s _db seed:run",
-    "precommit": "run-s -s lint"
+    "db:seed": "npm run -s db seed:run",
+    "db:watch": "onchange 'db/migrations/*.sql' -- run-s db:cycle db:seed",
+    "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
+    "precommit": "run-s -s lint db:up db:seed test"
   },
   "repository": {
     "type": "git",

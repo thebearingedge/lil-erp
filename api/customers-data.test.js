@@ -3,7 +3,7 @@ import { begin, expect, rollback } from './__test__'
 import { Customer } from './__fixtures__'
 import customersData from './customers-data'
 
-describe.skip('customersData', () => {
+describe('customersData', () => {
 
   let trx
   let customers
@@ -47,7 +47,7 @@ describe.skip('customersData', () => {
       const created = await customers.create(customer)
       expect(created).to.have.structure(Customer)
     })
-
+    
     it('creates a customer with default properties', async () => {
       const created = await customers.create(customer)
       expect(created).to.include({

@@ -5,7 +5,8 @@ create table vendors (
   party_type     party_type check (party_type = 'vendor'),
   account_number varchar,
   website        varchar,
-  foreign key (id, party_type) references parties (id, party_type)
+  foreign key (id, party_type)
+          references parties (id, party_type)
 );
 
 ---

@@ -40,7 +40,8 @@ create table accounts (
   is_active         boolean not null default true,
   unique (code, class),
   unique (code, type),
-  foreign key (parent_code, class) references accounts (code, class)
+  foreign key (parent_code, class)
+          references accounts (code, class)
 );
 
 create function accounts_inherit_parent_account_type() returns trigger as $$

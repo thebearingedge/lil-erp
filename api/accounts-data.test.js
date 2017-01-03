@@ -72,6 +72,7 @@ describe('accountsData', () => {
     it('creates an account with default properties', async () => {
       const created = await accounts.create(account)
       expect(created).to.include({
+        ...account,
         parentCode: null,
         type: null,
         class: null,
@@ -100,6 +101,7 @@ describe('accountsData', () => {
         }
         const created = await accounts.create(childAccount)
         expect(created).to.include({
+          ...account,
           parentCode: parentAccount.code,
           type: parentAccount.type,
           class: parentAccount.class,

@@ -12,23 +12,17 @@ export default function customersData(knex) {
     return knex.transaction(async trx => {
       await trx
         .insert({ entity_id, type, payload })
-        .into('events')
+        .into('event_store')
       return findById(entity_id, trx)
     })
   }
 
   async function findById(id, trx) {
-    const customer = [
-      'c.id',
-      'p.name',
-      'p.notes',
-      'p.is_active'
-    ]
     return trx
-      .select(customer)
-      .from('customers as c')
-      .join('parties as p', 'c.id', 'p.id')
-      .where('c.id', id)
+      .select('id', 'name', 'notes', 'is_active')
+      .from('customers')
+      .joinRaw('join parties using (id, party_type)')
+      .where({ id })
       .first()
   }
 

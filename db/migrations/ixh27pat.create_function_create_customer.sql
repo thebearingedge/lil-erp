@@ -1,6 +1,6 @@
 create function create_customer(id uuid, payload jsonb) returns void as $$
   declare
-    party           parties%rowtype;
+    party parties%rowtype;
   begin
 
     select name, notes
@@ -8,9 +8,8 @@ create function create_customer(id uuid, payload jsonb) returns void as $$
       from jsonb_to_record(payload)
         as (name varchar, notes text);
 
-    party.id        = id;
-    party.type      = 'customer';
-    party.is_active = true;
+    select id, 'customer', true
+      into party.id, party.party_type, party.is_active;
 
     insert into parties
     values (party.*);

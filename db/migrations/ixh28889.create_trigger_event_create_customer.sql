@@ -1,3 +1,5 @@
+alter type event_type add value 'create_customer';
+
 create function event_create_customer() returns trigger as $$
   begin
 
@@ -9,11 +11,11 @@ $$ language plpgsql;
 
 create trigger create_customer
   after insert
-  on events
+  on event_store
   for each row
   when (new.type = 'create_customer')
   execute procedure event_create_customer();
 
 ---
-drop trigger create_customer on events;
+drop trigger create_customer on event_store;
 drop function event_create_customer();

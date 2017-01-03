@@ -7,9 +7,8 @@ create function create_account(id uuid, payload jsonb) returns void as $$
       into account
       from jsonb_populate_record(null::accounts, payload);
 
-    account.id                = id;
-    account.is_system_account = false;
-    account.is_active         = true;
+    select id, true, false
+      into account.id, account.is_active, account.is_system_account;
 
     insert into accounts
     values (account.*);

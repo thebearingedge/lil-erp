@@ -47,10 +47,11 @@ describe('customersData', () => {
       const created = await customers.create(customer)
       expect(created).to.have.structure(Customer)
     })
-    
+
     it('creates a customer with default properties', async () => {
       const created = await customers.create(customer)
       expect(created).to.include({
+        ...customer,
         isActive: true
       })
     })

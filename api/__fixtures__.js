@@ -18,3 +18,12 @@ export const Customer = {
   notes: Nullable(String),
   isActive: Boolean
 }
+
+export const Vendor = {
+  id: String,
+  name: String,
+  notes: Nullable(String),
+  website: Nullable(String),
+  accountNumber: Nullable(String),
+  isActive: Boolean
+}

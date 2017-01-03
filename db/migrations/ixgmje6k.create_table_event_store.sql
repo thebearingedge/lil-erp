@@ -1,9 +1,6 @@
-create type event_type as enum (
-  'create_account',
-  'create_customer'
-);
+create type event_type as enum ();
 
-create table events (
+create table event_store (
   id          bigserial      primary key,
   type        event_type     not null,
   entity_id   uuid           not null,
@@ -12,5 +9,5 @@ create table events (
 );
 
 ---
-drop table events;
+drop table event_store;
 drop type event_type;

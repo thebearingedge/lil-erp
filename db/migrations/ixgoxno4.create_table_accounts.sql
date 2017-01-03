@@ -82,7 +82,6 @@ create trigger inherit_parent_account_class
   execute procedure accounts_inherit_parent_account_class();
 
 ---
-
 drop table accounts;
 drop type account_type;
 drop type account_class;

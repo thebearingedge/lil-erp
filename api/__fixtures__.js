@@ -11,3 +11,10 @@ export const Account = {
   isActive: Boolean,
   isSystemAccount: Boolean
 }
+
+export const Customer = {
+  id: String,
+  name: String,
+  notes: Nullable(String),
+  isActive: Boolean
+}

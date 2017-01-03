@@ -15,6 +15,5 @@ create trigger create_account
   execute procedure event_create_account();
 
 ---
-
 drop trigger create_account on events;
 drop function event_create_account();

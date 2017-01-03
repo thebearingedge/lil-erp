@@ -14,11 +14,9 @@ create function create_account(id uuid, payload jsonb) returns void as $$
     insert into accounts
     values (account.*);
 
-
     return;
   end;
 $$ language plpgsql;
 
 ---
-
 drop function create_account(id uuid, payload jsonb);

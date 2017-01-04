@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'global'
-import { begin, expect, rollback, rejected, uuid } from './__test__'
+import { begin, expect, rollback, rejected } from './__test__'
 import { JournalEntry } from './__fixtures__'
 import journalEntriesData from './journal-entries-data'
 
@@ -31,7 +31,6 @@ describe('journalEntriesData', () => {
         .where('type', 'contributed_capital')
         .first()
       entry = {
-        transaction_id: uuid(),
         date: new Date(),
         memo: 'Shut up and take my money!',
         ledgerEntries: [
@@ -69,7 +68,6 @@ describe('journalEntriesData', () => {
       const transactionRecord = await trx
         .select('transaction_type')
         .from('transactions')
-        .where('transaction_id', entry.transaction_id)
         .first()
       expect(transactionRecord).to.include({ transaction_type: 'journal_entry' })
     })

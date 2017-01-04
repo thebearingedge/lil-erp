@@ -53,7 +53,7 @@ describe('accountsData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('accounts_code')
+        .that.includes('accounts_pkey')
     })
 
     it('does not create accounts with the same name', async () => {

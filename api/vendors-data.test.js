@@ -33,7 +33,7 @@ describe('vendorsData', () => {
       const vendorRecord = await trx
         .select('*')
         .from('vendors')
-        .where('id', partyRecord.id)
+        .where('party_id', partyRecord.party_id)
         .first()
       expect(partyRecord).to.exist
       expect(vendorRecord).to.exist

@@ -32,7 +32,7 @@ describe('customersData', () => {
       const customerRecord = await trx
         .select('*')
         .from('customers')
-        .where('id', partyRecord.id)
+        .where('party_id', partyRecord.party_id)
         .first()
       expect(partyRecord).to.exist
       expect(customerRecord).to.exist

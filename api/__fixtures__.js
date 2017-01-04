@@ -12,15 +12,27 @@ export const Account = {
   isSystemAccount: Boolean
 }
 
-export const Customer = {
+export const JournalEntry = {
   id: String,
+  date: Date,
+  memo: Nullable(String),
+  ledgerEntries: [{
+    id: String,
+    debitAccountCode: String,
+    creditAccountCode: String,
+    amount: Number
+  }]
+}
+
+export const Customer = {
+  partyId: String,
   name: String,
   notes: Nullable(String),
   isActive: Boolean
 }
 
 export const Vendor = {
-  id: String,
+  partyId: String,
   name: String,
   notes: Nullable(String),
   website: Nullable(String),

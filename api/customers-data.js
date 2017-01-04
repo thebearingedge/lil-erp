@@ -17,12 +17,12 @@ export default function customersData(knex) {
     })
   }
 
-  async function findById(id, trx) {
+  async function findById(party_id, trx) {
     return trx
-      .select('id', 'name', 'notes', 'is_active')
+      .select('party_id', 'name', 'notes', 'is_active')
       .from('customers')
-      .joinRaw('join parties using (id, party_type)')
-      .where({ id })
+      .joinRaw('join parties using (party_id, party_type)')
+      .where({ party_id })
       .first()
   }
 

@@ -1,5 +1,9 @@
 import { join } from 'path'
-import { readFile } from 'fs-promise'
+import { readFile } from 'fs'
 
-export const readSql = filename =>
-  readFile(join(__dirname, `../sql/${filename}`), 'utf8')
+export const readSql = filename => new Promise((resolve, reject) => {
+  readFile(join(__dirname, `../sql/${filename}`), 'utf8', (err, data) => {
+    if (err) return reject(err)
+    resolve(data)
+  })
+})

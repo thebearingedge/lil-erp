@@ -9,12 +9,12 @@ create function create_customer(id uuid, payload jsonb) returns void as $$
         as (name varchar, notes text);
 
     select id, 'customer', true
-      into party.id, party.party_type, party.is_active;
+      into party.party_id, party.party_type, party.is_active;
 
     insert into parties
     values (party.*);
 
-    insert into customers
+    insert into customers (party_id, party_type)
     values (id, 'customer');
 
     return;

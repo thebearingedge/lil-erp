@@ -10,7 +10,7 @@ create function create_vendor(id uuid, payload jsonb) returns void as $$
         as (name varchar, notes text);
 
     select id, 'vendor', true
-      into party.id, party.party_type, party.is_active;
+      into party.party_id, party.party_type, party.is_active;
 
     insert into parties
     values (party.*);
@@ -21,7 +21,7 @@ create function create_vendor(id uuid, payload jsonb) returns void as $$
         as (account_number varchar, website varchar);
 
     select id, 'vendor'
-      into vendor.id, vendor.party_type;
+      into vendor.party_id, vendor.party_type;
 
     insert into vendors
     values (vendor.*);

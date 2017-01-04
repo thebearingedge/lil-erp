@@ -1,12 +1,13 @@
 alter type party_type add value 'vendor';
 
 create table vendors (
-  id             uuid       primary key default uuid_generate_v4(),
+  party_id       uuid       unique not null,
   party_type     party_type check (party_type = 'vendor'),
   account_number varchar,
   website        varchar,
-  foreign key (id, party_type)
-          references parties (id, party_type)
+  primary key (party_id, party_type),
+  foreign key (party_id, party_type)
+          references parties (party_id, party_type)
 );
 
 ---

@@ -29,8 +29,8 @@ create type account_class as enum (
 );
 
 create table accounts (
-  id                uuid    primary key default uuid_generate_v4(),
-  code              varchar unique not null,
+  id                uuid    unique not null default uuid_generate_v4(),
+  code              varchar primary key,
   parent_code       varchar,
   class             account_class,
   type              account_type,

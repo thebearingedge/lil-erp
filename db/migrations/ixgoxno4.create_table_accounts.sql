@@ -29,26 +29,26 @@ create type account_class as enum (
 );
 
 create table accounts (
-  id                uuid    unique not null default uuid_generate_v4(),
-  code              varchar primary key,
+  id                uuid          unique not null default uuid_generate_v4(),
+  code              varchar       primary key,
   parent_code       varchar,
   class             account_class,
   type              account_type,
-  name              varchar unique not null,
+  name              varchar       unique not null,
   description       text,
-  is_system_account boolean not null default false,
-  is_active         boolean not null default true,
+  is_system_account boolean       not null default false,
+  is_active         boolean       not null default true,
   unique (code, class),
   unique (code, type),
   foreign key (parent_code, class)
           references accounts (code, class)
 );
 
-create function accounts_inherit_parent_account_type() returns trigger as $$
+create function inherit_parent_account() returns trigger as $$
   begin
 
-    select a.type
-      into new.type
+    select a.type, a.class
+      into new.type, new.class
       from accounts as a
      where a.code = new.parent_code;
 
@@ -56,35 +56,15 @@ create function accounts_inherit_parent_account_type() returns trigger as $$
   end;
 $$ language plpgsql;
 
-create trigger inherit_parent_account_type
+create trigger inherit_parent_account
   before insert or update of parent_code
   on accounts
   for each row
   when (new.is_system_account != true)
-  execute procedure accounts_inherit_parent_account_type();
-
-create function accounts_inherit_parent_account_class() returns trigger as $$
-  begin
-
-    select a.class
-      into new.class
-      from accounts as a
-     where a.code = new.parent_code;
-
-    return new;
-  end;
-$$ language plpgsql;
-
-create trigger inherit_parent_account_class
-  before insert or update of parent_code
-  on accounts
-  for each row
-  when (new.is_system_account != true)
-  execute procedure accounts_inherit_parent_account_class();
+  execute procedure inherit_parent_account();
 
 ---
 drop table accounts;
 drop type account_type;
 drop type account_class;
-drop function accounts_inherit_parent_account_type();
-drop function accounts_inherit_parent_account_class();
+drop function inherit_parent_account();

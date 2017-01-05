@@ -9,18 +9,11 @@ create function create_journal_entry(id uuid, payload jsonb) returns void as $$
       from jsonb_to_record(payload)
         as (date timestamptz(6), memo text);
 
-    with system_party as (
-      select p.party_id, p.party_type
-        from parties as p
-       where p.party_type = 'system'
-       limit 1
-    )
-    select s.party_id, s.party_type
-      into trx.party_id, trx.party_type
-      from system_party as s;
-
-    select id, 'journal_entry'
-      into trx.transaction_id, trx.transaction_type;
+    select id, 'journal_entry', p.party_id, p.party_type
+      into trx.transaction_id, trx.transaction_type, trx.party_id, trx.party_type
+      from parties as p
+     where p.party_type = 'general_journal'
+     limit 1;
 
     insert into transactions
     values (trx.*);

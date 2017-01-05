@@ -2,7 +2,7 @@ alter type party_type add value 'vendor';
 
 create table vendors (
   party_id       uuid       unique not null,
-  party_type     party_type check (party_type = 'vendor'),
+  party_type     party_type not null check (party_type = 'vendor'),
   account_number varchar,
   website        varchar,
   primary key (party_id, party_type),

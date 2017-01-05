@@ -1,13 +1,18 @@
 import uuid from 'uuid/V4'
 import accounts from './accounts'
 import default_accounts from './default-accounts'
+import payment_methods from './payment-methods'
 
 export default async function systemSeed(knex) {
 
-  const system = { party_id: uuid(), party_type: 'system', name: uuid() }
+  const general_journal = {
+    party_id: uuid(),
+    party_type: 'general_journal',
+    name: uuid()
+  }
 
   await knex
-    .insert(system)
+    .insert(general_journal)
     .into('parties')
 
   await knex
@@ -17,4 +22,8 @@ export default async function systemSeed(knex) {
   await knex
     .insert(default_accounts)
     .into('default_accounts')
+
+  await knex
+    .insert(payment_methods)
+    .into('payment_methods')
 }

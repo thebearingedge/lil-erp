@@ -39,3 +39,14 @@ export const Vendor = {
   accountNumber: Nullable(String),
   isActive: Boolean
 }
+
+export const Payment = {
+  transactionId: String,
+  partyId: String,
+  paymentMethodId: String,
+  date: Date,
+  amount: Number,
+  memo: Nullable(String),
+  tradeAccountCode: String,
+  paymentAccountCode: String
+}

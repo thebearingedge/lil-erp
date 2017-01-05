@@ -12,5 +12,4 @@ export const seed = async knex => {
   await knex.raw(`truncate table ${tables} restart identity`)
 
   await systemSeed(knex)
-
 }

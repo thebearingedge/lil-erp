@@ -1,6 +1,7 @@
 {
   "accounts_receivable_code": "1200",
-  "accounts_receivable_type": "accounts_receivable",
   "accounts_payable_code": "2100",
-  "accounts_payable_type": "accounts_payable"
+  "inventory_sales_code": "4100",
+  "inventory_cost_code": "5000",
+  "inventory_assets_code": "1300"
 }

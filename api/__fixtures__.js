@@ -56,3 +56,14 @@ export const Brand = {
   brandName: String,
   isActive: Boolean
 }
+
+export const InventoryItem = {
+  itemId: String,
+  sku: String,
+  brandName: Nullable(String),
+  description: Nullable(String),
+  salesAccountCode: String,
+  costAccountCode: String,
+  assetAccountCode: String,
+  isActive: Boolean
+}

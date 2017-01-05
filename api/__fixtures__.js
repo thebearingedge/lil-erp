@@ -50,3 +50,9 @@ export const Payment = {
   tradeAccountCode: String,
   paymentAccountCode: String
 }
+
+export const Brand = {
+  brandId: String,
+  brandName: String,
+  isActive: Boolean
+}

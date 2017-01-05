@@ -22,20 +22,20 @@ describe('customersData', () => {
       notes: 'Hello... My name is Denis'
     }
 
-    it('inserts "parties" and "customers" records', async () => {
+    it('inserts "parties" and "customers" rows', async () => {
       await customers.create(customer)
-      const partyRecord = await trx
+      const partyRow = await trx
         .select('*')
         .from('parties')
         .where('name', customer.name)
         .first()
-      const customerRecord = await trx
+      const customerRow = await trx
         .select('*')
         .from('customers')
-        .where('party_id', partyRecord.party_id)
+        .where('party_id', partyRow.party_id)
         .first()
-      expect(partyRecord).to.exist
-      expect(customerRecord).to.exist
+      expect(partyRow).to.exist
+      expect(customerRow).to.exist
     })
 
     it('returns the created customer', async () => {

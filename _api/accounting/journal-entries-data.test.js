@@ -44,29 +44,29 @@ describe('journalEntriesData', () => {
       }
     })
 
-    it('inserts "transactions" and "ledger_entries" records', async () => {
+    it('inserts "transactions" and "ledger_entries" rows', async () => {
       await entries.create(entry)
-      const transactionRecord = await trx
+      const transactionRow = await trx
         .select('*')
         .from('transactions')
         .where('id', entry.id)
         .first()
-      const ledgerEntryRecords = await trx
+      const ledgerEntryRows = await trx
         .select('*')
         .from('ledger_entries')
         .where('transaction_id', entry.id)
-      expect(transactionRecord).to.exist
-      expect(ledgerEntryRecords).to.have.lengthOf(1)
+      expect(transactionRow).to.exist
+      expect(ledgerEntryRows).to.have.lengthOf(1)
     })
 
     it('inserts a "transactions" record of type "journal_entry"', async () => {
       await entries.create(entry)
-      const transactionRecord = await trx
+      const transactionRow = await trx
         .select('type')
         .from('transactions')
         .where('id', entry.id)
         .first()
-      expect(transactionRecord).to.include({ type: 'journal_entry' })
+      expect(transactionRow).to.include({ type: 'journal_entry' })
     })
 
     it('returns the created journal entry', async () => {

@@ -65,11 +65,11 @@ describe('journalEntriesData', () => {
 
     it('inserts a "transactions" record of type "journal_entry"', async () => {
       await entries.create(entry)
-      const transactionRecord = await trx
+      const transactionRow = await trx
         .select('transaction_type')
         .from('transactions')
         .first()
-      expect(transactionRecord).to.include({ transaction_type: 'journal_entry' })
+      expect(transactionRow).to.include({ transaction_type: 'journal_entry' })
     })
 
     it('returns the created journal entry', async () => {

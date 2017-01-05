@@ -22,20 +22,20 @@ describe('inventoryItemsData', () => {
       description: 'A quality widget.'
     }
 
-    it('inserts "items" and "inventory_items" records', async () => {
+    it('inserts "items" and "inventory_items" rows', async () => {
       await inventoryItems.create(item)
-      const itemRecord = await trx
+      const itemRow = await trx
         .select('*')
         .from('items')
         .where('sku', item.sku)
         .first()
-      const inventoryItemRecord = await trx
+      const inventoryItemRow = await trx
         .select('*')
         .from('inventory_items')
         .where('sku', item.sku)
         .first()
-      expect(itemRecord).to.exist
-      expect(inventoryItemRecord).to.exist
+      expect(itemRow).to.exist
+      expect(inventoryItemRow).to.exist
     })
 
     it('returns the created inventory item', async () => {

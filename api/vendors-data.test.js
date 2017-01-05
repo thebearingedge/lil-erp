@@ -23,20 +23,20 @@ describe('vendorsData', () => {
       notes: 'This is where we buy our bars.'
     }
 
-    it('inserts "parties" and "vendors" records', async () => {
+    it('inserts "parties" and "vendors" rows', async () => {
       await vendors.create(vendor)
-      const partyRecord = await trx
+      const partyRow = await trx
         .select('*')
         .from('parties')
         .where('name', vendor.name)
         .first()
-      const vendorRecord = await trx
+      const vendorRow = await trx
         .select('*')
         .from('vendors')
-        .where('party_id', partyRecord.party_id)
+        .where('party_id', partyRow.party_id)
         .first()
-      expect(partyRecord).to.exist
-      expect(vendorRecord).to.exist
+      expect(partyRow).to.exist
+      expect(vendorRow).to.exist
     })
 
     it('returns the created vendor', async () => {

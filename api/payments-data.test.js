@@ -67,7 +67,7 @@ describe('paymentsData', () => {
         }
       })
 
-      it('inserts "transactions", "payments" "journal_entries", and "ledger_entries" records', async () => {
+      it('inserts "transactions", "payments" "journal_entries", and "ledger_entries" rows', async () => {
         await payments.create(payment)
         const transactionRow = await trx
           .select('*')
@@ -114,7 +114,7 @@ describe('paymentsData', () => {
         expect(transactionRow).to.exist
       })
 
-      it('inserts a "ledger_entries" record with the correct accounts', async () => {
+      it('inserts a "ledger_entries" record with the correct values', async () => {
         await payments.create(payment)
         const transactionRow = await trx
           .select('*')
@@ -130,6 +130,7 @@ describe('paymentsData', () => {
           debit_account_code: cashCode,
           credit_account_code: receivablesCode
         })
+        expect(Number(ledgerEntryRow.amount)).to.equal(payment.amount)
       })
 
       it('returns the created payment', async () => {

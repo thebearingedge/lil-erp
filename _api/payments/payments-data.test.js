@@ -67,51 +67,51 @@ describe('paymentsData', () => {
         }
       })
 
-      it('inserts "transactions", "payments" and "ledger_entries" records', async () => {
+      it('inserts "transactions", "payments" and "ledger_entries" rows', async () => {
         await payments.create(payment)
-        const transactionRecord = await trx
+        const transactionRow = await trx
           .select('*')
           .from('transactions')
           .where('party_id', party.id)
           .first()
-        const paymentRecord = await trx
+        const paymentRow = await trx
           .select('*')
           .from('payments')
           .where('party_id', party.id)
           .first()
-        const ledgerEntryRecord = await trx
+        const ledgerEntryRow = await trx
           .select('*')
           .from('ledger_entries')
-          .where('transaction_id', transactionRecord.id)
+          .where('transaction_id', transactionRow.id)
           .first()
-        expect(transactionRecord).to.exist
-        expect(paymentRecord).to.exist
-        expect(ledgerEntryRecord).to.exist
+        expect(transactionRow).to.exist
+        expect(paymentRow).to.exist
+        expect(ledgerEntryRow).to.exist
       })
 
       it('inserts a "transactions" record of type "payment"', async () => {
         await payments.create(payment)
-        const transactionRecord = await trx
+        const transactionRow = await trx
           .select('*')
           .from('transactions')
           .where('party_id', party.id)
           .first()
-        expect(transactionRecord).to.include({ type: 'payment' })
+        expect(transactionRow).to.include({ type: 'payment' })
       })
 
       it('inserts a "ledger_entries" record with the correct accounts', async () => {
         await payments.create(payment)
-        const transactionRecord = await trx
+        const transactionRow = await trx
           .select('*')
           .from('transactions')
           .where('party_id', party.id)
           .first()
-        const ledgerEntryRecord = await trx
+        const ledgerEntryRow = await trx
           .select('*')
           .from('ledger_entries')
-          .where('transaction_id', transactionRecord.id)
+          .where('transaction_id', transactionRow.id)
           .first()
-        expect(ledgerEntryRecord).to.include({
+        expect(ledgerEntryRow).to.include({
           debit_account_code: cashCode,
           credit_account_code: receivablesCode
         })

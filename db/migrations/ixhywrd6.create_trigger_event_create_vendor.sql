@@ -2,23 +2,14 @@ alter type event_type add value 'create_vendor';
 
 create function create_vendor(id uuid, payload jsonb) returns void as $$
   declare
-    party  parties%rowtype;
     vendor vendors%rowtype;
   begin
-
-    party = jsonb_populate_record(null::parties, payload);
-
-    party.party_id   = id;
-    party.party_type = 'vendor';
-    party.is_active  = true;
-
-    insert into parties
-    values (party.*);
 
     vendor = jsonb_populate_record(null::vendors, payload);
 
     vendor.party_id   = id;
     vendor.party_type = 'vendor';
+    vendor.is_active  = true;
 
     insert into vendors
     values (vendor.*);

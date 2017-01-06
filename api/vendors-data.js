@@ -18,10 +18,17 @@ export default function vendorsData(knex) {
   }
 
   async function findById(party_id, trx) {
+    const vendor = [
+      'party_id',
+      'name',
+      'notes',
+      'website',
+      'account_number',
+      'is_active'
+    ]
     return trx
-      .select('party_id', 'name', 'notes', 'website', 'account_number', 'is_active')
+      .select(...vendor)
       .from('vendors')
-      .joinRaw('join parties using (party_id, party_type)')
       .where({ party_id })
       .first()
   }

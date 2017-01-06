@@ -2,23 +2,14 @@ alter type event_type add value 'create_inventory_item';
 
 create function create_inventory_item(id uuid, payload jsonb) returns void as $$
   declare
-    item           items%rowtype;
     inventory_item inventory_items%rowtype;
   begin
 
-    item = jsonb_populate_record(null::items, payload);
-
-    item.item_id   = id;
-    item.item_type = 'inventory_item';
-    item.is_active = true;
-
-    insert into items
-    values (item.*);
-
     inventory_item = jsonb_populate_record(null::inventory_items, payload);
 
-    inventory_item.item_id            = item.item_id;
-    inventory_item.item_type          = 'inventory_item';
+    inventory_item.item_id   = id;
+    inventory_item.item_type = 'inventory_item';
+    inventory_item.is_active = true;
     inventory_item.sales_account_type = 'inventory_sales';
     inventory_item.sales_account_code = coalesce(
       inventory_item.sales_account_code,

@@ -21,7 +21,6 @@ export default function customersData(knex) {
     return trx
       .select('party_id', 'name', 'notes', 'is_active')
       .from('customers')
-      .joinRaw('join parties using (party_id, party_type)')
       .where({ party_id })
       .first()
   }

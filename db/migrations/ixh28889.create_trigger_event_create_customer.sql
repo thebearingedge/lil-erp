@@ -2,20 +2,17 @@ alter type event_type add value 'create_customer';
 
 create function create_customer(id uuid, payload jsonb) returns void as $$
   declare
-    party parties%rowtype;
+    customer customers%rowtype;
   begin
 
-    party = jsonb_populate_record(null::parties, payload);
+    customer = jsonb_populate_record(null::customers, payload);
 
-    party.party_id   = id;
-    party.party_type = 'customer';
-    party.is_active  = true;
+    customer.party_id   = id;
+    customer.party_type = 'customer';
+    customer.is_active  = true;
 
-    insert into parties
-    values (party.*);
-
-    insert into customers (party_id, party_type)
-    values (id, 'customer');
+    insert into customers
+    values (customer.*);
 
     return;
   end;

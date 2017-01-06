@@ -1,11 +1,12 @@
 create type party_type as enum ('general_journal');
 
 create table parties (
-  party_id   uuid       unique not null,
+  party_id   uuid       not null,
   party_type party_type not null,
   name       varchar    not null,
   notes      text,
   is_active  boolean    not null default true,
+  unique (party_id),
   primary key (party_id, party_type)
 );
 

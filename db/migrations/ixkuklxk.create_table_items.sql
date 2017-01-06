@@ -6,7 +6,8 @@ create table items (
   sku         varchar   unique not null,
   description text,
   is_active   boolean   not null default true,
-  primary key (item_id, item_type, sku)
+  primary key (item_id, item_type, sku),
+  unique (item_type, sku)
 );
 
 ---

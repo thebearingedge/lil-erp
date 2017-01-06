@@ -6,13 +6,13 @@ create function create_journal_entry(id uuid, payload jsonb) returns void as $$
     entry journal_entries%rowtype;
   begin
 
-    select date, memo
-      into trx.date, trx.memo
-      from jsonb_to_record(payload)
-        as (date timestamptz(6), memo text);
+    trx = jsonb_populate_record(null::transactions, payload);
 
-    select id, 'journal_entry', p.party_id, p.party_type
-      into trx.transaction_id, trx.transaction_type, trx.party_id, trx.party_type
+    trx.transaction_id = id;
+    trx.transaction_type = 'journal_entry';
+    
+    select p.party_id, p.party_type
+      into trx.party_id, trx.party_type
       from parties as p
      where p.party_type = 'general_journal'
      limit 1;
@@ -30,12 +30,7 @@ create function create_journal_entry(id uuid, payload jsonb) returns void as $$
            debit_account_code,
            credit_account_code,
            amount
-      from jsonb_to_recordset(payload->'ledger_entries')
-        as (
-            debit_account_code  varchar,
-            credit_account_code varchar,
-            amount              monetary
-           );
+      from jsonb_populate_recordset(null::ledger_entries, payload->'ledger_entries');
 
     return;
   end;

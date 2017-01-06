@@ -6,24 +6,19 @@ create function create_vendor(id uuid, payload jsonb) returns void as $$
     vendor vendors%rowtype;
   begin
 
-    select name, notes
-      into party.name, party.notes
-      from jsonb_to_record(payload)
-        as (name varchar, notes text);
+    party = jsonb_populate_record(null::parties, payload);
 
-    select id, 'vendor', true
-      into party.party_id, party.party_type, party.is_active;
+    party.party_id   = id;
+    party.party_type = 'vendor';
+    party.is_active  = true;
 
     insert into parties
     values (party.*);
 
-    select account_number, website
-      into vendor.account_number, vendor.website
-      from jsonb_to_record(payload)
-        as (account_number varchar, website varchar);
+    vendor = jsonb_populate_record(null::vendors, payload);
 
-    select id, 'vendor'
-      into vendor.party_id, vendor.party_type;
+    vendor.party_id   = id;
+    vendor.party_type = 'vendor';
 
     insert into vendors
     values (vendor.*);

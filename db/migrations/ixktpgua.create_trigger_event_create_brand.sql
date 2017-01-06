@@ -5,12 +5,10 @@ create function create_brand(id uuid, payload jsonb) returns void as $$
     brand brands%rowtype;
   begin
 
-    select *
-      into brand
-      from jsonb_populate_record(null::brands, payload);
+    brand = jsonb_populate_record(null::brands, payload);
 
-    select id, true
-      into brand.brand_id, brand.is_active;
+    brand.brand_id  = id;
+    brand.is_active = true;
 
     insert into brands
     values (brand.*);

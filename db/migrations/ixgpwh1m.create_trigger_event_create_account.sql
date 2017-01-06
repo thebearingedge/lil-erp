@@ -5,12 +5,11 @@ create function create_account(id uuid, payload jsonb) returns void as $$
     account accounts%rowtype;
   begin
 
-    select *
-      into account
-      from jsonb_populate_record(null::accounts, payload);
+    account = jsonb_populate_record(null::accounts, payload);
 
-    select id, true, false
-      into account.id, account.is_active, account.is_system_account;
+    account.id                = id;
+    account.is_active         = true;
+    account.is_system_account = false;
 
     insert into accounts
     values (account.*);

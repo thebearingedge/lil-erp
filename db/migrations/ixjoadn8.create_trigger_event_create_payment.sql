@@ -11,8 +11,11 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
 
     trx = jsonb_populate_record(null::transactions, payload);
 
-    select id, 'payment', p.party_type
-      into trx.transaction_id, trx.transaction_type, trx.party_type
+    trx.transaction_id   = id;
+    trx.transaction_type = 'payment';
+
+    select p.party_type
+      into trx.party_type
       from parties as p
      where p.party_id = trx.party_id
      limit 1;

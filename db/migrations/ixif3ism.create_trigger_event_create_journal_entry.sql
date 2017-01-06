@@ -2,31 +2,27 @@ alter type event_type add value 'create_journal_entry';
 
 create function create_journal_entry(id uuid, payload jsonb) returns void as $$
   declare
-    trx   transactions%rowtype;
-    entry journal_entries%rowtype;
+    journal_entry journal_entries%rowtype;
   begin
 
-    trx = jsonb_populate_record(null::transactions, payload);
+    journal_entry = jsonb_populate_record(null::journal_entries, payload);
 
-    trx.transaction_id = id;
-    trx.transaction_type = 'journal_entry';
-    
+    journal_entry.transaction_id = id;
+    journal_entry.transaction_type = 'journal_entry';
+
     select p.party_id, p.party_type
-      into trx.party_id, trx.party_type
+      into journal_entry.party_id, journal_entry.party_type
       from parties as p
      where p.party_type = 'general_journal'
      limit 1;
 
-    insert into transactions
-    values (trx.*);
-
     insert into journal_entries
-    values (trx.transaction_id, trx.transaction_type);
+    values (journal_entry.*);
 
     insert into ledger_entries
     select uuid_generate_v4(),
-           trx.transaction_id,
-           trx.transaction_type,
+           journal_entry.transaction_id,
+           journal_entry.transaction_type,
            debit_account_code,
            credit_account_code,
            amount

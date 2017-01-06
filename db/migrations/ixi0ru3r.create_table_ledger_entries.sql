@@ -9,7 +9,7 @@ create table ledger_entries (
   amount              monetary         not null,
   primary key (id),
   foreign key (transaction_id, transaction_type)
-          references transactions (transaction_id, transaction_type),
+          references journal_entries (transaction_id, transaction_type),
   foreign key (debit_account_code)
           references accounts (code)
           on update cascade,

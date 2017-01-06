@@ -2,32 +2,22 @@ alter type event_type add value 'create_payment';
 
 create function create_payment(id uuid, payload jsonb) returns void as $$
   declare
-    trx                 transactions%rowtype;
     payment             payments%rowtype;
     journal_entry_json  jsonb;
     debit_account_code  varchar;
     credit_account_code varchar;
   begin
 
-    trx = jsonb_populate_record(null::transactions, payload);
-
-    trx.transaction_id   = id;
-    trx.transaction_type = 'payment';
-
-    select p.party_type
-      into trx.party_type
-      from parties as p
-     where p.party_id = trx.party_id
-     limit 1;
-
-    insert into transactions
-    values (trx.*);
-
     payment = jsonb_populate_record(null::payments, payload);
 
-    payment.transaction_id   = trx.transaction_id;
-    payment.transaction_type = trx.transaction_type;
-    payment.party_type       = trx.party_type;
+    payment.transaction_id   = id;
+    payment.transaction_type = 'payment';
+
+    select p.party_type
+      into payment.party_type
+      from parties as p
+     where p.party_id = payment.party_id
+     limit 1;
 
     case
       when
@@ -70,7 +60,7 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
     end case;
 
     journal_entry_json = jsonb_build_object(
-      'date', trx.date,
+      'date', payment.date,
       'ledger_entries', jsonb_build_array(
         jsonb_build_object(
           'debit_account_code', debit_account_code,
@@ -87,7 +77,7 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
     )
     values (
       'create_journal_entry',
-      trx.transaction_id,
+      payment.transaction_id,
       journal_entry_json
     );
 

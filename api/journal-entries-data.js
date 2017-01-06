@@ -28,11 +28,10 @@ export default function journalEntriesData(knex) {
       )
     ) as ledger_entries`)
     return trx
-      .select([...journal_entry, ledger_entries])
+      .select(...journal_entry, ledger_entries)
       .from('journal_entries as j')
-      .joinRaw('join transactions as t using (transaction_id, transaction_type)')
       .joinRaw('join ledger_entries as l using (transaction_id, transaction_type)')
-      .groupBy(journal_entry)
+      .groupBy(...journal_entry)
       .where({ transaction_id })
       .first()
   }

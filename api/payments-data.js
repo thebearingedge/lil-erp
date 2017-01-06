@@ -18,12 +18,6 @@ export default function paymentsData(knex) {
   }
 
   async function findById(transaction_id, trx) {
-    const join = [
-      'transaction_id',
-      'transaction_type',
-      'party_id',
-      'party_type'
-    ]
     const columns = [
       'transaction_id',
       'party_id',
@@ -35,9 +29,8 @@ export default function paymentsData(knex) {
       knex.raw('amount::float')
     ]
     return trx
-      .select(columns)
-      .from('payments as p')
-      .joinRaw(`join transactions as t using (${join})`)
+      .select(...columns)
+      .from('payments')
       .where({ transaction_id })
       .first()
   }

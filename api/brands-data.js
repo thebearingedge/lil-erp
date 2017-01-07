@@ -1,4 +1,4 @@
-import uuid from 'uuid/V4'
+import uuid from 'uuid/v4'
 import { camelSql } from './util'
 
 export default function brandsData(knex) {

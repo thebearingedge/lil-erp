@@ -1,4 +1,4 @@
-import uuid from 'uuid/V4'
+import uuid from 'uuid/v4'
 import accounts from './accounts'
 import default_accounts from './default-accounts'
 import payment_methods from './payment-methods'

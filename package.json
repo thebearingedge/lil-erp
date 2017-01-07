@@ -9,17 +9,20 @@
     "npm": ">=3.10.9"
   },
   "scripts": {
-    "lint": "eslint api db",
+    "lint": "eslint api db _db",
     "test": "mocha --harmony-async-await -r babel-register api/**/*.test.js",
-    "tdd": "npm run db:seed && npm t -s -- -w -R min",
+    "tdd": "run-s db:cycle && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",
-    "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
-    "db:make": "npm run -s db migrate:make",
-    "db:up": "npm run -s db migrate:latest",
-    "db:down": "npm run -s db migrate:rollback",
+    "db:status": "careen",
+    "db:make": "careen -C",
+    "db:up": "careen -A --all",
+    "db:down": "careen -R -t ixgk6g09",
+    "db:cycle": "run-s -s db:down db:up db:seed",
     "db:seed": "npm run -s db seed:run",
-    "precommit": "run-s -s lint db:up db:seed cover check"
+    "db:watch": "onchange -i 'db/**/*.*' -- run-s -s db:cycle",
+    "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
+    "precommit": "run-s -s lint db:cycle test"
   },
   "repository": {
     "type": "git",
@@ -38,7 +41,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
     "babel-plugin-transform-export-extensions": "6.8.0",
     "babel-plugin-transform-object-rest-spread": "6.20.2",
-    "bluebird": "3.4.7",
+    "careen": "0.1.1",
     "chai": "3.5.0",
     "chai-struct": "2.1.1",
     "eslint": "3.13.0",
@@ -47,14 +50,14 @@
     "mocha": "3.2.0",
     "npm-run-all": "3.1.2",
     "nyc": "10.0.0",
-    "uuid": "3.0.1"
+    "onchange": "3.2.1"
   },
   "dependencies": {
     "deep-clone": "3.0.2",
-    "fs-promise": "1.0.0",
     "global": "4.3.1",
     "knex": "0.12.6",
     "lodash": "4.17.4",
-    "pg": "6.1.2"
+    "pg": "6.1.2",
+    "uuid": "3.0.1"
   }
 }

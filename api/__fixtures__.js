@@ -107,3 +107,17 @@ export const ItemReceipt = {
     lineTotal: Number
   }]
 }
+
+export const ItemSale = {
+  transactionId: String,
+  partyId: String,
+  tradeAccountCode: String,
+  date: Date,
+  lineItems: [{
+    id: String,
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
+    lineTotal: Number
+  }]
+}

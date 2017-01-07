@@ -2,8 +2,8 @@ alter type event_type add value 'create_purchase_order';
 
 create function create_purchase_order(id uuid, payload jsonb) returns void as $$
   declare
-    po         purchase_orders%rowtype;
-    line_item  purchase_order_line_items%rowtype;
+    po        purchase_orders%rowtype;
+    line_item purchase_order_line_items%rowtype;
   begin
 
     po = jsonb_populate_record(null::purchase_orders, payload);

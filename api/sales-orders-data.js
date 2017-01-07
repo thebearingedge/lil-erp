@@ -5,10 +5,10 @@ export default function salesOrdersData(knex) {
 
   return camelSql({ create })
 
-  async function create({ id, ...po }) {
+  async function create({ id, ...order }) {
     const entity_id = id || uuid()
     const type = 'create_sales_order'
-    const payload = JSON.stringify(po)
+    const payload = JSON.stringify(order)
     return knex.transaction(async trx => {
       await trx
         .insert({ entity_id, type, payload })

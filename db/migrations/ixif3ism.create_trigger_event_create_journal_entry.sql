@@ -34,9 +34,7 @@ $$ language plpgsql;
 
 create function event_create_journal_entry() returns trigger as $$
   begin
-
     perform create_journal_entry(new.entity_id, new.payload);
-
     return new;
   end;
 $$ language plpgsql;
@@ -52,3 +50,7 @@ create trigger create_journal_entry
 drop trigger create_journal_entry on event_store;
 drop function event_create_journal_entry();
 drop function create_journal_entry(id uuid, payload jsonb);
+delete from pg_enum using pg_type
+ where pg_type.oid       = pg_enum.enumtypid
+   and pg_type.typname   = 'event_type'
+   and pg_enum.enumlabel = 'create_journal_entry';

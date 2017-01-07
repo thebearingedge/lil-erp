@@ -6,7 +6,6 @@ create table parties (
   name       varchar    not null,
   notes      text,
   is_active  boolean    not null default true,
-  unique (party_id),
   primary key (party_id, party_type)
 );
 

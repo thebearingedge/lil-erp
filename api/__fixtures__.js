@@ -67,3 +67,17 @@ export const InventoryItem = {
   assetAccountCode: String,
   isActive: Boolean
 }
+
+export const PurchaseOrder = {
+  orderId: String,
+  partyId: String,
+  date: Date,
+  lineItems: [{
+    id: String,
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
+    unitPrice: Number,
+    lineTotal: Number
+  }]
+}

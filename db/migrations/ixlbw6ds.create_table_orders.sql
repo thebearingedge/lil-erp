@@ -1,4 +1,4 @@
-create type order_type as enum ('sales_order', 'purchase_order');
+create type order_type as enum ();
 
 create table orders (
   order_id   uuid           not null,
@@ -8,11 +8,7 @@ create table orders (
   date       timestamptz(6) not null,
   primary key (order_id, order_type),
   foreign key (party_id, party_type)
-          references parties (party_id, party_type),
-  check (
-    (party_type = 'customer' and order_type = 'sales_order') or
-    (party_type = 'vendor' and order_type = 'purchase_order')
-  )
+          references parties (party_id, party_type)
 );
 
 ---

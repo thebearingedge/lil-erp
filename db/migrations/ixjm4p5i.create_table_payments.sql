@@ -24,6 +24,10 @@ create table payments (
   check (trade_account_type in ('accounts_payable', 'accounts_receivable')),
   check (payment_account_type in ('cash', 'credit_cards'))
 ) inherits (transactions);
----
 
+---
 drop table payments;
+delete from pg_enum using pg_type
+ where pg_type.oid       = pg_enum.enumtypid
+   and pg_type.typname   = 'transaction_type'
+   and pg_enum.enumlabel = 'payment';

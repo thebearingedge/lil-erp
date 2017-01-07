@@ -87,9 +87,7 @@ $$ language plpgsql;
 
 create function event_create_payment() returns trigger as $$
   begin
-
     perform create_payment(new.entity_id, new.payload);
-
     return new;
   end;
 $$ language plpgsql;
@@ -105,3 +103,7 @@ create trigger create_payment
 drop trigger create_payment on event_store;
 drop function event_create_payment();
 drop function create_payment(id uuid, payload jsonb);
+delete from pg_enum using pg_type
+ where pg_type.oid       = pg_enum.enumtypid
+   and pg_type.typname   = 'event_type'
+   and pg_enum.enumlabel = 'create_payment';

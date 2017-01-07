@@ -8,3 +8,7 @@ create table journal_entries (
 
 ---
 drop table journal_entries;
+delete from pg_enum using pg_type
+ where pg_type.oid       = pg_enum.enumtypid
+   and pg_type.typname   = 'transaction_type'
+   and pg_enum.enumlabel = 'journal_entry';

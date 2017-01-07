@@ -29,6 +29,7 @@ export default function vendorsData(knex) {
     return trx
       .select(...vendor)
       .from('vendors')
+      .joinRaw('join parties using (party_id, party_type)')
       .where({ party_id })
       .first()
   }

@@ -6,10 +6,7 @@ create table transactions (
   party_id         uuid             not null,
   party_type       party_type       not null,
   date             timestamptz(6)   not null,
-  memo             text,
-  primary key (transaction_id, transaction_type),
-  foreign key (party_id, party_type)
-          references parties (party_id, party_type)
+  memo             text
 );
 ---
 

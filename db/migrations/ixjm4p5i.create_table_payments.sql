@@ -1,8 +1,6 @@
 alter type transaction_type add value 'payment';
 
 create table payments (
-  party_id             uuid              not null,
-  party_type           party_type        not null,
   payment_method_id    uuid              not null,
   amount               monetary          not null,
   trade_account_code   varchar           not null,

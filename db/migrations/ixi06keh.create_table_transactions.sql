@@ -8,7 +8,7 @@ create table transactions (
   date             timestamptz(6)   not null,
   memo             text
 );
----
 
+---
 drop table transactions;
 drop type transaction_type;

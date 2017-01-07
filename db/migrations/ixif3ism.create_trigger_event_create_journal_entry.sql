@@ -3,6 +3,7 @@ alter type event_type add value 'create_journal_entry';
 create function create_journal_entry(id uuid, payload jsonb) returns void as $$
   declare
     journal_entry journal_entries%rowtype;
+    ledger_entry  ledger_entries%rowtype;
   begin
 
     journal_entry = jsonb_populate_record(null::journal_entries, payload);
@@ -19,14 +20,17 @@ create function create_journal_entry(id uuid, payload jsonb) returns void as $$
     insert into journal_entries
     values (journal_entry.*);
 
-    insert into ledger_entries
-    select uuid_generate_v4(),
-           journal_entry.transaction_id,
-           journal_entry.transaction_type,
-           debit_account_code,
-           credit_account_code,
-           amount
-      from jsonb_populate_recordset(null::ledger_entries, payload->'ledger_entries');
+    for ledger_entry in select * from jsonb_populate_recordset(
+      null::ledger_entries,
+      payload->'ledger_entries'
+    )
+      loop
+        ledger_entry.id               = uuid_generate_v4();
+        ledger_entry.transaction_id   = journal_entry.transaction_id;
+        ledger_entry.transaction_type = journal_entry.transaction_type;
+        insert into ledger_entries
+        values (ledger_entry.*);
+      end loop;
 
     return;
   end;

@@ -18,11 +18,11 @@
     "db:make": "careen -C",
     "db:up": "careen -A --all",
     "db:down": "careen -R -t ixgk6g09",
-    "db:cycle": "run-s -s db:down db:up",
+    "db:cycle": "run-s -s db:down db:up db:seed",
     "db:seed": "npm run -s db seed:run",
-    "db:watch": "onchange -i 'db/**/*.*' -- run-s -s db:cycle db:seed",
+    "db:watch": "onchange -i 'db/**/*.*' -- run-s -s db:cycle",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
-    "precommit": "run-s -s lint db:up db:seed test"
+    "precommit": "run-s -s lint db:cycle test"
   },
   "repository": {
     "type": "git",

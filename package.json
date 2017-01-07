@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint api db _db",
     "test": "mocha --harmony-async-await -r babel-register api/**/*.test.js",
-    "tdd": "run-s db:up db:seed && npm t -s -- -w -R min",
+    "tdd": "run-s db:cycle && npm t -s -- -w -R min",
     "cover": "nyc npm t -s",
     "check": "nyc check-coverage",
     "db:status": "careen",

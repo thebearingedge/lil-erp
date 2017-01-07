@@ -77,7 +77,33 @@ export const PurchaseOrder = {
     sku: String,
     quantity: Number,
     description: Nullable(String),
-    unitPrice: Number,
+    lineTotal: Number
+  }]
+}
+
+export const SalesOrder = {
+  orderId: String,
+  partyId: String,
+  date: Date,
+  lineItems: [{
+    id: String,
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
+    lineTotal: Number
+  }]
+}
+
+export const ItemReceipt = {
+  transactionId: String,
+  partyId: String,
+  tradeAccountCode: String,
+  date: Date,
+  lineItems: [{
+    id: String,
+    sku: String,
+    quantity: Number,
+    description: Nullable(String),
     lineTotal: Number
   }]
 }

@@ -25,7 +25,6 @@ export default function salesOrdersData(knex) {
         'sku', l.sku,
         'quantity', l.quantity,
         'description', l.description,
-        'unit_price', (l.line_total / l.quantity),
         'line_total', l.line_total
       )
     ) as line_items`)

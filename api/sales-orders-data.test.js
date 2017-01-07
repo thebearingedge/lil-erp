@@ -1,6 +1,6 @@
 import { describe, beforeEach, afterEach, it } from 'global'
 import { begin, expect, rollback, rejected, uuid } from './__test__'
-import { PurchaseOrder } from './__fixtures__'
+import { SalesOrder } from './__fixtures__'
 import salesOrdersData from './sales-orders-data'
 
 describe('salesOrdersData', () => {
@@ -76,7 +76,7 @@ describe('salesOrdersData', () => {
 
     it('returns the created sales order with the correct structure', async () => {
       const created = await orders.create(order)
-      expect(created).to.have.structure(PurchaseOrder)
+      expect(created).to.have.structure(SalesOrder)
     })
 
     it('does not create a sales order for an unknown party', async () => {

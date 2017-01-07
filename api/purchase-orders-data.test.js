@@ -32,13 +32,8 @@ describe('purchaseOrdersData', () => {
     let order
 
     beforeEach(async () => {
-      await trx
-        .insert(vendor)
-        .into('parties')
-      await trx
-        .insert(item)
-        .into('items')
-
+      await trx.insert(vendor).into('parties')
+      await trx.insert(item).into('items')
       order = {
         date: new Date(),
         partyId: vendor.party_id,
@@ -61,7 +56,7 @@ describe('purchaseOrdersData', () => {
       expect(orderRow).to.be.an('object', '"purchase_orders" row not found')
     })
 
-    it('inserts an "purchase_order_line_items" row for each line item', async () => {
+    it('inserts a "purchase_order_line_items" row for each line item', async () => {
       await orders.create(order)
       const lineItemRows = await trx
         .select('*')
@@ -106,9 +101,7 @@ describe('purchaseOrdersData', () => {
 
     it('does not create a purchase order for non-"vendor" parties', async () => {
       const customer = { party_id: uuid(), party_type: 'customer', name: 'Widget Fan' }
-      await trx
-        .insert(customer)
-        .into('parties')
+      await trx.insert(customer).into('parties')
       const err = await rejected(orders.create({
         ...order,
         partyId: customer.party_id

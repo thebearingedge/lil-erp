@@ -1,14 +1,14 @@
 import uuid from 'uuid/V4'
 import { camelSql } from './util'
 
-export default function purchaseOrdersData(knex) {
+export default function itemReceiptsData(knex) {
 
   return camelSql({ create })
 
-  async function create({ id, ...po }) {
+  async function create({ id, ...receipt }) {
     const entity_id = id || uuid()
-    const type = 'create_purchase_order'
-    const payload = JSON.stringify(po)
+    const type = 'create_item_receipt'
+    const payload = JSON.stringify(receipt)
     return knex.transaction(async trx => {
       await trx
         .insert({ entity_id, type, payload })
@@ -17,8 +17,13 @@ export default function purchaseOrdersData(knex) {
     })
   }
 
-  async function findById(order_id, trx) {
-    const purchase_order = ['order_id', 'party_id', 'date']
+  async function findById(transaction_id, trx) {
+    const item_receipt = [
+      'transaction_id',
+      'party_id',
+      'trade_account_code',
+      'date'
+    ]
     const line_items = knex.raw(`json_agg(
       json_build_object(
         'id', l.id,
@@ -29,11 +34,11 @@ export default function purchaseOrdersData(knex) {
       )
     ) as line_items`)
     return trx
-      .select(...purchase_order, line_items)
-      .from('purchase_orders')
-      .joinRaw('join purchase_order_line_items as l using (order_id, order_type)')
-      .groupBy(...purchase_order)
-      .where({ order_id })
+      .select(...item_receipt, line_items)
+      .from('item_receipts')
+      .joinRaw('join item_receipt_line_items as l using (transaction_id, transaction_type)')
+      .groupBy(...item_receipt)
+      .where({ transaction_id })
       .first()
   }
 

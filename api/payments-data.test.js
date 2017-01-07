@@ -174,7 +174,7 @@ describe('paymentsData', () => {
         const customCode = '0000'
         const customReceivables = {
           code: customCode,
-          name: 'Other Accounts Payable',
+          name: 'Other Accounts Receivable',
           parent_code: receivablesCode
         }
         const customPayment = {

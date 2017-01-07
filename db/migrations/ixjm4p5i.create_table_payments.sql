@@ -1,12 +1,12 @@
 alter type transaction_type add value 'payment';
 
 create table payments (
-  payment_method_id    uuid              not null,
-  amount               monetary          not null,
-  trade_account_code   varchar           not null,
-  trade_account_type   account_type      not null,
-  payment_account_code varchar           not null,
-  payment_account_type account_type      not null,
+  payment_method_id    uuid         not null,
+  amount               monetary     not null,
+  trade_account_code   varchar      not null,
+  trade_account_type   account_type not null,
+  payment_account_code varchar      not null,
+  payment_account_type account_type not null,
   primary key (transaction_id, transaction_type),
   foreign key (party_id, party_type)
           references parties (party_id, party_type),

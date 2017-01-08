@@ -1,13 +1,15 @@
 create table stock_status (
   trade_line_item_id uuid           not null,
+  transaction_id     uuid           not null,
+  transaction_date   timestamptz(6) not null,
   item_type          item_type      not null default 'inventory_item',
   sku                varchar        not null,
   move_quantity      numeric        not null,
   move_cost          monetary       not null,
   quantity           numeric        not null,
   average_cost       monetary       not null,
-  transaction_date   timestamptz(6) not null,
-  inserted_at        timestamptz(6) not null default statement_timestamp(),
+  inserted_at        timestamptz(6) not null,
+  primary key (trade_line_item_id),
   foreign key (trade_line_item_id)
           references trade_line_items (id),
   foreign key (item_type, sku)
@@ -22,12 +24,19 @@ create function stock_status_handle_inbound() returns trigger as $$
   declare
     previous_quantity numeric;
     previous_cost     monetary;
+    later_status      stock_status;
   begin
+
+    new.inserted_at = statement_timestamp();
 
     select quantity, average_cost
       into previous_quantity, previous_cost
       from stock_status
      where (item_type, sku) = (new.item_type, new.sku)
+       and transaction_date < new.transaction_date
+        or (transaction_date = new.transaction_date
+            and
+            inserted_at <= new.inserted_at)
      order by transaction_date desc,
               inserted_at      desc
      limit 1;
@@ -57,7 +66,46 @@ create trigger handle_inbound
   when (new.move_quantity > 0)
   execute procedure stock_status_handle_inbound();
 
+create function stock_status_update_sku() returns trigger as $$
+  begin
+
+    with future_status as (
+      select *
+        from stock_status
+       where (item_type, sku) = (new.item_type, new.sku)
+         and transaction_date > new.transaction_date
+          or (transaction_date = new.transaction_date
+              and
+              inserted_at >= new.inserted_at)
+    )
+    update stock_status as s
+       set quantity     = coalesce(s.quantity + ns.move_quantity, s.quantity),
+           average_cost = coalesce(
+                            (s.quantity * s.average_cost + ns.move_cost)
+                             /
+                            (s.quantity + ns.move_quantity)
+                          , s.average_cost)
+      from (select lead(trade_line_item_id) over w as trade_line_item_id,
+                   move_quantity,
+                   move_cost
+              from future_status
+              window w as (order by transaction_date asc, inserted_at asc)
+              ) as ns
+     where s.trade_line_item_id = ns.trade_line_item_id;
+
+    return new;
+  end;
+$$ language plpgsql;
+
+create trigger update_sku
+  after insert
+  on stock_status
+  for each row
+  execute procedure stock_status_update_sku();
+
 ---
 drop trigger handle_inbound on stock_status;
 drop function stock_status_handle_inbound();
+drop trigger update_sku on stock_status;
+drop function stock_status_update_sku();
 drop table stock_status;

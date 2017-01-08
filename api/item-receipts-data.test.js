@@ -77,12 +77,110 @@ describe('itemReceiptsData', () => {
       expect(lineItemRows).to.have.lengthOf(1)
     })
 
-    it('inserts an "stock_status" row for each inventory line item', async () => {
+    it('inserts a "stock_status" row for each inventory line item', async () => {
       await receipts.create(receipt)
-      const moveRows = await trx
+      const status = await trx
         .select('*')
         .from('stock_status')
-      expect(moveRows).to.have.lengthOf(1)
+      expect(status).to.have.lengthOf(1)
+    })
+
+    it('calculates the average cost of inventory on hand', async () => {
+      const { sku } = receipt.lineItems[0]
+      await receipts.create({
+        ...receipt,
+        lineItems: [
+          { ...receipt.lineItems[0], quantity:2, lineTotal: 100 }
+        ]
+      })
+      const status = await trx
+        .select('*')
+        .from('stock_status')
+        .where({ sku })
+        .first()
+      expect(status).to.include({ average_cost: '50.00000' })
+    })
+
+    it('recalculates the quantity and average cost of inventory on hand', async () => {
+      const { sku } = receipt.lineItems[0]
+      const first = {
+        ...receipt,
+        lineItems: [
+          { ...receipt.lineItems[0], quantity: 1, lineTotal: 10 }
+        ]
+      }
+      const second = {
+        ...receipt,
+        lineItems: [
+          { ...receipt.lineItems[0], quantity: 1, lineTotal: 8 }
+        ]
+      }
+      await receipts.create(first)
+      const status1 = await trx
+        .select('*')
+        .from('stock_status')
+        .where({ sku })
+        .orderBy('inserted_at', 'desc')
+        .first()
+      expect(status1).to.include({
+        quantity: '1',
+        average_cost: '10.00000'
+      })
+      await receipts.create(second)
+      const status2 = await trx
+        .select('*')
+        .from('stock_status')
+        .where({ sku })
+        .orderBy('inserted_at', 'desc')
+        .first()
+      expect(status2).to.include({
+        quantity: '2',
+        average_cost: '9.00000'
+      })
+    })
+
+    it('retraces the stock status of back-dated purchases', async () => {
+      const { sku } = receipt.lineItems[0]
+      const today = new Date('1/2/2017')
+      const yesterday = new Date('1/1/2017')
+      const first = {
+        ...receipt,
+        date: today,
+        lineItems: [
+          { ...receipt.lineItems[0], quantity: 1, lineTotal: 10 }
+        ]
+      }
+      const second = {
+        ...receipt,
+        date: yesterday,
+        lineItems: [
+          { ...receipt.lineItems[0], quantity: 1, lineTotal: 8 }
+        ]
+      }
+      await receipts.create(first)
+      const status1 = await trx
+        .select('*')
+        .from('stock_status')
+        .where({ sku })
+        .orderBy('transaction_date', 'desc')
+        .orderBy('inserted_at', 'desc')
+        .first()
+      expect(status1).to.include({
+        quantity: '1',
+        average_cost: '10.00000'
+      })
+      await receipts.create(second)
+      const status2 = await trx
+        .select('*')
+        .from('stock_status')
+        .where({ sku })
+        .orderBy('transaction_date', 'desc')
+        .orderBy('inserted_at', 'desc')
+        .first()
+      expect(status2).to.include({
+        quantity: '2',
+        average_cost: '9.00000'
+      })
     })
 
     it('returns the created purchase', async () => {

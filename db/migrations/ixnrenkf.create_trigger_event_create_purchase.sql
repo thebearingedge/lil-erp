@@ -55,6 +55,7 @@ create function create_purchase(id uuid, payload jsonb) returns void as $$
       sku,
       move_quantity,
       move_cost,
+      transaction_id,
       transaction_date
     )
     select l.id,
@@ -62,6 +63,7 @@ create function create_purchase(id uuid, payload jsonb) returns void as $$
            l.sku,
            l.quantity,
            l.line_total,
+           purchase.transaction_id,
            purchase.date
       from inventory_line_items as l;
 

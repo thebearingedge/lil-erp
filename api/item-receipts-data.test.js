@@ -36,6 +36,7 @@ describe('itemReceiptsData', () => {
     beforeEach(async () => {
       await trx.insert(vendor).into('parties')
       await trx.insert(item).into('items')
+      await trx.insert(item).into('inventory_items')
       const { accounts_payable_code } = await trx
         .select('accounts_payable_code')
         .from('default_accounts')
@@ -68,12 +69,20 @@ describe('itemReceiptsData', () => {
       expect(receiptRow).to.be.an('object', '"trades" row not found')
     })
 
-    it('inserts an "item_receipt_line_items" row for each line item', async () => {
+    it('inserts a "trade_line_items" row for each line item', async () => {
       await receipts.create(receipt)
       const lineItemRows = await trx
         .select('*')
         .from('trade_line_items')
       expect(lineItemRows).to.have.lengthOf(1)
+    })
+
+    it('inserts an "stock_status" row for each inventory line item', async () => {
+      await receipts.create(receipt)
+      const moveRows = await trx
+        .select('*')
+        .from('stock_status')
+      expect(moveRows).to.have.lengthOf(1)
     })
 
     it('returns the created purchase', async () => {

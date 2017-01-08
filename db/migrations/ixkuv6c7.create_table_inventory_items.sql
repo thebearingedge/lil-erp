@@ -1,8 +1,8 @@
 alter type item_type add value 'inventory_item';
 
 create table inventory_items (
-  item_id            uuid      unique not null,
-  item_type          item_type not null,
+  item_id            uuid         unique not null,
+  item_type          item_type    not null,
   sku                varchar,
   brand_id           uuid,
   sales_account_code varchar      not null
@@ -14,6 +14,7 @@ create table inventory_items (
   asset_account_code varchar      not null
                                   default get_default_inventory_assets_code(),
   asset_account_type account_type not null default 'inventory_assets',
+  primary key (item_id, item_type, sku),
   foreign key (item_id, item_type, sku)
           references items (item_id, item_type, sku),
   foreign key (brand_id)

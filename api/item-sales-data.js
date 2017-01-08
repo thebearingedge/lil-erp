@@ -7,7 +7,7 @@ export default function itemSalesData(knex) {
 
   async function create({ id, ...sale }) {
     const entity_id = id || uuid()
-    const type = 'create_item_sale'
+    const type = 'create_sale'
     const payload = JSON.stringify(sale)
     return knex.transaction(async trx => {
       await trx
@@ -18,7 +18,7 @@ export default function itemSalesData(knex) {
   }
 
   async function findById(transaction_id, trx) {
-    const item_sale = [
+    const sale = [
       'transaction_id',
       'party_id',
       'trade_account_code',
@@ -34,10 +34,10 @@ export default function itemSalesData(knex) {
       )
     ) as line_items`)
     return trx
-      .select(...item_sale, line_items)
-      .from('item_sales')
-      .joinRaw('join item_sale_line_items as l using (transaction_id, transaction_type)')
-      .groupBy(...item_sale)
+      .select(...sale, line_items)
+      .from('trades')
+      .joinRaw('join trade_line_items as l using (transaction_id, transaction_type)')
+      .groupBy(...sale)
       .where({ transaction_id })
       .first()
   }

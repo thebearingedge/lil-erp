@@ -63,35 +63,35 @@ describe('itemSalesData', () => {
       await sales.create(sale)
       const saleRow = await trx
         .select('*')
-        .from('item_sales')
+        .from('trades')
         .first()
-      expect(saleRow).to.be.an('object', '"item_sales" row not found')
+      expect(saleRow).to.be.an('object', '"trades" row not found')
     })
 
-    it('inserts an "item_sale_line_items" row for each line item', async () => {
+    it('inserts an "trade_line_items" row for each line item', async () => {
       await sales.create(sale)
       const lineItemRows = await trx
         .select('*')
-        .from('item_sale_line_items')
+        .from('trade_line_items')
       expect(lineItemRows).to.have.lengthOf(1)
     })
 
-    it('returns the created item sale', async () => {
+    it('returns the created sale', async () => {
       const created = await sales.create(sale)
-      expect(created).to.be.an('object', 'item sale not returned')
+      expect(created).to.be.an('object', 'sale not returned')
     })
 
-    it('returns the created item sale with the correct structure', async () => {
+    it('returns the created sale with the correct structure', async () => {
       const created = await sales.create(sale)
       expect(created).to.have.structure(ItemSale)
     })
 
-    it('creates the item sale with the default receivables code', async () => {
+    it('creates the sale with the default receivables code', async () => {
       const created = await sales.create(sale)
       expect(created).to.have.property('tradeAccountCode', receivablesCode)
     })
 
-    it('creates the item sale with a custom receivables code', async () => {
+    it('creates the sale with a custom receivables code', async () => {
       const customReceivablesCode = '0000'
       const customReceivables = {
         code: customReceivablesCode,
@@ -107,7 +107,7 @@ describe('itemSalesData', () => {
       expect(created).to.have.property('tradeAccountCode', customReceivablesCode)
     })
 
-    it('does not create item sales against non-receivables', async () => {
+    it('does not create sales against non-receivables', async () => {
       const badSale = {
         ...sale,
         tradeAccountCode: payablesCode
@@ -116,10 +116,10 @@ describe('itemSalesData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_sales_trade_account_code_fkey')
+        .that.includes('trades_trade_account_code_fkey')
     })
 
-    it('does not create an item sale for an unknown customer', async () => {
+    it('does not create an sale for an unknown customer', async () => {
       const err = await rejected(sales.create({
         ...sale,
         partyId: uuid()
@@ -127,10 +127,10 @@ describe('itemSalesData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_sales_party_id_fkey')
+        .that.includes('trades_party_id_fkey')
     })
 
-    it('does not create an item sale for unknown items', async () => {
+    it('does not create an sale for unknown items', async () => {
       const err = await rejected(sales.create({
         ...sale,
         lineItems: [{
@@ -141,10 +141,10 @@ describe('itemSalesData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_sale_line_items_item_type_fkey')
+        .that.includes('trade_line_items_item_type_fkey')
     })
 
-    it('does not create an item sale for non-"customer" parties', async () => {
+    it('does not create an sale for non-"customer" parties', async () => {
       const vendor = { party_id: uuid(), party_type: 'vendor', name: 'Widget Fan' }
       await trx.insert(vendor).into('parties')
       const err = await rejected(sales.create({
@@ -154,7 +154,7 @@ describe('itemSalesData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_sales_party_id_fkey')
+        .that.includes('trades_party_id_fkey')
     })
 
   })

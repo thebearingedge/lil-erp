@@ -1,6 +1,7 @@
-alter type transaction_type add value 'item_receipt';
+alter type transaction_type add value 'sale';
+alter type transaction_type add value 'purchase';
 
-create table item_receipts (
+create table trades (
   trade_account_code varchar      not null
                                   default get_default_accounts_payable_code(),
   trade_account_type account_type not null
@@ -10,14 +11,22 @@ create table item_receipts (
           references parties (party_id, party_type),
   foreign key (trade_account_code, trade_account_type)
           references accounts (code, type),
-  check (transaction_type = 'item_receipt'),
-  check (party_type = 'vendor'),
-  check (trade_account_type = 'accounts_payable')
+  check (
+    (party_type = 'vendor' and trade_account_type = 'accounts_payable')
+     or
+    (party_type = 'customer' and trade_account_type = 'accounts_receivable')
+  ),
+  check (
+    (party_type = 'vendor' and transaction_type = 'purchase')
+     or
+    (party_type = 'customer' and transaction_type = 'sale')
+  )
 ) inherits (transactions);
 
 ---
-drop table item_receipts;
+drop table trades;
 delete from pg_enum using pg_type
  where pg_type.oid       = pg_enum.enumtypid
    and pg_type.typname   = 'transaction_type'
-   and pg_enum.enumlabel = 'item_receipt';
+   and pg_enum.enumlabel = 'sale'
+    or pg_enum.enumlabel = 'purchase';

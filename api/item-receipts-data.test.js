@@ -59,39 +59,39 @@ describe('itemReceiptsData', () => {
       receivablesCode = accounts_receivable_code
     })
 
-    it('inserts an "item_receipts" row', async () => {
+    it('inserts an "trades" row', async () => {
       await receipts.create(receipt)
       const receiptRow = await trx
         .select('*')
-        .from('item_receipts')
+        .from('trades')
         .first()
-      expect(receiptRow).to.be.an('object', '"item_receipts" row not found')
+      expect(receiptRow).to.be.an('object', '"trades" row not found')
     })
 
     it('inserts an "item_receipt_line_items" row for each line item', async () => {
       await receipts.create(receipt)
       const lineItemRows = await trx
         .select('*')
-        .from('item_receipt_line_items')
+        .from('trade_line_items')
       expect(lineItemRows).to.have.lengthOf(1)
     })
 
-    it('returns the created item receipt', async () => {
+    it('returns the created purchase', async () => {
       const created = await receipts.create(receipt)
-      expect(created).to.be.an('object', 'item receipt not returned')
+      expect(created).to.be.an('object', 'purchase not returned')
     })
 
-    it('returns the created item receipt with the correct structure', async () => {
+    it('returns the created purchase with the correct structure', async () => {
       const created = await receipts.create(receipt)
       expect(created).to.have.structure(ItemReceipt)
     })
 
-    it('creates the item receipt with the default payables code', async () => {
+    it('creates the purchase with the default payables code', async () => {
       const created = await receipts.create(receipt)
       expect(created).to.have.property('tradeAccountCode', payablesCode)
     })
 
-    it('creates the item receipt with a custom payables code', async () => {
+    it('creates the purchase with a custom payables code', async () => {
       const customPayablesCode = '0000'
       const customPayables = {
         code: customPayablesCode,
@@ -107,7 +107,7 @@ describe('itemReceiptsData', () => {
       expect(created).to.have.property('tradeAccountCode', customPayablesCode)
     })
 
-    it('does not create item receipts against non-payables', async () => {
+    it('does not create purchases against non-payables', async () => {
       const badReceipt = {
         ...receipt,
         tradeAccountCode: receivablesCode
@@ -116,10 +116,10 @@ describe('itemReceiptsData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_receipts_trade_account_code_fkey')
+        .that.includes('trades_trade_account_code_fkey')
     })
 
-    it('does not create an item receipt for an unknown vendor', async () => {
+    it('does not create a purchase for an unknown vendor', async () => {
       const err = await rejected(receipts.create({
         ...receipt,
         partyId: uuid()
@@ -127,10 +127,10 @@ describe('itemReceiptsData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_receipts_party_id_fkey')
+        .that.includes('trades_party_id_fkey')
     })
 
-    it('does not create an item receipt for unknown items', async () => {
+    it('does not create a purchase for unknown items', async () => {
       const err = await rejected(receipts.create({
         ...receipt,
         lineItems: [{
@@ -141,10 +141,10 @@ describe('itemReceiptsData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_receipt_line_items_item_type_fkey')
+        .that.includes('trade_line_items_item_type_fkey')
     })
 
-    it('does not create an item receipt for non-"vendor" parties', async () => {
+    it('does not create a purchase for non-"vendor" parties', async () => {
       const customer = { party_id: uuid(), party_type: 'customer', name: 'Widget Fan' }
       await trx.insert(customer).into('parties')
       const err = await rejected(receipts.create({
@@ -154,7 +154,7 @@ describe('itemReceiptsData', () => {
       expect(err)
         .to.be.an('error')
         .with.property('message')
-        .that.includes('item_receipts_party_id_fkey')
+        .that.includes('trades_party_id_fkey')
     })
 
   })

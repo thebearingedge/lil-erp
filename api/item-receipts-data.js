@@ -7,7 +7,7 @@ export default function itemReceiptsData(knex) {
 
   async function create({ id, ...receipt }) {
     const entity_id = id || uuid()
-    const type = 'create_item_receipt'
+    const type = 'create_purchase'
     const payload = JSON.stringify(receipt)
     return knex.transaction(async trx => {
       await trx
@@ -18,7 +18,7 @@ export default function itemReceiptsData(knex) {
   }
 
   async function findById(transaction_id, trx) {
-    const item_receipt = [
+    const purchase = [
       'transaction_id',
       'party_id',
       'trade_account_code',
@@ -34,10 +34,10 @@ export default function itemReceiptsData(knex) {
       )
     ) as line_items`)
     return trx
-      .select(...item_receipt, line_items)
-      .from('item_receipts')
-      .joinRaw('join item_receipt_line_items as l using (transaction_id, transaction_type)')
-      .groupBy(...item_receipt)
+      .select(...purchase, line_items)
+      .from('trades')
+      .joinRaw('join trade_line_items as l using (transaction_id, transaction_type)')
+      .groupBy(...purchase)
       .where({ transaction_id })
       .first()
   }

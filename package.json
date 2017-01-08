@@ -22,7 +22,7 @@
     "db:seed": "npm run -s db seed:run",
     "db:watch": "onchange -i 'db/**/*.*' -- run-s -s db:cycle",
     "db": "babel-node --harmony-async-await node_modules/.bin/knex --cwd db/",
-    "precommit": "run-s -s lint db:cycle test"
+    "precommit": "run-s -s lint db:cycle cover check"
   },
   "repository": {
     "type": "git",

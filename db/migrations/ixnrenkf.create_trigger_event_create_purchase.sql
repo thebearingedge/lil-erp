@@ -5,6 +5,8 @@ create function create_purchase(id uuid, payload jsonb) returns void as $$
     purchase           trades%rowtype;
     trade_account_code jsonb;
     line_items         jsonb[];
+    journal_entry_json jsonb;
+    ledger_entry_json  jsonb[];
   begin
 
     trade_account_code = coalesce(
@@ -48,24 +50,53 @@ create function create_purchase(id uuid, payload jsonb) returns void as $$
       select *
         from inserted_line_items
        where item_type = 'inventory_item'
+    ), stock_moves as (
+      insert into stock_status (
+        trade_line_item_id,
+        item_type,
+        sku,
+        move_quantity,
+        move_cost,
+        transaction_id,
+        transaction_date
+      )
+      select l.id,
+             l.item_type,
+             l.sku,
+             l.quantity,
+             l.line_total,
+             purchase.transaction_id,
+             purchase.date
+        from inventory_line_items as l
+      returning *
+    ), new_ledger_entries as (
+      select array_agg(jsonb_build_object(
+               'debit_account_code', ii.asset_account_code,
+               'credit_account_code', purchase.trade_account_code,
+               'amount', l.line_total
+             ))
+        from inventory_line_items as l
+        join inventory_items as ii using (item_type, sku)
     )
-    insert into stock_status (
-      trade_line_item_id,
-      item_type,
-      sku,
-      move_quantity,
-      move_cost,
-      transaction_id,
-      transaction_date
+    select *
+      into ledger_entry_json
+      from new_ledger_entries;
+
+    journal_entry_json = jsonb_build_object(
+      'date', purchase.date,
+      'ledger_entries', to_jsonb(ledger_entry_json)
+    );
+
+    insert into event_store (
+      type,
+      entity_id,
+      payload
     )
-    select l.id,
-           l.item_type,
-           l.sku,
-           l.quantity,
-           l.line_total,
-           purchase.transaction_id,
-           purchase.date
-      from inventory_line_items as l;
+    values (
+      'create_journal_entry',
+      purchase.transaction_id,
+      journal_entry_json
+    );
 
     return;
   end;

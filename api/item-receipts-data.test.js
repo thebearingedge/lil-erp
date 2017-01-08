@@ -31,18 +31,19 @@ describe('itemReceiptsData', () => {
 
     let receipt
     let payablesCode
+    let inventoryCode
     let receivablesCode
 
     beforeEach(async () => {
       await trx.insert(vendor).into('parties')
       await trx.insert(item).into('items')
       await trx.insert(item).into('inventory_items')
-      const { accounts_payable_code } = await trx
-        .select('accounts_payable_code')
-        .from('default_accounts')
-        .first()
-      const { accounts_receivable_code } = await trx
-        .select('accounts_receivable_code')
+      const {
+        accounts_payable_code,
+        accounts_receivable_code,
+        inventory_assets_code
+      } = await trx
+        .select('*')
         .from('default_accounts')
         .first()
       receipt = {
@@ -58,6 +59,7 @@ describe('itemReceiptsData', () => {
       }
       payablesCode = accounts_payable_code
       receivablesCode = accounts_receivable_code
+      inventoryCode = inventory_assets_code
     })
 
     it('inserts an "trades" row', async () => {
@@ -180,6 +182,60 @@ describe('itemReceiptsData', () => {
       expect(status2).to.include({
         quantity: '2',
         average_cost: '9.00000'
+      })
+    })
+
+    it('inserts a "journal_entries" row for the purchase', async () => {
+      await receipts.create(receipt)
+      const journalEntryRow = await trx
+        .select('*')
+        .from('journal_entries')
+        .first()
+      expect(journalEntryRow).to.be.an('object', 'journal entry not found')
+    })
+
+    it('creates "ledger_entries" rows for the purchase', async () => {
+      await receipts.create({
+        ...receipt,
+        lineItems: [
+          ...receipt.lineItems,
+          { ...receipt.lineItems[0] }
+        ]
+      })
+      const ledgerEntryRows = await trx
+        .select('*')
+        .from('ledger_entries')
+      expect(ledgerEntryRows).to.have.lengthOf(2)
+    })
+
+    it('creates a "ledger_entries" row for the correct amount', async () => {
+      await receipts.create({
+        ...receipt,
+        lineItems: [
+          { ...receipt.lineItems[0], lineTotal: 1000 }
+        ]
+      })
+      const ledgerEntryRow = await trx
+        .select('*')
+        .from('ledger_entries')
+        .first()
+      expect(ledgerEntryRow).to.include({ amount: '1000.00000' })
+    })
+
+    it('creates a "ledger_entries" row for the correct accounts', async () => {
+      await receipts.create({
+        ...receipt,
+        lineItems: [
+          { ...receipt.lineItems[0], lineTotal: 1000 }
+        ]
+      })
+      const ledgerEntryRow = await trx
+        .select('*')
+        .from('ledger_entries')
+        .first()
+      expect(ledgerEntryRow).to.include({
+        debit_account_code: inventoryCode,
+        credit_account_code: payablesCode
       })
     })
 

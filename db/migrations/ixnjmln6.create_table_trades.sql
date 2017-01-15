@@ -10,16 +10,15 @@ create table trades (
   foreign key (party_id, party_type)
           references parties (party_id, party_type),
   foreign key (trade_account_code, trade_account_type)
-          references accounts (code, type),
+          references accounts (code, account_type),
   check (
-    (party_type = 'vendor' and trade_account_type = 'accounts_payable')
+    (party_type         = 'vendor' and
+     trade_account_type = 'accounts_payable' and
+     transaction_type   = 'purchase')
      or
-    (party_type = 'customer' and trade_account_type = 'accounts_receivable')
-  ),
-  check (
-    (party_type = 'vendor' and transaction_type = 'purchase')
-     or
-    (party_type = 'customer' and transaction_type = 'sale')
+    (party_type         = 'customer' and
+     trade_account_type = 'accounts_receivable' and
+     transaction_type   = 'sale')
   )
 ) inherits (transactions);
 

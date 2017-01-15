@@ -1,13 +1,13 @@
 create domain monetary as numeric(20, 5);
 
 create table ledger_entries (
-  id                  uuid             not null,
+  entry_id            uuid             not null,
   transaction_id      uuid             not null,
   transaction_type    transaction_type not null,
   debit_account_code  varchar          not null,
   credit_account_code varchar          not null,
   amount              monetary         not null,
-  primary key (id),
+  primary key (entry_id),
   foreign key (transaction_id, transaction_type)
           references journal_entries (transaction_id, transaction_type),
   foreign key (debit_account_code)

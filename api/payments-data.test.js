@@ -26,7 +26,7 @@ describe('paymentsData', () => {
       const { cash } = await trx
         .select('code as cash')
         .from('accounts')
-        .where('type', 'cash')
+        .where('account_type', 'cash')
         .first()
       const { accounts_receivable_code } = await trx
         .select('accounts_receivable_code')
@@ -37,7 +37,7 @@ describe('paymentsData', () => {
         .from('default_accounts')
         .first()
       const { method } = await trx
-        .select('id as method')
+        .select('payment_method_id as method')
         .from('payment_methods')
         .where('name', 'ilike', 'cash')
         .first()

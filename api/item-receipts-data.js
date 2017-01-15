@@ -6,14 +6,14 @@ export default function itemReceiptsData(knex) {
   return camelSql({ create })
 
   async function create({ id, ...receipt }) {
-    const entity_id = id || uuid()
-    const type = 'create_purchase'
+    const stream_id = id || uuid()
+    const event_type ='create_purchase'
     const payload = JSON.stringify(receipt)
     return knex.transaction(async trx => {
       await trx
-        .insert({ entity_id, type, payload })
+        .insert({ stream_id, event_type, payload })
         .into('event_store')
-      return findById(entity_id, trx)
+      return findById(stream_id, trx)
     })
   }
 
@@ -26,11 +26,11 @@ export default function itemReceiptsData(knex) {
     ]
     const line_items = knex.raw(`json_agg(
       json_build_object(
-        'id', l.id,
-        'sku', l.sku,
-        'quantity', l.quantity,
-        'description', l.description,
-        'line_total', l.line_total
+        'line_item_id', l.line_item_id,
+        'sku',          l.sku,
+        'quantity',     l.quantity,
+        'description',  l.description,
+        'line_total',   l.line_total
       )
     ) as line_items`)
     return trx

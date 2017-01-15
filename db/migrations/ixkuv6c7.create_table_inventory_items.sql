@@ -20,13 +20,13 @@ create table inventory_items (
   foreign key (brand_id)
           references brands (brand_id),
   foreign key (sales_account_code, sales_account_type)
-          references accounts (code, type)
+          references accounts (code, account_type)
           on update cascade,
   foreign key (cost_account_code, cost_account_type)
-          references accounts (code, type)
+          references accounts (code, account_type)
           on update cascade,
   foreign key (asset_account_code, asset_account_type)
-          references accounts (code, type)
+          references accounts (code, account_type)
           on update cascade,
   unique (item_type, sku),
   check (item_type = 'inventory_item'),

@@ -23,12 +23,12 @@ describe('journalEntriesData', () => {
       const { cash } = await trx
         .select('code as cash')
         .from('accounts')
-        .where('type', 'cash')
+        .where('account_type', 'cash')
         .first()
       const { capital } = await trx
         .select('code as capital')
         .from('accounts')
-        .where('type', 'contributed_capital')
+        .where('account_type', 'contributed_capital')
         .first()
       entry = {
         date: new Date(),

@@ -5,7 +5,7 @@ create table orders (
   order_type order_type     not null,
   party_id   uuid           not null,
   party_type party_type     not null,
-  date       timestamptz(6) not null
+  date       date           not null
 );
 
 ---

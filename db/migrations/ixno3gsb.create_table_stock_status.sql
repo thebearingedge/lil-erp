@@ -1,7 +1,7 @@
 create table stock_status (
   line_item_id       uuid           not null,
   transaction_id     uuid           not null,
-  transaction_date   timestamptz(6) not null,
+  transaction_date   date           not null,
   item_type          item_type      not null default 'inventory_item',
   sku                varchar        not null,
   move_quantity      numeric        not null,

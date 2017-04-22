@@ -6,14 +6,14 @@ export default function customersData(knex) {
   return camelSql({ create })
 
   async function create({ id, ...customer }) {
-    const entity_id = id || uuid()
-    const type = 'create_customer'
+    const stream_id = id || uuid()
+    const event_type ='create_customer'
     const payload = JSON.stringify(customer)
     return knex.transaction(async trx => {
       await trx
-        .insert({ entity_id, type, payload })
+        .insert({ stream_id, event_type, payload })
         .into('event_store')
-      return findById(entity_id, trx)
+      return findById(stream_id, trx)
     })
   }
 

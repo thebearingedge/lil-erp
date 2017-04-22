@@ -1,6 +1,6 @@
 alter type event_type add value 'create_sale';
 
-create function create_sale(id uuid, payload jsonb) returns void as $$
+create function create_sale(stream_id uuid, payload jsonb) returns void as $$
   declare
     sale      trades%rowtype;
     line_item trade_line_items%rowtype;
@@ -8,7 +8,7 @@ create function create_sale(id uuid, payload jsonb) returns void as $$
 
     sale = jsonb_populate_record(null::trades, payload);
 
-    sale.transaction_id     = id;
+    sale.transaction_id     = stream_id;
     sale.transaction_type   = 'sale';
     sale.party_type         = 'customer';
     sale.trade_account_code = coalesce(
@@ -25,7 +25,7 @@ create function create_sale(id uuid, payload jsonb) returns void as $$
       payload->'line_items'
     )
       loop
-        line_item.id               = uuid_generate_v4();
+        line_item.line_item_id     = uuid_generate_v4();
         line_item.transaction_id   = sale.transaction_id;
         line_item.transaction_type = sale.transaction_type;
         insert into trade_line_items
@@ -38,7 +38,7 @@ $$ language plpgsql;
 
 create function event_create_sale() returns trigger as $$
   begin
-    perform create_sale(new.entity_id, new.payload);
+    perform create_sale(new.stream_id, new.payload);
     return new;
   end;
 $$ language plpgsql;
@@ -47,13 +47,13 @@ create trigger create_sale
   after insert
   on event_store
   for each row
-  when (new.type = 'create_sale')
+  when (new.event_type = 'create_sale')
   execute procedure event_create_sale();
 
 ---
 drop trigger create_sale on event_store;
 drop function event_create_sale();
-drop function create_sale(id uuid, payload jsonb);
+drop function create_sale(stream_id uuid, payload jsonb);
 delete from pg_enum using pg_type
  where pg_type.oid       = pg_enum.enumtypid
    and pg_type.typname   = 'event_type'

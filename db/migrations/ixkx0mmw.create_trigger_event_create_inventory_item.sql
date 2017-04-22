@@ -1,6 +1,6 @@
 alter type event_type add value 'create_inventory_item';
 
-create function create_inventory_item(id uuid, payload jsonb) returns void as $$
+create function create_inventory_item(stream_id uuid, payload jsonb) returns void as $$
   declare
     item           items%rowtype;
     inventory_item inventory_items%rowtype;
@@ -8,7 +8,7 @@ create function create_inventory_item(id uuid, payload jsonb) returns void as $$
 
     item = jsonb_populate_record(null::items, payload);
 
-    item.item_id   = id;
+    item.item_id   = stream_id;
     item.item_type = 'inventory_item';
     item.is_active = true;
 
@@ -44,7 +44,7 @@ $$ language plpgsql;
 
 create function event_create_inventory_item() returns trigger as $$
   begin
-    perform create_inventory_item(new.entity_id, new.payload);
+    perform create_inventory_item(new.stream_id, new.payload);
     return new;
   end;
 $$ language plpgsql;
@@ -53,13 +53,13 @@ create trigger create_inventory_item
   after insert
   on event_store
   for each row
-  when (new.type = 'create_inventory_item')
+  when (new.event_type = 'create_inventory_item')
   execute procedure event_create_inventory_item();
 
 ---
 drop trigger create_inventory_item on event_store;
 drop function event_create_inventory_item();
-drop function create_inventory_item(id uuid, payload jsonb);
+drop function create_inventory_item(stream_id uuid, payload jsonb);
 delete from pg_enum using pg_type
  where pg_type.oid       = pg_enum.enumtypid
    and pg_type.typname   = 'event_type'

@@ -1,23 +1,23 @@
 import { Nullable } from 'chai-struct'
 
 export const Account = {
-  id: String,
+  accountId: String,
   code: String,
   name: String,
   description: Nullable(String),
   parentCode: Nullable(String),
-  type: Nullable(String),
+  accountType: Nullable(String),
   class: Nullable(String),
   isActive: Boolean,
   isSystemAccount: Boolean
 }
 
 export const JournalEntry = {
-  id: String,
+  transactionId: String,
   date: Date,
   memo: Nullable(String),
   ledgerEntries: [{
-    id: String,
+    entryId: String,
     debitAccountCode: String,
     creditAccountCode: String,
     amount: Number
@@ -73,7 +73,7 @@ export const PurchaseOrder = {
   partyId: String,
   date: Date,
   lineItems: [{
-    id: String,
+    lineItemId: String,
     sku: String,
     quantity: Number,
     description: Nullable(String),
@@ -86,7 +86,7 @@ export const SalesOrder = {
   partyId: String,
   date: Date,
   lineItems: [{
-    id: String,
+    lineItemId: String,
     sku: String,
     quantity: Number,
     description: Nullable(String),
@@ -100,7 +100,7 @@ export const ItemReceipt = {
   tradeAccountCode: String,
   date: Date,
   lineItems: [{
-    id: String,
+    lineItemId: String,
     sku: String,
     quantity: Number,
     description: Nullable(String),
@@ -114,7 +114,7 @@ export const ItemSale = {
   tradeAccountCode: String,
   date: Date,
   lineItems: [{
-    id: String,
+    lineItemId: String,
     sku: String,
     quantity: Number,
     description: Nullable(String),

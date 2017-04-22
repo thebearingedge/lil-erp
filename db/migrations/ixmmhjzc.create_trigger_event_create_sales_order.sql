@@ -1,6 +1,6 @@
 alter type event_type add value 'create_sales_order';
 
-create function create_sales_order(id uuid, payload jsonb) returns void as $$
+create function create_sales_order(stream_id uuid, payload jsonb) returns void as $$
   declare
     so         sales_orders%rowtype;
     line_item  sales_order_line_items%rowtype;
@@ -8,7 +8,7 @@ create function create_sales_order(id uuid, payload jsonb) returns void as $$
 
     so = jsonb_populate_record(null::sales_orders, payload);
 
-    so.order_id   = id;
+    so.order_id   = stream_id;
     so.order_type = 'sales_order';
     so.party_type = 'customer';
 
@@ -20,9 +20,9 @@ create function create_sales_order(id uuid, payload jsonb) returns void as $$
       payload->'line_items'
     )
       loop
-        line_item.id         = uuid_generate_v4();
-        line_item.order_id   = so.order_id;
-        line_item.order_type = so.order_type;
+        line_item.line_item_id = uuid_generate_v4();
+        line_item.order_id     = so.order_id;
+        line_item.order_type   = so.order_type;
         insert into sales_order_line_items
         values (line_item.*);
       end loop;
@@ -33,7 +33,7 @@ $$ language plpgsql;
 
 create function event_create_sales_order() returns trigger as $$
   begin
-    perform create_sales_order(new.entity_id, new.payload);
+    perform create_sales_order(new.stream_id, new.payload);
     return new;
   end;
 $$ language plpgsql;
@@ -42,13 +42,13 @@ create trigger create_sales_order
   after insert
   on event_store
   for each row
-  when (new.type = 'create_sales_order')
+  when (new.event_type = 'create_sales_order')
   execute procedure event_create_sales_order();
 
 ---
 drop trigger create_sales_order on event_store;
 drop function event_create_sales_order();
-drop function create_sales_order(id uuid, payload jsonb);
+drop function create_sales_order(stream_id uuid, payload jsonb);
 delete from pg_enum using pg_type
  where pg_type.oid       = pg_enum.enumtypid
    and pg_type.typname   = 'event_type'

@@ -1,7 +1,7 @@
 create table stock_status (
-  trade_line_item_id uuid           not null,
+  line_item_id       uuid           not null,
   transaction_id     uuid           not null,
-  transaction_date   timestamptz(6) not null,
+  transaction_date   date           not null,
   item_type          item_type      not null default 'inventory_item',
   sku                varchar        not null,
   move_quantity      numeric        not null,
@@ -9,9 +9,9 @@ create table stock_status (
   quantity           numeric        not null,
   average_cost       monetary       not null,
   inserted_at        timestamptz(6) not null,
-  primary key (trade_line_item_id),
-  foreign key (trade_line_item_id)
-          references trade_line_items (id),
+  primary key (line_item_id),
+  foreign key (line_item_id)
+          references trade_line_items (line_item_id),
   foreign key (item_type, sku)
           references inventory_items (item_type, sku)
           on update cascade,
@@ -85,13 +85,13 @@ create function stock_status_update_sku() returns trigger as $$
                              /
                             (s.quantity + ns.move_quantity)
                           , s.average_cost)
-      from (select lead(trade_line_item_id) over w as trade_line_item_id,
+      from (select lead(line_item_id) over w as line_item_id,
                    move_quantity,
                    move_cost
               from future_status
               window w as (order by transaction_date asc, inserted_at asc)
               ) as ns
-     where s.trade_line_item_id = ns.trade_line_item_id;
+     where s.line_item_id = ns.line_item_id;
 
     return new;
   end;

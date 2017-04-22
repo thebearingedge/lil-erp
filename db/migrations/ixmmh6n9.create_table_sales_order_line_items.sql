@@ -1,5 +1,5 @@
 create table sales_order_line_items (
-  primary key (id),
+  primary key (line_item_id),
   foreign key (order_id, order_type)
           references sales_orders (order_id, order_type),
   foreign key (item_type, sku)

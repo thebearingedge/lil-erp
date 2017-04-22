@@ -29,17 +29,17 @@ create type account_class as enum (
 );
 
 create table accounts (
-  id                uuid          unique not null default uuid_generate_v4(),
+  account_id        uuid          unique not null default uuid_generate_v4(),
   code              varchar       primary key,
   parent_code       varchar,
   class             account_class,
-  type              account_type,
+  account_type      account_type,
   name              varchar       unique not null,
   description       text,
   is_system_account boolean       not null default false,
   is_active         boolean       not null default true,
   unique (code, class),
-  unique (code, type),
+  unique (code, account_type),
   foreign key (parent_code, class)
           references accounts (code, class)
 );
@@ -47,8 +47,8 @@ create table accounts (
 create function inherit_parent_account() returns trigger as $$
   begin
 
-    select a.type, a.class
-      into new.type, new.class
+    select a.account_type, a.class
+      into new.account_type, new.class
       from accounts as a
      where a.code = new.parent_code;
 

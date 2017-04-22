@@ -10,10 +10,10 @@ create table default_accounts (
   inventory_assets_code    varchar      not null,
   inventory_assets_type    account_type not null default 'inventory_assets',
   foreign key (accounts_payable_code, accounts_payable_type)
-          references accounts (code, type)
+          references accounts (code, account_type)
           on update cascade,
   foreign key (accounts_receivable_code, accounts_receivable_type)
-          references accounts (code, type)
+          references accounts (code, account_type)
           on update cascade,
   check (accounts_payable_type = 'accounts_payable'),
   check (accounts_receivable_type = 'accounts_receivable'),

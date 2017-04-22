@@ -11,15 +11,18 @@ create table payments (
   foreign key (party_id, party_type)
           references parties (party_id, party_type),
   foreign key (payment_method_id)
-          references payment_methods (id),
+          references payment_methods (payment_method_id),
   foreign key (trade_account_code, trade_account_type)
-          references accounts (code, type),
+          references accounts (code, account_type),
   foreign key (payment_account_code, payment_account_type)
-          references accounts (code, type),
+          references accounts (code, account_type),
   check (transaction_type = 'payment'),
-  check (party_type in ('customer', 'vendor')),
   check (amount > 0),
-  check (trade_account_type in ('accounts_payable', 'accounts_receivable')),
+  check ((party_type        = 'customer' and
+         trade_account_type = 'accounts_receivable')
+         or
+         (party_type         = 'vendor' and
+          trade_account_type = 'accounts_payable')),
   check (payment_account_type in ('cash', 'credit_cards'))
 ) inherits (transactions);
 

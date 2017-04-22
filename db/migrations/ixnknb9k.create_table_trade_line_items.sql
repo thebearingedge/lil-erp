@@ -1,5 +1,5 @@
 create table trade_line_items (
-  id               uuid             not null,
+  line_item_id     uuid             not null,
   transaction_id   uuid             not null,
   transaction_type transaction_type not null,
   item_type        item_type,
@@ -7,7 +7,7 @@ create table trade_line_items (
   quantity         numeric,
   description      text,
   line_total       monetary,
-  primary key (id),
+  primary key (line_item_id),
   foreign key (transaction_id, transaction_type)
           references trades (transaction_id, transaction_type),
   foreign key (item_type, sku)

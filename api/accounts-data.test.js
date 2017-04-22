@@ -74,7 +74,7 @@ describe('accountsData', () => {
       expect(created).to.include({
         ...account,
         parentCode: null,
-        type: null,
+        accountType: null,
         class: null,
         isActive: true,
         isSystemAccount: false
@@ -89,9 +89,9 @@ describe('accountsData', () => {
         parentAccount = await trx
           .select('*')
           .from('accounts')
-          .where('type', 'cash')
+          .where('account_type', 'cash')
           .first()
-        expect(parentAccount).to.include.keys(['code', 'type', 'class'])
+        expect(parentAccount).to.include.keys(['code', 'account_type', 'class'])
       })
 
       it('creates an account with inherited properties', async () => {
@@ -103,7 +103,7 @@ describe('accountsData', () => {
         expect(created).to.include({
           ...account,
           parentCode: parentAccount.code,
-          type: parentAccount.type,
+          accountType: parentAccount.account_type,
           class: parentAccount.class,
           isActive: true,
           isSystemAccount: false

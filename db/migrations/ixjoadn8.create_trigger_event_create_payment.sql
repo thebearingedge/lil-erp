@@ -1,6 +1,6 @@
 alter type event_type add value 'create_payment';
 
-create function create_payment(id uuid, payload jsonb) returns void as $$
+create function create_payment(stream_id uuid, payload jsonb) returns void as $$
   declare
     payment             payments%rowtype;
     journal_entry_json  jsonb;
@@ -10,7 +10,7 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
 
     payment = jsonb_populate_record(null::payments, payload);
 
-    payment.transaction_id   = id;
+    payment.transaction_id   = stream_id;
     payment.transaction_type = 'payment';
 
     select p.party_type
@@ -38,7 +38,7 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
         );
     end case;
 
-    select a.type
+    select a.account_type
       into payment.payment_account_type
       from accounts as a
      where a.code = payment.payment_account_code;
@@ -71,8 +71,8 @@ create function create_payment(id uuid, payload jsonb) returns void as $$
     );
 
     insert into event_store (
-      type,
-      entity_id,
+      event_type,
+      stream_id,
       payload
     )
     values (
@@ -87,7 +87,7 @@ $$ language plpgsql;
 
 create function event_create_payment() returns trigger as $$
   begin
-    perform create_payment(new.entity_id, new.payload);
+    perform create_payment(new.stream_id, new.payload);
     return new;
   end;
 $$ language plpgsql;
@@ -96,13 +96,13 @@ create trigger create_payment
   after insert
   on event_store
   for each row
-  when (new.type = 'create_payment')
+  when (new.event_type = 'create_payment')
   execute procedure event_create_payment();
 
 ---
 drop trigger create_payment on event_store;
 drop function event_create_payment();
-drop function create_payment(id uuid, payload jsonb);
+drop function create_payment(stream_id uuid, payload jsonb);
 delete from pg_enum using pg_type
  where pg_type.oid       = pg_enum.enumtypid
    and pg_type.typname   = 'event_type'

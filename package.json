@@ -37,7 +37,7 @@
   "homepage": "https://github.com/thebearingedge/lil-erp#readme",
   "devDependencies": {
     "babel-cli": "6.23.0",
-    "babel-eslint": "7.1.1",
+    "babel-eslint": "7.2.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.24.0",
     "babel-plugin-transform-export-extensions": "6.22.0",
     "babel-plugin-transform-object-rest-spread": "6.20.2",
@@ -46,8 +46,7 @@
     "chai-struct": "2.1.1",
     "eslint": "3.18.0",
     "husky": "0.13.3",
-    "husky": "0.13.3",
-    "knex": "0.12.7",
+    "knex": "0.12.9",
     "mocha": "3.2.0",
     "npm-run-all": "4.0.2",
     "nyc": "10.1.0",
@@ -58,7 +57,7 @@
     "global": "4.3.1",
     "knex": "0.12.6",
     "lodash": "4.17.4",
-    "pg": "6.1.4",
+    "pg": "6.1.5",
     "uuid": "3.0.1"
   }
 }

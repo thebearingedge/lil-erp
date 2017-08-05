@@ -45,7 +45,7 @@
     "chai": "3.5.0",
     "chai-struct": "2.1.1",
     "mocha": "3.3.0",
-    "eslint": "3.19.0",
+    "eslint": "4.4.0",
     "husky": "0.13.3",
     "knex": "0.12.9",
     "npm-run-all": "4.0.2",

@@ -49,7 +49,7 @@
     "husky": "0.13.3",
     "knex": "0.12.9",
     "npm-run-all": "4.0.2",
-    "nyc": "10.2.0",
+    "nyc": "12.0.2",
     "onchange": "3.2.1"
   },
   "dependencies": {

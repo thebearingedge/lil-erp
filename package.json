@@ -50,7 +50,7 @@
     "knex": "0.12.9",
     "npm-run-all": "4.0.2",
     "nyc": "10.2.0",
-    "onchange": "3.2.1"
+    "onchange": "4.1.0"
   },
   "dependencies": {
     "deep-clone": "3.0.2",
